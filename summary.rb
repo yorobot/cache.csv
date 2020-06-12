@@ -1,73 +1,158 @@
 require_relative 'boot'
-require_relative 'repos'
-require_relative 'git'
+
+
+COUNTRIES = SportDb::Import.catalog.countries
+LEAGUES   = SportDb::Import.catalog.leagues
+CLUBS     = SportDb::Import.catalog.clubs
 
 
 
-def sum( path, country: nil )
-    out_dir = path
+class Names
+  def initialize( country_key )
+    @names = Hash.new(0)
 
-    git_pull( out_dir )
-    print "hit return to continue: ";  ch=STDIN.getc
+    @country = COUNTRIES.find( country_key )
+    if @country.nil?
+      puts "!! ERROR - no country found for key >#{country_key}<"
+      exit 1
+    end
+    pp @country
+  end
 
-    pack = CsvPackage.new( out_dir )
+  def add_matches( matches )
+    matches.each do |match|
+      @names[ match.team1 ] += 1
+      @names[ match.team2 ] += 1
+    end
+  end
+
+  def build
+    buf = String.new('')
+    errors = []
+
+    ## sort by count (reverse) and alphabet
+    names = @names.sort do |l,r|
+      res =  r[1] <=> l[1]
+      res =  l[0] <=> r[0]  if res == 0
+      res
+    end
+
+    buf << "\n\n## #{@country.name} (#{@country.key})\n\n"
+    buf << "#{names.size} club names:\n\n"
+    buf << "```\n"
+
+    clubs = {}  ## check for duplicates
+
+    names.each do |rec|
+      club = CLUBS.find_by( name: rec[0], country: @country )
+      if club.nil?
+        puts "!! ERROR - no club match found for >#{rec[0]}<"
+        errors << "#{rec[0]} > #{@country.name}"
+
+        buf << "!!! #{rec[0]} (#{rec[1]})\n"
+      else
+        if club.historic?
+          buf << "xxx "   ### check if year is in name?
+        else
+          buf << "    "
+        end
+
+        buf << "%-28s" %  "#{rec[0]} (#{rec[1]})"
+        if club.name != rec[0]
+          buf << " => %-25s |" % club.name
+        else
+          buf << (" #{' '*28} |")
+        end
+
+        if club.city
+          buf << " #{club.city}"
+          buf << " (#{club.district})"   if club.district
+        else
+          buf << " ?  "
+        end
+
+        if club.geos
+          buf << ",  #{club.geos.join(' › ')}"
+        end
+
+        buf << "\n"
+
+        clubs[club] ||= []
+        clubs[club] << rec[0]
+      end
+    end
+    buf << "```\n\n"
+
+    ## check for duplicate clubs (more than one mapping / name)
+    duplicates = clubs.reduce( {} ) do |h,(club,rec)|
+                                      h[club]=rec  if rec.size > 1
+                                      h
+                                    end
+
+    if duplicates.size > 0
+      buf << "\n\n#{duplicates.size} duplicates:\n"
+      duplicates.each do |club, rec|
+        buf << "- **#{club.name}** _(#{rec.size})_ #{rec.join(' · ')}\n"
+      end
+    end
+
+    [buf, errors]
+  end
+end # class Names
 
 
-    report = CsvPyramidReport.new( pack ) 
-    
-    buf = "# Summary\n\n"
-    buf << report.build
-    File.open( "#{out_dir}/SUMMARY.md", 'w:utf-8' ) { |f| f.write buf }
-  
-
-    report = CsvTeamsReport.new( pack, country: country )
-
-    buf = "# Clubs\n\n"
-    buf << report.build
-    File.open( "#{out_dir}/CLUBS.md", 'w:utf-8' ) { |f| f.write buf }
 
 
-    report_geo = TeamsByCityPart.new( report.team_mapping )
-       
-    buf = "# Clubs by Geo(graphy)\n\n"
-    buf << report_geo.build
-    File.open( "#{out_dir}/CLUBS_GEO.md", 'w:utf-8' ) { |f| f.write buf }
+FOOTBALLDATA_DIR = "../../footballcsv/mirror.footballdata"
+
+datafiles = Dir[ "#{FOOTBALLDATA_DIR}/**/*.csv" ]
+puts "#{datafiles.size} datafiles"
 
 
-    print "hit return to commit: ";  ch=STDIN.getc
-    git_commit( out_dir )
-end  # method sum
+countries = {}
+datafiles.each do |datafile|
+  basename = File.basename( datafile, File.extname( datafile ))
+  country_key = basename.gsub( /[0-9.]/, '' )    # remove numbers and dots
 
+  countries[ country_key] ||= Names.new( country_key )
+  names = countries[ country_key]
 
-=begin
-[
-# :eng, 
-# :sco, 
-# :de, 
-# :it, 
- :es, 
- :fr,
- :nl,
- :be,
- :pt,
- :tr,
- :gr
-]
-=end
+  matches = SportDb::CsvMatchParser.read( datafile )
 
+  pp matches.size
+  pp matches[0..2]
 
-=begin
-COUNTRY_REPOS.each do |country_key, country_path|
-  ## filter by country code
-  ## next   unless [:mx].include?( country_key )
-  
-  path = "../../../footballcsv/#{country_path}"
-  sum( path, country: country_key.to_s )
+  names.add_matches( matches )
 end
-=end
 
 
-### extras
-sum( "../../../footballcsv/major-league-soccer", country: 'us' )
-# sum( "../../../footballcsv/europe-champions-league"  )
 
+errors = []
+buf = String.new('')
+buf << "# Summary\n\n"
+buf << "#{datafiles.size} datafiles\n\n"
+
+countries.each do |country_key, names|
+  more_buf, more_errors = names.build
+
+  buf    << more_buf
+  errors += more_errors
+end
+
+
+puts "#{errors.size} errors:"
+pp errors
+
+if errors.size > 0
+  buf << "\n\n#{errors.size} errors:\n"
+  buf << "```\n"
+  buf << errors.pretty_inspect
+  buf << "\n```\n"
+end
+
+
+File.open( "#{FOOTBALLDATA_DIR}/SUMMARY.md", 'w:utf-8' ) do |f|
+  f.write buf
+end
+
+puts "bye"

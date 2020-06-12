@@ -1,5 +1,5 @@
 
-require 'sportdb/source/footballdata'
+require 'sportdb/models'
 
 
 SportDb.connect( adapter:  'sqlite3',

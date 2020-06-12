@@ -1,5 +1,7 @@
 ## note: use the local version of sportdb-source gem
 $LOAD_PATH.unshift( File.expand_path( '../../sportdb/sport.db/sportdb-formats/lib') )
+$LOAD_PATH.unshift( File.expand_path( '../../sportdb/sport.db/sportdb-importers/lib') )
+
 $LOAD_PATH.unshift( File.expand_path( '../../sportdb/sport.db.sources/sportdb-source-footballdata/lib') )
 
 
