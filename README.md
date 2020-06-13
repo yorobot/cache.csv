@@ -1,6 +1,6 @@
 # Football Data Scripts
 
-source <https://www.football-data.co.uk/data.php>
+scripts to prepare datasets cached in <https://github.com/footballcsv/cache.footballdata>
 
 
 ## Step 1
