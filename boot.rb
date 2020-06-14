@@ -10,3 +10,9 @@ require 'sportdb/source/footballdata'
 ## use (switch to) "external" datasets
 SportDb::Import.config.clubs_dir   = "../../openfootball/clubs"
 SportDb::Import.config.leagues_dir = "../../openfootball/leagues"
+
+
+$LOAD_PATH.unshift( File.expand_path( '../football.csv/sportdb-linters/lib') )
+
+require 'sportdb/linters'    # e.g. uses TeamSummary class
+

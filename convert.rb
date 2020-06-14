@@ -22,8 +22,8 @@ end  # method convert
 
 
 
-# OUT_DIR = "./o/mirror"
-OUT_DIR = "../../footballcsv/mirror.footballdata"
+# OUT_DIR = "./o"
+OUT_DIR = "../../footballcsv/cache.footballdata"
 
 convert( out_dir: OUT_DIR )
 
