@@ -1,0 +1,116 @@
+# tournaments
+
+17029 Friendly
+7236 FIFA World Cup qualification
+2582 UEFA Euro qualification
+1672 African Cup of Nations qualification
+ 900 FIFA World Cup
+ 813 Copa América
+ 724 AFC Asian Cup qualification
+ 690 African Cup of Nations
+ 620 CECAFA Cup
+ 606 CFU Caribbean Cup qualification
+ 505 British Championship
+ 503 Merdeka Tournament
+ 380 Gulf Cup
+ 370 AFC Asian Cup
+ 350 Island Games
+ 327 Gold Cup
+ 293 AFF Championship
+ 292 COSAFA Cup
+ 286 UEFA Euro
+ 283 Nordic Championship
+ 264 African Nations Championship
+ 251 CFU Caribbean Cup
+ 235 Amílcar Cabral Cup
+ 234 King's Cup
+ 205 South Pacific Games
+ 164 UNCAF Cup
+ 159 Korea Cup
+ 142 UEFA Nations League
+ 140 Confederations Cup
+ 136 SAFF Cup
+ 127 International Cup
+ 123 CCCF Championship
+ 122 EAFF Championship
+ 122 UAFA Cup
+ 102 CONCACAF Nations League
+ 101 Oceania Nations Cup
+ 101 CONIFA World Football Cup
+ 101 Windward Islands Tournament
+ 100 AFC Challenge Cup
+  97 WAFF Championship
+  92 AFC Challenge Cup qualification
+  89 Nehru Cup
+  87 Balkan Cup
+  87 Baltic Cup
+  75 Indonesia Tournament
+  70 Oceania Nations Cup qualification
+  70 Cyprus International Tournament
+  69 Kirin Cup
+  68 CONCACAF Nations League qualification
+  65 UDEAC Cup
+  64 African Nations Championship qualification
+  60 Vietnam Independence Cup
+  56 Viva World Cup
+  56 Gold Cup qualification
+  54 West African Cup
+  53 Malta International Tournament
+  51 Pacific Games
+  49 CONCACAF Championship
+  49 CONIFA European Football Cup
+  39 Pan American Championship
+  37 USA Cup
+  37 Brazil Independence Cup
+  31 United Arab Emirates Friendship Tournament
+  29 Copa Chevallier Boutell
+  29 Dynasty Cup
+  28 Copa Lipton
+  26 Copa Newton
+  25 Lunar New Year Cup
+  25 Merlion Cup
+  23 Copa Roca
+  23 Copa Paz del Chaco
+  22 Prime Minister's Cup
+  21 CONCACAF Championship qualification
+  20 ABCS Tournament
+  19 Inter Games Football Tournament
+  19 Copa del Pacífico
+  18 Copa Rio Branco
+  17 Simba Tournament
+  16 Copa Carlos Dittborn
+  16 Copa Oswaldo Cruz
+  16 ELF Cup
+  16 Copa Juan Pinto Durán
+  15 Copa Premio Honor Uruguayo
+  15 Millennium Cup
+  15 UNIFFAC Cup
+  15 Dunhill Cup
+  14 GaNEFo
+  14 Nile Basin Tournament
+  14 Intercontinental Cup
+  13 Copa Artigas
+  13 Jordan International Tournament
+  12 Copa Premio Honor Argentino
+  12 King Hassan II Tournament
+  11 SKN Football Festival
+  11 Rous Cup
+  11 Atlantic Cup
+  10 Copa Bernardo O'Higgins
+  10 FIFI Wild Cup
+  10 Tournoi de France
+   9 VFF Cup
+   9 UAFA Cup qualification
+   7 NAFU Championship
+   7 Mundialito
+   6 Nations Cup
+   6 Copa Félix Bogado
+   6 Copa Ramón Castilla
+   4 OSN Cup
+   4 Dragon Cup
+   4 World Unity Cup
+   2 AFF Championship qualification
+   2 Copa América qualification
+   2 Atlantic Heritage Cup
+
+

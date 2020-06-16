@@ -1,0 +1,314 @@
+# teams
+
+1018 Sweden
+1009 England
+ 981 Brazil
+ 980 Argentina
+ 949 Germany
+ 928 Hungary
+ 884 Uruguay
+ 869 Mexico
+ 862 South Korea
+ 840 France
+ 815 Poland
+ 804 Norway
+ 800 Italy
+ 797 Switzerland
+ 795 Denmark
+ 784 Netherlands
+ 781 Scotland
+ 778 Austria
+ 768 Belgium
+ 760 Chile
+ 744 Finland
+ 718 Zambia
+ 716 Paraguay
+ 694 Russia
+ 694 Spain
+ 694 Romania
+ 684 United States
+ 672 Bulgaria
+ 665 Trinidad and Tobago
+ 656 Wales
+ 645 Kenya
+ 644 Northern Ireland
+ 639 Thailand
+ 634 Egypt
+ 627 Japan
+ 624 Uganda
+ 623 Saudi Arabia
+ 623 Peru
+ 613 Portugal
+ 604 Costa Rica
+ 602 Malaysia
+ 600 Ghana
+ 596 China PR
+ 581 Tunisia
+ 576 Nigeria
+ 567 Turkey
+ 566 Republic of Ireland
+ 565 Ivory Coast
+ 564 Greece
+ 564 Kuwait
+ 564 Jamaica
+ 563 Malawi
+ 556 Singapore
+ 553 Indonesia
+ 550 Colombia
+ 547 Iraq
+ 535 Morocco
+ 534 Cameroon
+ 533 Qatar
+ 531 Tanzania
+ 529 Senegal
+ 521 United Arab Emirates
+ 517 Australia
+ 515 Honduras
+ 512 Ecuador
+ 505 Algeria
+ 501 El Salvador
+ 499 Mali
+ 499 Iran
+ 496 Czechoslovakia
+ 489 Bahrain
+ 480 Yugoslavia
+ 467 Estonia
+ 466 Guinea
+ 462 DR Congo
+ 458 Bolivia
+ 456 Zimbabwe
+ 450 Oman
+ 449 Haiti
+ 448 Iceland
+ 442 Guatemala
+ 428 Panama
+ 428 Israel
+ 404 India
+ 404 Syria
+ 402 Luxembourg
+ 400 South Africa
+ 397 Malta
+ 397 Sudan
+ 393 Latvia
+ 392 Jordan
+ 389 Hong Kong
+ 388 Burkina Faso
+ 386 Togo
+ 381 Venezuela
+ 381 Canada
+ 375 Congo
+ 366 Lithuania
+ 362 Cyprus
+ 362 Ethiopia
+ 362 New Zealand
+ 359 Gabon
+ 352 Angola
+ 348 Suriname
+ 341 Burma
+ 340 North Korea
+ 337 Cuba
+ 337 Libya
+ 332 Albania
+ 332 Curaçao
+ 318 Croatia
+ 304 Martinique
+ 304 Mozambique
+ 298 German DR
+ 297 Czech Republic
+ 291 Slovakia
+ 279 Botswana
+ 275 Uzbekistan
+ 275 Serbia
+ 273 Lebanon
+ 267 Ukraine
+ 264 Guyana
+ 263 Barbados
+ 260 Benin
+ 253 Sierra Leone
+ 250 Mauritius
+ 250 Belarus
+ 248 Lesotho
+ 247 Slovenia
+ 247 Liberia
+ 245 Azerbaijan
+ 244 Rwanda
+ 241 Georgia
+ 237 North Macedonia
+ 236 Guadeloupe
+ 234 Moldova
+ 232 Philippines
+ 230 Eswatini
+ 229 Namibia
+ 227 New Caledonia
+ 226 Yemen
+ 225 Cambodia
+ 224 Faroe Islands
+ 222 Madagascar
+ 221 Fiji
+ 220 Bosnia and Herzegovina
+ 213 Gambia
+ 212 Mauritania
+ 212 Grenada
+ 210 Tahiti
+ 210 Armenia
+ 208 Bangladesh
+ 205 Niger
+ 205 Zanzibar
+ 202 Vietnam
+ 201 Sri Lanka
+ 199 Saint Lucia
+ 198 Liechtenstein
+ 198 Kazakhstan
+ 196 Antigua and Barbuda
+ 190 Pakistan
+ 188 Burundi
+ 186 Palestine
+ 182 Dominica
+ 179 Saint Kitts and Nevis
+ 178 Nepal
+ 174 Vanuatu
+ 170 Solomon Islands
+ 166 Cape Verde
+ 164 Andorra
+ 163 San Marino
+ 163 Laos
+ 159 Maldives
+ 157 French Guiana
+ 155 Nicaragua
+ 153 Vietnam Republic
+ 152 Bermuda
+ 149 Chinese Taipei
+ 147 Guinea-Bissau
+ 146 Saint Vincent and the Grenadines
+ 146 Kyrgyzstan
+ 144 Tajikistan
+ 138 Turkmenistan
+ 130 Equatorial Guinea
+ 128 Macau
+ 120 Aruba
+ 117 Puerto Rico
+ 116 Papua New Guinea
+ 115 Chad
+ 113 Dominican Republic
+ 113 Seychelles
+ 111 Afghanistan
+ 107 Somalia
+ 107 Montenegro
+  99 Guam
+  98 Gibraltar
+  96 Central African Republic
+  91 Cayman Islands
+  91 British Virgin Islands
+  88 Djibouti
+  82 Jersey
+  81 Bhutan
+  81 Réunion
+  79 Belize
+  77 Guernsey
+  73 Mongolia
+  73 Greenland
+  73 Brunei
+  72 Eritrea
+  61 Anguilla
+  61 Ynys Môn
+  60 Comoros
+  57 Basque Country
+  56 Tonga
+  54 U.S. Virgin Islands
+  51 Samoa
+  51 East Timor
+  51 Shetland
+  49 Isle of Man
+  48 American Samoa
+  47 Catalonia
+  46 Åland Islands
+  46 São Tomé and Príncipe
+  44 Saint Martin
+  44 Isle of Wight
+  43 South Sudan
+  43 Padania
+  43 Cook Islands
+  40 Montserrat
+  39 Kosovo
+  36 Bahamas
+  35 Saare County
+  34 Tuvalu
+  34 Northern Cyprus
+  34 Sint Maarten
+  30 Gotland
+  30 Frøya
+  29 Western Australia
+  29 Falkland Islands
+  28 Abkhazia
+  28 Western Isles
+  27 Turks and Caicos Islands
+  27 Iraqi Kurdistan
+  26 Sápmi
+  24 Northern Mariana Islands
+  24 Yemen DPR
+  24 North Vietnam
+  24 Wallis Islands and Futuna
+  23 Székely Land
+  21 Bonaire
+  21 Menorca
+  21 Orkney
+  19 Alderney
+  19 Hitra
+  18 Rhodes
+  18 Mayotte
+  18 Occitania
+  17 Ellan Vannin
+  17 Tamil Eelam
+  17 Provence
+  16 Myanmar
+  16 Western Armenia
+  14 South Ossetia
+  13 Andalusia
+  13 Tibet
+  12 Barawa
+  12 Monaco
+  12 Panjab
+  12 Brittany
+  11 Kiribati
+  11 United Koreans in Japan
+  11 Chagos Islands
+  11 Artsakh
+  11 Kernow
+  10 Arameans Suryoye
+  10 Kárpátalja
+   9 Galicia
+   9 County of Nice
+   9 Corsica
+   9 Timor-Leste
+   9 Saarland
+   8 Silesia
+   8 Felvidék
+   8 Raetia
+   7 Saint Pierre and Miquelon
+   7 Darfur
+   7 Micronesia
+   7 Cascadia
+   7 Yorkshire
+   6 Vatican City
+   6 Kabylia
+   6 Gozo
+   5 Matabeleland
+   5 Crimea
+   5 Chameria
+   5 Western Sahara
+   5 Somaliland
+   4 Two Sicilies
+   4 Canary Islands
+   4 Republic of St. Pauli
+   4 Sark
+   4 Saint Helena
+   3 Romani people
+   3 Găgăuzia
+   3 Parishes of Jersey
+   3 Manchukuo
+   2 Palau
+   2 Central Spain
+   2 Niue
+   1 Asturias
+   1 Surrey
+   1 Madrid

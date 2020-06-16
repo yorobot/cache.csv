@@ -1,0 +1,112 @@
+!!  Friendly
+!!  FIFA World Cup qualification
+!!  UEFA Euro qualification
+!!  African Cup of Nations qualification
+    FIFA World Cup                   => World Cup (world)
+    Copa América                     => Copa América (southamerica)
+!!  AFC Asian Cup qualification
+!!  African Cup of Nations
+!!  CECAFA Cup
+!!  CFU Caribbean Cup qualification
+!!  British Championship
+!!  Merdeka Tournament
+!!  Gulf Cup
+!!  AFC Asian Cup
+!!  Island Games
+    Gold Cup                         => Gold Cup (northamerica)
+!!  AFF Championship
+!!  COSAFA Cup
+    UEFA Euro                        => Euro (euro)
+!!  Nordic Championship
+!!  African Nations Championship
+!!  CFU Caribbean Cup
+!!  Amílcar Cabral Cup
+!!  King's Cup
+!!  South Pacific Games
+!!  UNCAF Cup
+!!  Korea Cup
+!!  UEFA Nations League
+    Confederations Cup               => Confederations Cup (world.confed)
+!!  SAFF Cup
+!!  International Cup
+!!  CCCF Championship
+!!  EAFF Championship
+!!  UAFA Cup
+!!  CONCACAF Nations League
+!!  Oceania Nations Cup
+!!  CONIFA World Football Cup
+!!  Windward Islands Tournament
+!!  AFC Challenge Cup
+!!  WAFF Championship
+!!  AFC Challenge Cup qualification
+!!  Nehru Cup
+!!  Balkan Cup
+!!  Baltic Cup
+!!  Indonesia Tournament
+!!  Oceania Nations Cup qualification
+!!  Cyprus International Tournament
+!!  Kirin Cup
+!!  CONCACAF Nations League qualification
+!!  UDEAC Cup
+!!  African Nations Championship qualification
+!!  Vietnam Independence Cup
+!!  Viva World Cup
+!!  Gold Cup qualification
+!!  West African Cup
+!!  Malta International Tournament
+!!  Pacific Games
+!!  CONCACAF Championship
+!!  CONIFA European Football Cup
+!!  Pan American Championship
+    USA Cup                          => US Open Cup (us.cup)
+!!  Brazil Independence Cup
+!!  United Arab Emirates Friendship Tournament
+!!  Copa Chevallier Boutell
+!!  Dynasty Cup
+!!  Copa Lipton
+!!  Copa Newton
+!!  Lunar New Year Cup
+!!  Merlion Cup
+!!  Copa Roca
+!!  Copa Paz del Chaco
+!!  Prime Minister's Cup
+!!  CONCACAF Championship qualification
+!!  ABCS Tournament
+!!  Inter Games Football Tournament
+!!  Copa del Pacífico
+!!  Copa Rio Branco
+!!  Simba Tournament
+!!  Copa Carlos Dittborn
+!!  Copa Oswaldo Cruz
+!!  ELF Cup
+!!  Copa Juan Pinto Durán
+!!  Copa Premio Honor Uruguayo
+!!  Millennium Cup
+!!  UNIFFAC Cup
+!!  Dunhill Cup
+!!  GaNEFo
+!!  Nile Basin Tournament
+!!  Intercontinental Cup
+!!  Copa Artigas
+!!  Jordan International Tournament
+!!  Copa Premio Honor Argentino
+!!  King Hassan II Tournament
+!!  SKN Football Festival
+!!  Rous Cup
+!!  Atlantic Cup
+!!  Copa Bernardo O'Higgins
+!!  FIFI Wild Cup
+!!  Tournoi de France
+!!  VFF Cup
+!!  UAFA Cup qualification
+!!  NAFU Championship
+!!  Mundialito
+!!  Nations Cup
+!!  Copa Félix Bogado
+!!  Copa Ramón Castilla
+!!  OSN Cup
+!!  Dragon Cup
+!!  World Unity Cup
+!!  AFF Championship qualification
+!!  Copa América qualification
+!!  Atlantic Heritage Cup

@@ -1,0 +1,312 @@
+    Sweden                           => Sweden (se)
+    England                          => England (eng)
+    Brazil                           => Brazil (br)
+    Argentina                        => Argentina (ar)
+    Germany                          => Germany (de)
+    Hungary                          => Hungary (hu)
+    Uruguay                          => Uruguay (uy)
+    Mexico                           => Mexico (mx)
+    South Korea                      => South Korea (kr)
+    France                           => France (fr)
+    Poland                           => Poland (pl)
+    Norway                           => Norway (no)
+    Italy                            => Italy (it)
+    Switzerland                      => Switzerland (ch)
+    Denmark                          => Denmark (dk)
+    Netherlands                      => Netherlands (nl)
+    Scotland                         => Scotland (sco)
+    Austria                          => Austria (at)
+    Belgium                          => Belgium (be)
+    Chile                            => Chile (cl)
+    Finland                          => Finland (fi)
+    Zambia                           => Zambia (zm)
+    Paraguay                         => Paraguay (py)
+    Russia                           => Russia (ru)
+    Spain                            => Spain (es)
+    Romania                          => Romania (ro)
+    United States                    => United States (us)
+    Bulgaria                         => Bulgaria (bg)
+    Trinidad and Tobago              => Trinidad and Tobago (tt)
+    Wales                            => Wales (wal)
+    Kenya                            => Kenya (ke)
+    Northern Ireland                 => Northern Ireland (nir)
+    Thailand                         => Thailand (th)
+    Egypt                            => Egypt (eg)
+    Japan                            => Japan (jp)
+    Uganda                           => Uganda (ug)
+    Saudi Arabia                     => Saudi Arabia (sa)
+    Peru                             => Peru (pe)
+    Portugal                         => Portugal (pt)
+    Costa Rica                       => Costa Rica (cr)
+    Malaysia                         => Malaysia (my)
+    Ghana                            => Ghana (gh)
+    China PR                         => China (cn)
+    Tunisia                          => Tunisia (tn)
+    Nigeria                          => Nigeria (ng)
+    Turkey                           => Turkey (tr)
+    Republic of Ireland              => Ireland (ie)
+    Ivory Coast                      => Côte d'Ivoire (ci)
+    Greece                           => Greece (gr)
+    Kuwait                           => Kuwait (kw)
+    Jamaica                          => Jamaica (jm)
+    Malawi                           => Malawi (mw)
+    Singapore                        => Singapore (sg)
+    Indonesia                        => Indonesia (id)
+    Colombia                         => Colombia (co)
+    Iraq                             => Iraq (iq)
+    Morocco                          => Morocco (ma)
+    Cameroon                         => Cameroon (cm)
+    Qatar                            => Qatar (qa)
+    Tanzania                         => Tanzania (tz)
+    Senegal                          => Senegal (sn)
+    United Arab Emirates             => United Arab Emirates (ae)
+    Australia                        => Australia (au)
+    Honduras                         => Honduras (hn)
+    Ecuador                          => Ecuador (ec)
+    Algeria                          => Algeria (dz)
+    El Salvador                      => El Salvador (sv)
+    Mali                             => Mali (ml)
+    Iran                             => Iran (ir)
+    Czechoslovakia                   => Czechoslovakia (-1992) (czechoslovakia)
+    Bahrain                          => Bahrain (bh)
+    Yugoslavia                       => Yugoslavia (-2003) (yugoslavia)
+    Estonia                          => Estonia (ee)
+    Guinea                           => Guinea (gn)
+    DR Congo                         => Congo DR (cd)
+    Bolivia                          => Bolivia (bo)
+    Zimbabwe                         => Zimbabwe (zw)
+    Oman                             => Oman (om)
+    Haiti                            => Haiti (ht)
+    Iceland                          => Iceland (is)
+    Guatemala                        => Guatemala (gt)
+    Panama                           => Panama (pa)
+    Israel                           => Israel (il)
+    India                            => India (in)
+    Syria                            => Syria (sy)
+    Luxembourg                       => Luxembourg (lu)
+    South Africa                     => South Africa (za)
+    Malta                            => Malta (mt)
+    Sudan                            => Sudan (sd)
+    Latvia                           => Latvia (lv)
+    Jordan                           => Jordan (jo)
+    Hong Kong                        => Hong Kong (hk)
+    Burkina Faso                     => Burkina Faso (bf)
+    Togo                             => Togo (tg)
+    Venezuela                        => Venezuela (ve)
+    Canada                           => Canada (ca)
+    Congo                            => Congo (cg)
+    Lithuania                        => Lithuania (lt)
+    Cyprus                           => Cyprus (cy)
+    Ethiopia                         => Ethiopia (et)
+    New Zealand                      => New Zealand (nz)
+    Gabon                            => Gabon (ga)
+    Angola                           => Angola (ao)
+    Suriname                         => Suriname (sr)
+!!  Burma
+    North Korea                      => North Korea (kp)
+    Cuba                             => Cuba (cu)
+    Libya                            => Libya (ly)
+    Albania                          => Albania (al)
+    Curaçao                          => Curaçao (cw)
+    Croatia                          => Croatia (hr)
+    Martinique                       => Martinique (mq)
+    Mozambique                       => Mozambique (mz)
+!!  German DR
+    Czech Republic                   => Czech Republic (cz)
+    Slovakia                         => Slovakia (sk)
+    Botswana                         => Botswana (bw)
+    Uzbekistan                       => Uzbekistan (uz)
+    Serbia                           => Serbia (rs)
+    Lebanon                          => Lebanon (lb)
+    Ukraine                          => Ukraine (ua)
+    Guyana                           => Guyana (gy)
+    Barbados                         => Barbados (bb)
+    Benin                            => Benin (bj)
+    Sierra Leone                     => Sierra Leone (sl)
+    Mauritius                        => Mauritius (mu)
+    Belarus                          => Belarus (by)
+    Lesotho                          => Lesotho (ls)
+    Slovenia                         => Slovenia (si)
+    Liberia                          => Liberia (lr)
+    Azerbaijan                       => Azerbaijan (az)
+    Rwanda                           => Rwanda (rw)
+    Georgia                          => Georgia (ge)
+    North Macedonia                  => North Macedonia (mk)
+    Guadeloupe                       => Guadeloupe (gp)
+    Moldova                          => Moldova (md)
+    Philippines                      => Philippines (ph)
+    Eswatini                         => Eswatini (sz)
+    Namibia                          => Namibia (na)
+    New Caledonia                    => New Caledonia (nc)
+    Yemen                            => Yemen (ye)
+    Cambodia                         => Cambodia (kh)
+    Faroe Islands                    => Faroe Islands (fo)
+    Madagascar                       => Madagascar (mg)
+    Fiji                             => Fiji (fj)
+    Bosnia and Herzegovina           => Bosnia and Herzegovina (ba)
+    Gambia                           => Gambia (gm)
+    Mauritania                       => Mauritania (mr)
+    Grenada                          => Grenada (gd)
+    Tahiti                           => Tahiti (pf)
+    Armenia                          => Armenia (am)
+    Bangladesh                       => Bangladesh (bd)
+    Niger                            => Niger (ne)
+    Zanzibar                         => Zanzibar (zan)
+    Vietnam                          => Vietnam (vn)
+    Sri Lanka                        => Sri Lanka (lk)
+    Saint Lucia                      => Saint Lucia (lc)
+    Liechtenstein                    => Liechtenstein (li)
+    Kazakhstan                       => Kazakhstan (kz)
+    Antigua and Barbuda              => Antigua and Barbuda (ag)
+    Pakistan                         => Pakistan (pk)
+    Burundi                          => Burundi (bi)
+    Palestine                        => Palestine (ps)
+    Dominica                         => Dominica (dm)
+    Saint Kitts and Nevis            => Saint Kitts and Nevis (kn)
+    Nepal                            => Nepal (np)
+    Vanuatu                          => Vanuatu (vu)
+    Solomon Islands                  => Solomon Islands (sb)
+    Cape Verde                       => Cabo Verde (cv)
+    Andorra                          => Andorra (ad)
+    San Marino                       => San Marino (sm)
+    Laos                             => Laos (la)
+    Maldives                         => Maldives (mv)
+    French Guiana                    => French Guiana (gf)
+    Nicaragua                        => Nicaragua (ni)
+!!  Vietnam Republic
+    Bermuda                          => Bermuda (bm)
+    Chinese Taipei                   => Taiwan (tw)
+    Guinea-Bissau                    => Guinea-Bissau (gw)
+    Saint Vincent and the Grenadines => Saint Vincent and the Grenadines (vc)
+    Kyrgyzstan                       => Kyrgyzstan (kg)
+    Tajikistan                       => Tajikistan (tj)
+    Turkmenistan                     => Turkmenistan (tm)
+    Equatorial Guinea                => Equatorial Guinea (gq)
+    Macau                            => Macao (mo)
+    Aruba                            => Aruba (aw)
+    Puerto Rico                      => Puerto Rico (pr)
+    Papua New Guinea                 => Papua New Guinea (pg)
+    Chad                             => Chad (td)
+    Dominican Republic               => Dominican Republic (do)
+    Seychelles                       => Seychelles (sc)
+    Afghanistan                      => Afghanistan (af)
+    Somalia                          => Somalia (so)
+    Montenegro                       => Montenegro (me)
+    Guam                             => Guam (gu)
+    Gibraltar                        => Gibraltar (gi)
+    Central African Republic         => Central African Republic (cf)
+    Cayman Islands                   => Cayman Islands (ky)
+    British Virgin Islands           => British Virgin Islands (vg)
+    Djibouti                         => Djibouti (dj)
+!!  Jersey
+    Bhutan                           => Bhutan (bt)
+    Réunion                          => Réunion (re)
+    Belize                           => Belize (bz)
+!!  Guernsey
+    Mongolia                         => Mongolia (mn)
+    Greenland                        => Greenland (gl)
+    Brunei                           => Brunei (bn)
+    Eritrea                          => Eritrea (er)
+    Anguilla                         => Anguilla (ai)
+!!  Ynys Môn
+    Comoros                          => Comoros (km)
+    Basque Country                   => Basque Country (bsq)
+    Tonga                            => Tonga (to)
+    U.S. Virgin Islands              => US Virgin Islands (vi)
+    Samoa                            => Samoa (ws)
+    East Timor                       => Timor-Leste (tl)
+!!  Shetland
+!!  Isle of Man
+    American Samoa                   => American Samoa (as)
+    Catalonia                        => Catalonia (cat)
+!!  Åland Islands
+    São Tomé and Príncipe            => São Tomé and Príncipe (st)
+    Saint Martin                     => Saint Martin (mf)
+!!  Isle of Wight
+    South Sudan                      => South Sudan (ss)
+!!  Padania
+    Cook Islands                     => Cook Islands (ck)
+    Montserrat                       => Montserrat (ms)
+    Kosovo                           => Kosovo (xk)
+    Bahamas                          => Bahamas (bs)
+!!  Saare County
+    Tuvalu                           => Tuvalu (tv)
+    Northern Cyprus                  => Northern Cyprus (trnc)
+    Sint Maarten                     => Sint Maarten (sx)
+!!  Gotland
+!!  Frøya
+!!  Western Australia
+!!  Falkland Islands
+!!  Abkhazia
+!!  Western Isles
+    Turks and Caicos Islands         => Turks and Caicos Islands (tc)
+!!  Iraqi Kurdistan
+!!  Sápmi
+    Northern Mariana Islands         => Northern Mariana Islands (mp)
+!!  Yemen DPR
+!!  North Vietnam
+!!  Wallis Islands and Futuna
+!!  Székely Land
+    Bonaire                          => Bonaire (bq)
+!!  Menorca
+!!  Orkney
+!!  Alderney
+!!  Hitra
+!!  Rhodes
+!!  Mayotte
+!!  Occitania
+!!  Ellan Vannin
+!!  Tamil Eelam
+!!  Provence
+    Myanmar                          => Myanmar (mm)
+!!  Western Armenia
+!!  South Ossetia
+!!  Andalusia
+!!  Tibet
+!!  Barawa
+    Monaco                           => Monaco (mc)
+!!  Panjab
+!!  Brittany
+    Kiribati                         => Kiribati (ki)
+!!  United Koreans in Japan
+!!  Chagos Islands
+    Artsakh                          => Artsakh (nkr)
+!!  Kernow
+!!  Arameans Suryoye
+!!  Kárpátalja
+!!  Galicia
+!!  County of Nice
+!!  Corsica
+    Timor-Leste                      => Timor-Leste (tl)
+!!  Saarland
+!!  Silesia
+!!  Felvidék
+!!  Raetia
+!!  Saint Pierre and Miquelon
+!!  Darfur
+    Micronesia                       => Micronesia (fm)
+!!  Cascadia
+!!  Yorkshire
+    Vatican City                     => Vatican City (va)
+!!  Kabylia
+!!  Gozo
+!!  Matabeleland
+!!  Crimea
+!!  Chameria
+!!  Western Sahara
+!!  Somaliland
+!!  Two Sicilies
+!!  Canary Islands
+!!  Republic of St. Pauli
+!!  Sark
+!!  Saint Helena
+!!  Romani people
+!!  Găgăuzia
+!!  Parishes of Jersey
+!!  Manchukuo
+    Palau                            => Palau (pw)
+!!  Central Spain
+    Niue                             => Niue (nu)
+!!  Asturias
+!!  Surrey
+!!  Madrid
