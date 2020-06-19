@@ -5,7 +5,7 @@ require_relative '../boot'
 # DATAFILES_DIR = '../../footballcsv/cache.soccerdata'
 DATAFILES_DIR = './o'
 
-buf, errors = SportDb::TeamSummary.build( DATAFILES_DIR )
+buf, errors = SportDb::TeamSummary.build( DATAFILES_DIR, start: '1989' )
 
 puts "#{errors.size} errors:"
 pp errors

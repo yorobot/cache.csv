@@ -163,13 +163,12 @@ es  = '../../../schochastics/football-data/data/results/spain.csv'
 it  = '../../../schochastics/football-data/data/results/italy.csv'
 de  = '../../../schochastics/football-data/data/results/germany.csv'
 
-# check_datafile( at, league: 'at' )
-# check_datafile( fr, league: 'fr' )
-# check_datafile( eng, league: 'eng' )
-
-check_datafile( es, league: 'es' )
-check_datafile( it, league: 'it' )
-check_datafile( de, league: 'de' )
+check_datafile( at,  league: 'at' )
+check_datafile( fr,  league: 'fr' )
+check_datafile( eng, league: 'eng' )
+check_datafile( es,  league: 'es' )
+check_datafile( it,  league: 'it' )
+check_datafile( de,  league: 'de' )
 
 puts "bye"
 
