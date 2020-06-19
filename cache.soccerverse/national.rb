@@ -71,6 +71,11 @@ def date_to_season( date )
 end
 
 
+
+# OUT_DIR = './o'
+OUT_DIR = '../../../footballcsv/cache.soccerverse'
+
+
 def check_datafile( path, league: )
   columns = {}
 
@@ -141,8 +146,9 @@ def check_datafile( path, league: )
     ## reformat date / beautify e.g. Sat Aug 7 1993
     recs.each { |rec| rec[0] = Date.strptime( rec[0], '%Y-%m-%d' ).strftime( '%a %b %-d %Y' ) }
 
-    CsvMatchWriter.write( "./o/#{key}/#{league}.csv", recs )
+    CsvMatchWriter.write( "./#{OUT_DIR}/#{key}/#{league}.csv", recs )
   end
+
 
   ## assert all columns have only a single value
   columns.each do |column, h|

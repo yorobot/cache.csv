@@ -2,18 +2,16 @@ require_relative '../boot'
 
 
 
-# DATAFILES_DIR = '../../footballcsv/cache.soccerdata'
-DATAFILES_DIR = './o'
+DATAFILES_DIR = '../../../footballcsv/cache.soccerverse'
+# DATAFILES_DIR = './o'   ## for (local) debugging
 
 buf, errors = SportDb::TeamSummary.build( DATAFILES_DIR, start: '1989' )
 
 puts "#{errors.size} errors:"
 pp errors
 
-path = "#{DATAFILES_DIR}/SUMMARY.md"
-# path = './o/SUMMARY.md'   ## for (local) debugging
 
-File.open( path, 'w:utf-8' ) do |f|
+File.open( "#{DATAFILES_DIR}/SUMMARY.md", 'w:utf-8' ) do |f|
   f.write buf
 end
 
