@@ -4,6 +4,7 @@ require 'fileutils'
 
 
 ## todo/fix: move CsvMatchWriter to its own file!!!!!
+module Soccerverse
 class CsvMatchWriter
 
     def self.write( path, recs )
@@ -28,7 +29,7 @@ class CsvMatchWriter
         end
     end
   end # class CsvMatchWriter
-
+end
 
 
 
@@ -60,23 +61,22 @@ class CsvMatchWriter
 =end
 
 
-def date_to_season( date )
-  start_year =  if date.month >= 7
-                    date.year
-                else
-                    date.year-1
-                end
-
-  '%4d-%02d' % [start_year, (start_year+1)%100]
-end
+require_relative 'seasons'    ## pull in date_to_season helper
 
 
 
-# OUT_DIR = './o'
-OUT_DIR = '../../../footballcsv/cache.soccerverse'
+
+OUT_DIR = './o'
+# OUT_DIR = '../../../footballcsv/cache.soccerverse'
 
 
-def check_datafile( path, league: )
+def check_datafile( path, league:, start: nil )
+
+  league_basename = league
+  league_key      = league
+  league  = SportDb::Import.catalog.leagues.find!( league_key )
+
+
   columns = {}
 
   seasons = {}   ## split by season
@@ -88,6 +88,10 @@ def check_datafile( path, league: )
     pp row  if i == 1
 
     print '.' if i % 100 == 0
+
+    date   = Date.strptime( row[:date], '%Y-%m-%d')
+
+    next if start && start > date   ## skip older dates
 
 
     ## cut off country from name e.g.
@@ -104,8 +108,8 @@ def check_datafile( path, league: )
     end
 
 
-    date   = Date.strptime( row[:date], '%Y-%m-%d')
-    season = date_to_season( date )
+
+    season = date_to_season( date, league: league )
 
     seasons[season] ||= []
     seasons[season] << [ row[:date],
@@ -146,7 +150,7 @@ def check_datafile( path, league: )
     ## reformat date / beautify e.g. Sat Aug 7 1993
     recs.each { |rec| rec[0] = Date.strptime( rec[0], '%Y-%m-%d' ).strftime( '%a %b %-d %Y' ) }
 
-    CsvMatchWriter.write( "./#{OUT_DIR}/#{key}/#{league}.csv", recs )
+    Soccerverse::CsvMatchWriter.write( "./#{OUT_DIR}/#{key}/#{league_basename}.csv", recs )
   end
 
 
@@ -169,12 +173,18 @@ es  = '../../../schochastics/football-data/data/results/spain.csv'
 it  = '../../../schochastics/football-data/data/results/italy.csv'
 de  = '../../../schochastics/football-data/data/results/germany.csv'
 
-check_datafile( at,  league: 'at' )
-check_datafile( fr,  league: 'fr' )
-check_datafile( eng, league: 'eng' )
-check_datafile( es,  league: 'es' )
-check_datafile( it,  league: 'it' )
-check_datafile( de,  league: 'de' )
+br  = '../../../schochastics/football-data/data/results/brazil.csv'     # starting in 1977
+ar  = '../../../schochastics/football-data/data/results/argentina.csv'  # starting in 1910
+
+# check_datafile( at,  league: 'at' )
+# check_datafile( fr,  league: 'fr' )
+# check_datafile( eng, league: 'eng' )
+# check_datafile( es,  league: 'es' )
+# check_datafile( it,  league: 'it' )
+# check_datafile( de,  league: 'de' )
+
+check_datafile( br,  league: 'br' )
+# check_datafile( ar, league: 'ar', start: Date.new( 1990, 8, 20 ) )  # start with season 1990/91
 
 puts "bye"
 
