@@ -65,11 +65,28 @@ require_relative 'seasons'    ## pull in date_to_season helper
 
 
 
+def date_to_season( date, league: )
+  season_key = SEASONS.find_by( date: date, league: league )
+  if season_key.nil?
+      start_year =  if date.month >= 7
+                        date.year
+                    else
+                        date.year-1
+                    end
+
+     season_key = '%4d/%02d' % [start_year, (start_year+1)%100]
+  end
+  season_key
+end
+
+
+
 
 OUT_DIR = './o'
 # OUT_DIR = '../../../footballcsv/cache.soccerverse'
 
 
+## todo - rename method to convert() - why? why not?
 def check_datafile( path, league:, start: nil )
 
   league_basename = league
@@ -111,6 +128,7 @@ def check_datafile( path, league:, start: nil )
 
     season = date_to_season( date, league: league )
 
+
     seasons[season] ||= []
     seasons[season] << [ row[:date],
                          row[:home],
@@ -150,7 +168,8 @@ def check_datafile( path, league:, start: nil )
     ## reformat date / beautify e.g. Sat Aug 7 1993
     recs.each { |rec| rec[0] = Date.strptime( rec[0], '%Y-%m-%d' ).strftime( '%a %b %-d %Y' ) }
 
-    Soccerverse::CsvMatchWriter.write( "./#{OUT_DIR}/#{key}/#{league_basename}.csv", recs )
+    ## note: change season_key from 2019/20 to 2019-20  (for path/directory!!!!)
+    Soccerverse::CsvMatchWriter.write( "./#{OUT_DIR}/#{key.tr('/','-')}/#{league_basename}.csv", recs )
   end
 
 
@@ -183,7 +202,7 @@ ar  = '../../../schochastics/football-data/data/results/argentina.csv'  # starti
 # check_datafile( it,  league: 'it' )
 # check_datafile( de,  league: 'de' )
 
-check_datafile( br,  league: 'br' )
+check_datafile( br,  league: 'br', start: Date.new( 1990, 1, 1 ) )
 # check_datafile( ar, league: 'ar', start: Date.new( 1990, 8, 20 ) )  # start with season 1990/91
 
 puts "bye"
