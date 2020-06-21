@@ -1,36 +1,9 @@
-require 'csvreader'
-require 'fileutils'
+require_relative '../csv'        ## pull in date_to_season helper
+require_relative '../seasons'    ## pull in date_to_season helper
 
 
-
-## todo/fix: move CsvMatchWriter to its own file!!!!!
-module Soccerverse
-class CsvMatchWriter
-
-    def self.write( path, recs )
-
-      ## for convenience - make sure parent folders/directories exist
-      FileUtils.mkdir_p( File.dirname( path ))  unless Dir.exist?( File.dirname( path ))
-
-      headers = [
-        'Date',
-        'Team 1',
-        'FT',
-        'Team 2',
-      ]
-
-        File.open( path, 'w:utf-8' ) do |f|
-          f.write headers.join(',')   ## e.g. Date,Team 1,FT,HT,Team 2
-          f.write "\n"
-          recs.each do |rec|
-              f.write rec.join(',')
-              f.write "\n"
-          end
-        end
-    end
-  end # class CsvMatchWriter
-end
-
+# OUT_DIR = './o'
+OUT_DIR = '../../../footballcsv/cache.soccerverse'
 
 
 =begin
@@ -61,7 +34,6 @@ end
 =end
 
 
-require_relative 'seasons'    ## pull in date_to_season helper
 
 
 
@@ -80,26 +52,33 @@ def date_to_season( date, league: )
 end
 
 
+MODS = {
+  'br' => {
+      'Bragantino' => 'CA Bragantino' },  ## ambigious/conflict with RB Bragantino - use year to separate? possible?
+  'at' => {
+     ## 'FC Superfund' => 'FC Pasching OR ASKOE Pasching' }  ## use - why? why not?
+     },
+  'de' => {
+     ## 'KSC Uerdingen 05' => 'KFC Uerdingen 05'
+  }
+}
 
 
-OUT_DIR = './o'
-# OUT_DIR = '../../../footballcsv/cache.soccerverse'
-
-
-## todo - rename method to convert() - why? why not?
-def check_datafile( path, league:, start: nil )
+def convert( path, league:, start: nil )
+  start = Date.strptime( start, '%Y-%m-%d' )   if start.is_a?( String )
 
   league_basename = league
   league_key      = league
   league  = SportDb::Import.catalog.leagues.find!( league_key )
 
+  mods = MODS[ league_key ] || {}
+
 
   columns = {}
-
   seasons = {}   ## split by season
 
   i = 0
-  CsvHash.foreach( path, :header_converters => :symbol  ) do |row|
+  CsvHash.foreach( path, :header_converters => :symbol ) do |row|
     i += 1
 
     pp row  if i == 1
@@ -118,12 +97,19 @@ def check_datafile( path, league:, start: nil )
     ##    etc.
     if row[:home] != (row[:home_ident].sub(/[ ]+\(.+?\)$/, '').strip)
       puts "!! #{row[:home]} != #{row[:home_ident]}"
+      exit 1
     end
 
     if row[:away] != (row[:away_ident].sub(/[ ]+\(.+?\)$/, '').strip)
       puts "!! #{row[:away]} != #{row[:away_ident]}"
+      exit 1
     end
 
+    ### mods - rename club names
+    unless mods.nil? || mods.empty?
+       row[:home] = mods[ row[:home] ]      if mods[ row[:home] ]
+       row[:away] = mods[ row[:away] ]      if mods[ row[:away] ]
+    end
 
 
     season = date_to_season( date, league: league )
@@ -168,8 +154,17 @@ def check_datafile( path, league:, start: nil )
     ## reformat date / beautify e.g. Sat Aug 7 1993
     recs.each { |rec| rec[0] = Date.strptime( rec[0], '%Y-%m-%d' ).strftime( '%a %b %-d %Y' ) }
 
+    headers = [
+      'Date',
+      'Team 1',
+      'FT',
+      'Team 2',
+    ]
+
     ## note: change season_key from 2019/20 to 2019-20  (for path/directory!!!!)
-    Soccerverse::CsvMatchWriter.write( "./#{OUT_DIR}/#{key.tr('/','-')}/#{league_basename}.csv", recs )
+    Cache::CsvMatchWriter.write( "./#{OUT_DIR}/#{key.tr('/','-')}/#{league_basename}.csv",
+                                 recs,
+                                 headers: headers )
   end
 
 
@@ -195,15 +190,29 @@ de  = '../../../schochastics/football-data/data/results/germany.csv'
 br  = '../../../schochastics/football-data/data/results/brazil.csv'     # starting in 1977
 ar  = '../../../schochastics/football-data/data/results/argentina.csv'  # starting in 1910
 
-# check_datafile( at,  league: 'at' )
-# check_datafile( fr,  league: 'fr' )
-# check_datafile( eng, league: 'eng' )
-# check_datafile( es,  league: 'es' )
-# check_datafile( it,  league: 'it' )
-# check_datafile( de,  league: 'de' )
+pt  = '../../../schochastics/football-data/data/results/portugal.csv'     # starting in 1935
+nl  = '../../../schochastics/football-data/data/results/netherlands.csv'  # starting in 1956
 
-check_datafile( br,  league: 'br', start: Date.new( 1990, 1, 1 ) )
-# check_datafile( ar, league: 'ar', start: Date.new( 1990, 8, 20 ) )  # start with season 1990/91
+
+
+# convert( at,  league: 'at' )    # check for date_to_season (incomplete year index)
+#  !! WARN: date >2011-02-12< out-of-seasons for year 2011 in league at.1:
+#     2011/12 |  2011-07-16 - 2012-05-17
+#  !! ERROR: CANNOT auto-fix / (auto-)append date at the end of an event; check season setup - sorry
+
+# convert( de,  league: 'de' )
+
+
+# convert( fr,  league: 'fr' )
+# convert( eng, league: 'eng' )
+# convert( es,  league: 'es' )
+# convert( it,  league: 'it' )
+
+convert( br,  league: 'br', start: '1990-01-01' )
+# convert( ar,  league: 'ar', start: '1990-08-20' )   # start with season 1990/91
+
+# convert( pt,  league: 'pt', start: '1989-08-19' )
+# convert( nl,  league: 'nl', start: '1989-08-12' )
 
 puts "bye"
 
