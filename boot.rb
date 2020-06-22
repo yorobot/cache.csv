@@ -1,5 +1,6 @@
 ## note: use the local version of sportdb-source gem
 $LOAD_PATH.unshift( File.expand_path( '../../../sportdb/sport.db/sportdb-formats/lib') )
+$LOAD_PATH.unshift( File.expand_path( '../../../sportdb/sport.db/sportdb-config/lib') )
 $LOAD_PATH.unshift( File.expand_path( '../../../sportdb/sport.db/sportdb-importers/lib') )
 require 'sportdb/importers'
 
@@ -11,8 +12,5 @@ SportDb::Import.config.leagues_dir = "../../../openfootball/leagues"
 
 $LOAD_PATH.unshift( File.expand_path( '../../football.csv/sportdb-linters/lib') )
 require 'sportdb/linters'    # e.g. uses TeamSummary class
-
-
-
 
 

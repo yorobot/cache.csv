@@ -1,0 +1,29 @@
+####################
+#  checkout skripts (auto-update machinery)
+yorobot:
+- cache.csv      ## incl. self
+- football.csv
+
+###############
+#  use latest sportdb machinery (from source)
+sportdb:
+- sport.db
+- sport.db.sources
+- football.db
+
+#####################
+# football.db - open football
+openfootball:
+## add basics
+- leagues
+- clubs
+
+#####################
+# football.csv
+footballcsv:
+- cache.updates
+- cache.footballdata
+- cache.internationals
+- cache.leagues
+- cache.soccerdata
+- cache.soccerverse
