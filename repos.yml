@@ -3,6 +3,7 @@
 yorobot:
 - cache.csv      ## incl. self
 - football.csv
+- stage
 
 ###############
 #  use latest sportdb machinery (from source)

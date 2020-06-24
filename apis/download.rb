@@ -39,6 +39,18 @@ module Footballdata
     competition( 'BSA', year )
   end
 
+
+  def self.nl( year )
+    # DED - Eredivisie            , Netherlands    10 seasons | 2019-08-09 - 2020-03-08 / matchday 34
+    competition( 'DED', year )
+  end
+
+  def self.pt( year )
+    # PPL - Primeira Liga         , Portugal        9 seasons | 2019-08-10 - 2020-07-26 / matchday 28
+    competition( 'PPL', year )
+  end
+
+
   def self.eng( year )
    # PL  - Premier League        , England        27 seasons | 2019-08-09 - 2020-07-25 / matchday 31
    #  ELC - Championship          , England         3 seasons | 2019-08-02 - 2020-07-22 / matchday 38
@@ -121,6 +133,12 @@ end # module Footballdata
 ## data = Footballdata.fr( 2019 )  ## 2018-19
 ## data = Footballdata.fr( 2017 )  ## 2017-18   -- requires subscription ???
 
-Footballdata.eng( 2019 )
-Footballdata.eng( 2018 )
-Footballdata.eng( 2017 )
+## Footballdata.eng( 2019 )
+## Footballdata.eng( 2018 )
+## Footballdata.eng( 2017 )
+
+## Footballdata.nl( 2018 )
+## Footballdata.nl( 2019 )
+
+## Footballdata.pt( 2018 )
+## Footballdata.pt( 2019 )

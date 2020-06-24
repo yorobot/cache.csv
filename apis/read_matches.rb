@@ -15,13 +15,21 @@ LEAGUES = {
   'eng.1' => 'PL',
   'eng.2' => 'ELC',
   'br.1'  => 'BSA',
-  'fr.1'  => 'FL1'
+  'fr.1'  => 'FL1',
+  'nl.1'  => 'DED',
+  'pt.1'  => 'PPL',
 }
 
 MODS = {
-  'br.1' => { 'América FC' => 'América (MG)',   # in year 2018
-            }
+  'br.1' => {
+         'América FC' => 'América MG',   # in year 2018
+            },
+  'pt.1'  => {
+         'Vitória SC' => 'Vitória Guimarães',  ## avoid easy confusion with Vitória SC <=> Vitória FC
+         'Vitória FC' => 'Vitória Setúbal',
+           },
 }
+
 
 
 def convert( league:, year: )
@@ -31,6 +39,9 @@ def convert( league:, year: )
 
 txt = File.open( path, 'r:utf-8' ) {|f| f.read }
 data = JSON.parse( txt )
+
+
+mods = MODS[ league.downcase ] || {}
 
 
 recs = []
@@ -79,6 +90,14 @@ end_date   = Date.strptime( season['endDate'],   '%Y-%m-%d' )
 matches.each do |m|
   team1 = m['homeTeam']['name']
   team2 = m['awayTeam']['name']
+
+  ### mods - rename club names
+  unless mods.nil? || mods.empty?
+    team1 = mods[ team1 ]      if mods[ team1 ]
+    team2 = mods[ team2 ]      if mods[ team2 ]
+  end
+
+
 
   score = m['score']
 
@@ -200,8 +219,18 @@ puts buf
 
 
    File.open( './logs.txt', 'a:utf-8' ) do |f|
-     f.write "#{league} =============\n"
+     f.write "\n================================\n"
+     f.write "====  #{league}  =============\n"
      f.write buf
+     f.write "  match status: #{stat[:regular][:status].inspect}\n"
+
+     ### report warning if matches different from
+     ##   all and regular and print stage or something!!!
+
+     f.write "#{teams.keys.size} teams:\n"
+     teams.each do |name, count|
+        f.write "  #{count}x  #{name}\n"
+     end
    end
 
 
@@ -247,3 +276,8 @@ convert( league: 'BR.1', year: 2018 )
 convert( league: 'BR.1', year: 2019 )
 convert( league: 'BR.1', year: 2020 )
 
+convert( league: 'PT.1', year: 2018 )
+convert( league: 'PT.1', year: 2019 )
+
+convert( league: 'NL.1', year: 2018 )
+convert( league: 'NL.1', year: 2019 )
