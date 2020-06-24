@@ -7,4 +7,8 @@ temp/
 # ignore all databases
 *.db
 
+###############
+#  ignore error and logs
+errors.txt
+logs.txt
 
