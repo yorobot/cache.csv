@@ -12,13 +12,24 @@ OUT_DIR = '../../stage/one'
 
 
 LEAGUES = {
-  'eng.1' => 'PL',
+  'eng.1' => 'PL',     # incl. team(s) from wales
   'eng.2' => 'ELC',
-  'br.1'  => 'BSA',
-  'fr.1'  => 'FL1',
-  'nl.1'  => 'DED',
+  'es.1'  => 'PD',
   'pt.1'  => 'PPL',
+  'de.1'  => 'BL1',
+  'nl.1'  => 'DED',
+  'fr.1'  => 'FL1',    # incl. team(s) monaco
+  'it.1'  => 'SA',
+  'br.1'  => 'BSA',
+
+  'champs' => 'CL',
 }
+
+# e.g.
+# Cardiff City FC | Cardiff  › Wales  - Cardiff City Stadium, Leckwith Road Cardiff CF11 8AZ
+# AS Monaco FC | Monaco  › Monaco     - Avenue des Castellans Monaco 98000
+
+
 
 MODS = {
   'br.1' => {
@@ -31,14 +42,33 @@ MODS = {
 }
 
 
+def read_json( path )
+  puts "path=>#{path}<"
+  txt = File.open( path, 'r:utf-8' ) {|f| f.read }
+  data = JSON.parse( txt )
+  data
+end
+
 
 def convert( league:, year: )
 
-  path = "./dl/competitions~~#{LEAGUES[league.downcase]}~~matches-I-season~#{year}.json"
-  puts "path=>#{path}<"
+  path         = "./dl/competitions~~#{LEAGUES[league.downcase]}~~matches-I-season~#{year}.json"
+  path_teams   = "./dl/competitions~~#{LEAGUES[league.downcase]}~~teams-I-season~#{year}.json"
 
-txt = File.open( path, 'r:utf-8' ) {|f| f.read }
-data = JSON.parse( txt )
+  data         = read_json( path )
+  data_teams   = read_json( path_teams )
+
+
+  ## build a (reverse) team lookup by name
+  puts "#{data_teams['teams'].size} teams"
+
+  teams_by_name = data_teams['teams'].reduce( {} ) do |h,rec|
+     h[ rec['name'] ] = rec
+     h
+  end
+
+  pp teams_by_name.keys
+
 
 
 mods = MODS[ league.downcase ] || {}
@@ -229,9 +259,20 @@ puts buf
 
      f.write "#{teams.keys.size} teams:\n"
      teams.each do |name, count|
-        f.write "  #{count}x  #{name}\n"
+        rec = teams_by_name[ name ]
+        f.write "  #{count}x  #{name}"
+        if rec
+          f.write " | #{rec['shortName']} "   if name != rec['shortName']
+          f.write " › #{rec['area']['name']}"
+          f.write "  - #{rec['address']}"
+        else
+          f.write " -- !! WARN - no team record found in teams.json"
+        end
+        f.write "\n"
      end
    end
+
+
 
 
 # recs = recs.sort { |l,r| l[1] <=> r[1] }
@@ -254,30 +295,57 @@ Cache::CsvMatchWriter.write( "./#{OUT_DIR}/#{season_key.tr('/','-')}/#{league.do
                              headers: headers )
 
 
+teams.each do |name, count|
+  rec = teams_by_name[ name ]
+  print "  #{count}x  "
+  print name
+  if rec
+    print " | #{rec['shortName']} "   if name != rec['shortName']
+    print " › #{rec['area']['name']}"
+    print "  - #{rec['address']}"
+  else
+    print " -- !! WARN - no team record found in teams.json"
+  end
+  print "\n"
+end
 
-pp teams
 pp stat
 end   # method convert
 
 
 
 
-
+#=begin
 convert( league: 'ENG.1', year: 2018 )
 convert( league: 'ENG.1', year: 2019 )
 
 convert( league: 'ENG.2', year: 2018 )
 convert( league: 'ENG.2', year: 2019 )
 
-convert( league: 'FR.1', year: 2018 )
-convert( league: 'FR.1', year: 2019 )
-
-convert( league: 'BR.1', year: 2018 )
-convert( league: 'BR.1', year: 2019 )
-convert( league: 'BR.1', year: 2020 )
+convert( league: 'ES.1', year: 2018 )
+convert( league: 'ES.1', year: 2019 )
 
 convert( league: 'PT.1', year: 2018 )
 convert( league: 'PT.1', year: 2019 )
 
+convert( league: 'DE.1', year: 2018 )
+convert( league: 'DE.1', year: 2019 )
+
 convert( league: 'NL.1', year: 2018 )
 convert( league: 'NL.1', year: 2019 )
+
+convert( league: 'FR.1', year: 2018 )
+convert( league: 'FR.1', year: 2019 )
+
+convert( league: 'IT.1', year: 2018 )
+convert( league: 'IT.1', year: 2019 )
+
+convert( league: 'BR.1', year: 2018 )
+convert( league: 'BR.1', year: 2019 )
+convert( league: 'BR.1', year: 2020 )
+#=end
+
+# convert( league: 'FR.1',  year: 2019 )
+# convert( league: 'ENG.1', year: 2018 )
+
+

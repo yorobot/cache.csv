@@ -39,6 +39,10 @@ module Footballdata
     competition( 'BSA', year )
   end
 
+  def self.de( year )
+    # BL1 - Bundesliga            , Germany        24 seasons | 2019-08-16 - 2020-06-27 / matchday 34
+    competition( 'BL1', year )
+  end
 
   def self.nl( year )
     # DED - Eredivisie            , Netherlands    10 seasons | 2019-08-09 - 2020-03-08 / matchday 34
@@ -50,6 +54,15 @@ module Footballdata
     competition( 'PPL', year )
   end
 
+  def self.es( year )
+    # PD  - Primera Division      , Spain          27 seasons | 2019-08-16 - 2020-07-19 / matchday 31
+    competition( 'PD', year )
+  end
+
+  def self.it( year )
+    # SA  - Serie A               , Italy          15 seasons | 2019-08-24 - 2020-08-02 / matchday 27
+    competition( 'SA', year )
+  end
 
   def self.eng( year )
    # PL  - Premier League        , England        27 seasons | 2019-08-09 - 2020-07-25 / matchday 31
@@ -61,6 +74,12 @@ module Footballdata
 
    competition( 'PL', year )
    competition( 'ELC', year )
+  end
+
+
+  def self.cl( year )
+    # CL  - UEFA Champions League , Europe         19 seasons | 2019-06-25 - 2020-05-30 / matchday 6
+    competition( 'CL', year )
   end
 
 
@@ -142,3 +161,15 @@ end # module Footballdata
 
 ## Footballdata.pt( 2018 )
 ## Footballdata.pt( 2019 )
+
+## Footballdata.es( 2018 )
+## Footballdata.es( 2019 )
+
+## Footballdata.de( 2018 )
+## Footballdata.de( 2019 )
+
+Footballdata.it( 2018 )
+Footballdata.it( 2019 )
+
+Footballdata.cl( 2018 )
+Footballdata.cl( 2019 )
