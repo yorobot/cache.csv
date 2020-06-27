@@ -1,39 +1,8 @@
-require 'csvreader'
-require 'fileutils'
+require_relative '../csv'        ## pull in date_to_season helper
 
 
-## todo/fix: move CsvMatchWriter to its own file!!!!!
-class CsvMatchWriter
-
-    def self.write( path, recs )
-
-      ## for convenience - make sure parent folders/directories exist
-      FileUtils.mkdir_p( File.dirname( path ))  unless Dir.exist?( File.dirname( path ))
-
-      headers = [
-        'Matchday',
-        'Date',
-        'Time',
-        'Team 1',
-        'FT',
-        'HT',
-        'Team 2'
-      ]
-
-      File.open( path, 'w:utf-8' ) do |f|
-        f.write headers.join(',')   ## e.g. Date,Team 1,FT,HT,Team 2
-        f.write "\n"
-        recs.each do |rec|
-            f.write rec.join(',')
-            f.write "\n"
-        end
-      end
-    end
-
-  end # class CsvMatchWriter
-
-
-
+OUT_DIR = './o'
+# OUT_DIR = '../../../footballcsv/cache.leagues'
 
 
 
@@ -90,11 +59,20 @@ datafiles.each do |datafile|
     end
     puts "  #{recs.size} records  (from #{rows.size} rows)"
 
-    out_root = "../../footballcsv/cache.leagues"
-    # out_root = "./o"
 
-    out_path = "#{out_root}/#{dirname}/#{basename}.csv"
-    CsvMatchWriter.write( out_path, recs )
+    out_path = "#{OUT_DIR}/#{dirname}/#{basename}.csv"
+
+    headers = [
+      'Matchday',
+      'Date',
+      'Time',
+      'Team 1',
+      'FT',
+      'HT',
+      'Team 2'
+    ]
+
+    Cache::CsvMatchWriter.write( out_path, recs, headers: headers )
 end
 
 

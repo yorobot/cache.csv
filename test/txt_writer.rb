@@ -87,10 +87,16 @@ def write_es( season )
 end
 
 
-def write_it( season )
+def write_it( season, source: nil )
     season = SportDb::Import::Season.new( season )  ## normalize season
 
-    matches = SportDb::CsvMatchParser.read( "../../stage/one/#{season.path}/it.1.csv" )
+    in_path = if source == 'leagues'
+                "../cache.leagues/o/#{season.path}/it.1.csv"
+              else
+                "../../stage/one/#{season.path}/it.1.csv"
+              end
+
+    matches = SportDb::CsvMatchParser.read( in_path )
 
     pp matches[0]
     puts "#{matches.size} matches"
@@ -99,8 +105,8 @@ def write_it( season )
 
     matches = normalize( matches, league: league_name )
 
-    path = "../../../openfootball/italy/#{season.path}/1-seriea.txt"
-    SportDb::TxtMatchWriter.write( path, matches,
+    out_path = "../../../openfootball/italy/#{season.path}/1-seriea.txt"
+    SportDb::TxtMatchWriter.write( out_path, matches,
                             title: "#{league_name} #{season.key}",
                             round: ->(round) { "%s^ Giornata" % round },
                             lang:  'it')
@@ -112,7 +118,14 @@ end
 
 # write_es( '2019/20' )
 
-write_it( '2019/20' )
+# write_it( '2019/20' )
+
+# write_it( '2013/14', source: 'leagues' )
+# write_it( '2014/15', source: 'leagues' )
+# write_it( '2015/16', source: 'leagues' )
+# write_it( '2016/17', source: 'leagues' )
+# write_it( '2017/18', source: 'leagues' )
+write_it( '2018/19', source: 'leagues' )
 
 
 puts "bye"
