@@ -2,6 +2,7 @@
 #  checkout skripts (auto-update machinery)
 yorobot:
 - cache.csv      ## incl. self
+- sport.db.more
 - football.csv
 - stage
 
@@ -18,6 +19,9 @@ openfootball:
 ## add basics
 - leagues
 - clubs
+- england
+- espana
+- italy
 
 #####################
 # football.csv

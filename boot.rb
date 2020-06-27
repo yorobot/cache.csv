@@ -10,7 +10,8 @@ SportDb::Import.config.clubs_dir   = "../../../openfootball/clubs"
 SportDb::Import.config.leagues_dir = "../../../openfootball/leagues"
 
 
-$LOAD_PATH.unshift( File.expand_path( '../../football.csv/sportdb-linters/lib') )
+$LOAD_PATH.unshift( File.expand_path( '../../sport.db.more/sportdb-linters/lib') )
+$LOAD_PATH.unshift( File.expand_path( '../../sport.db.more/sportdb-writers/lib') )
 require 'sportdb/linters'    # e.g. uses TeamSummary class
-
+require 'sportdb/writers'
 
