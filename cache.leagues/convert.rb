@@ -5,6 +5,12 @@ OUT_DIR = './o'
 # OUT_DIR = '../../../footballcsv/cache.leagues'
 
 
+MODS = {
+  'es.2' => {
+         'Extremadura' => 'Extremadura UD'  # in season 2019/20
+            }
+}
+
 
 datafiles = Dir["./dl/fbref/**/*csv"]
 puts "#{datafiles.size} datafiles"
@@ -18,6 +24,8 @@ datafiles.each do |datafile|
 
     basename = File.basename( datafile, File.extname( datafile) )
     dirname  = File.basename( File.dirname( datafile ))
+
+    mods = MODS[ basename ] || {}
 
     puts "#{dirname}/#{basename}: (#{datafile})"
     rows = CsvHash.read( datafile, :header_converters => :symbol )
@@ -36,6 +44,16 @@ datafiles.each do |datafile|
 
        values = []
 
+       team1 = row[:home]
+       team2 = row[:away]
+
+       ### mods - rename club names
+       unless mods.nil? || mods.empty?
+         team1 = mods[ team1 ]      if mods[ team1 ]
+         team2 = mods[ team2 ]      if mods[ team2 ]
+       end
+
+
        values << row[:wk]                  # matchday
        values << Date.strptime( row[:date], '%Y-%m-%d' ).strftime( '%a %b %-d %Y' )   # e.g. Sat Aug 7 1993
        values <<  if row[:time].empty?     # time
@@ -45,14 +63,14 @@ datafiles.each do |datafile|
                     #   note: use non-greedy (minimal) match e.g. .+?
                       row[:time].gsub( /\(.+?\)/, '' ).strip
                   end
-        values << row[:home]    # team 1
+        values << team1    # team 1
         values << row[:score]   # ft
         values <<   if row[:score].empty?   # assume match still in future
                       ''
                     else
                       '?'          # ht
                     end
-        values << row[:away]    # team 2
+        values << team2    # team 2
 
 
        recs << values

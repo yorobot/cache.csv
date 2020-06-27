@@ -60,7 +60,7 @@ def write_eng( season )
 end
 
 
-def write_es( season )
+def write_es( season, source: nil )
 ## todo/fix:
 ## extras - add more info
 ## 2018/19
@@ -69,7 +69,13 @@ def write_es( season )
 
     season = SportDb::Import::Season.new( season )  ## normalize season
 
-    matches = SportDb::CsvMatchParser.read( "../../stage/one/#{season.path}/es.1.csv" )
+    in_path = if source == 'leagues'
+      "../cache.leagues/o/#{season.path}/es.1.csv"
+    else
+      "../../stage/one/#{season.path}/es.1.csv"
+    end
+
+    matches = SportDb::CsvMatchParser.read( in_path )
 
     pp matches[0]
     puts "#{matches.size} matches"
@@ -78,12 +84,32 @@ def write_es( season )
 
     matches = normalize( matches, league: league_name )
 
-    path = "../../../openfootball/espana/#{season.path}/1-liga.txt"
-    SportDb::TxtMatchWriter.write( path, matches,
+    out_path = "../../../openfootball/espana/#{season.path}/1-liga.txt"
+    SportDb::TxtMatchWriter.write( out_path, matches,
                             title: "#{league_name} #{season.key}",
                             round: 'Jornada',
                             lang:  'es')
+end
 
+def write_es2( season )
+      season = SportDb::Import::Season.new( season )  ## normalize season
+
+      in_path = "../cache.leagues/o/#{season.path}/es.2.csv"
+
+      matches = SportDb::CsvMatchParser.read( in_path )
+
+      pp matches[0]
+      puts "#{matches.size} matches"
+
+      league_name  = 'Segunda División de España'
+
+      matches = normalize( matches, league: league_name )
+
+      out_path = "../../../openfootball/espana/#{season.path}/2-liga2.txt"
+      SportDb::TxtMatchWriter.write( out_path, matches,
+                              title: "#{league_name} #{season.key}",
+                              round: 'Jornada',
+                              lang:  'es')
 end
 
 
@@ -116,7 +142,10 @@ end
 # write_eng( '2018/19' )
 # write_eng( '2019/20' )
 
+write_es( '2012/13', source: 'leagues' )
+write_es( '2013/14', source: 'leagues' )
 # write_es( '2019/20' )
+# write_es2( '2019/20' )
 
 # write_it( '2019/20' )
 
@@ -125,7 +154,7 @@ end
 # write_it( '2015/16', source: 'leagues' )
 # write_it( '2016/17', source: 'leagues' )
 # write_it( '2017/18', source: 'leagues' )
-write_it( '2018/19', source: 'leagues' )
+# write_it( '2018/19', source: 'leagues' )
 
 
 puts "bye"
