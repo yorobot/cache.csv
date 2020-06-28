@@ -113,6 +113,51 @@ def write_es2( season )
 end
 
 
+def write_fr( season )
+      season = SportDb::Import::Season.new( season )  ## normalize season
+
+      in_path = "../cache.leagues/o/#{season.path}/fr.1.csv"
+
+      matches = SportDb::CsvMatchParser.read( in_path )
+
+      pp matches[0]
+      puts "#{matches.size} matches"
+
+      league_name  = 'French Ligue 1'
+
+      matches = normalize( matches, league: league_name )
+
+      out_path = "../../../openfootball/france/#{season.path}/1-ligue1.txt"
+      SportDb::TxtMatchWriter.write( out_path, matches,
+                              title: "#{league_name} #{season.key}",
+                              round: 'Journée',
+                              lang:  'fr')
+  end
+
+  def write_fr2( season )
+        season = SportDb::Import::Season.new( season )  ## normalize season
+
+        in_path = "../cache.leagues/o/#{season.path}/fr.2.csv"
+
+        matches = SportDb::CsvMatchParser.read( in_path )
+
+        pp matches[0]
+        puts "#{matches.size} matches"
+
+        league_name  = 'French Ligue 2'
+
+        matches = normalize( matches, league: league_name )
+
+        out_path = "../../../openfootball/france/#{season.path}/2-ligue2.txt"
+        SportDb::TxtMatchWriter.write( out_path, matches,
+                                title: "#{league_name} #{season.key}",
+                                round: 'Journée',
+                                lang:  'fr')
+  end
+
+
+
+
 def write_it( season, source: nil )
     season = SportDb::Import::Season.new( season )  ## normalize season
 
@@ -142,10 +187,24 @@ end
 # write_eng( '2018/19' )
 # write_eng( '2019/20' )
 
-write_es( '2012/13', source: 'leagues' )
-write_es( '2013/14', source: 'leagues' )
+# write_es( '2012/13', source: 'leagues' )
+# write_es( '2013/14', source: 'leagues' )
+# write_es( '2014/15', source: 'leagues' )
+# write_es( '2015/16', source: 'leagues' )
+# write_es( '2016/17', source: 'leagues' )
+# write_es( '2017/18', source: 'leagues' )
+# write_es( '2018/19', source: 'leagues' )
 # write_es( '2019/20' )
 # write_es2( '2019/20' )
+
+# write_fr( '2014/15' )
+# write_fr2( '2014/15' )
+# write_fr( '2015/16' )
+# write_fr( '2016/17' )
+write_fr( '2017/18' )
+write_fr( '2018/19' )
+write_fr( '2019/20' )
+
 
 # write_it( '2019/20' )
 
