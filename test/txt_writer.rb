@@ -40,10 +40,16 @@ end
 ##########
 # start
 
-def write_eng( season )
+def write_eng( season, source: nil, extra: nil )
   season = SportDb::Import::Season.new( season )  ## normalize season
 
-  matches = SportDb::CsvMatchParser.read( "../../stage/one/#{season.path}/eng.1.csv" )
+  in_path = if source == 'leagues'
+              "../cache.leagues/o/#{season.path}/eng.1.csv"
+            else
+              "../../stage/one/#{season.path}/eng.1.csv"
+            end
+
+  matches = SportDb::CsvMatchParser.read( in_path )
 
   pp matches[0]
   puts "#{matches.size} matches"
@@ -52,8 +58,12 @@ def write_eng( season )
 
   matches = normalize( matches, league: league_name )
 
-  path = "../../../openfootball/england/#{season.path}/1-premierleague.txt"
-  SportDb::TxtMatchWriter.write( path, matches,
+  season_path = String.new('')    ## note: allow extra path for output!!!! e.g. archive/2000s etc.
+  season_path << "#{extra}/"   if extra
+  season_path << season.path
+
+  out_path = "../../../openfootball/england/#{season_path}/1-premierleague.txt"
+  SportDb::TxtMatchWriter.write( out_path, matches,
                                title: "#{league_name} #{season.key}",
                                round: 'Matchday',
                                lang:  'en')
@@ -183,6 +193,27 @@ def write_it( season, source: nil )
                             lang:  'it')
 end
 
+# write_eng( '1992/93', source: 'leagues', extra: 'archive/1990s' )
+# write_eng( '1993/94', source: 'leagues', extra: 'archive/1990s' )
+# write_eng( '1994/95', source: 'leagues', extra: 'archive/1990s' )
+# write_eng( '1995/96', source: 'leagues', extra: 'archive/1990s' )
+# write_eng( '1996/97', source: 'leagues', extra: 'archive/1990s' )
+# write_eng( '1997/98', source: 'leagues', extra: 'archive/1990s' )
+# write_eng( '2000/01', source: 'leagues', extra: 'archive/2000s')
+
+write_eng( '2001/02', source: 'leagues', extra: 'archive/2000s')
+write_eng( '2002/03', source: 'leagues', extra: 'archive/2000s')
+write_eng( '2003/04', source: 'leagues', extra: 'archive/2000s')
+
+
+# write_eng( '2010/11', source: 'leagues' )
+# write_eng( '2011/12', source: 'leagues' )
+# write_eng( '2012/13', source: 'leagues' )
+# write_eng( '2013/14', source: 'leagues' )
+# write_eng( '2014/15', source: 'leagues' )
+# write_eng( '2015/16', source: 'leagues' )
+# write_eng( '2016/17', source: 'leagues' )
+# write_eng( '2017/18', source: 'leagues' )
 
 # write_eng( '2018/19' )
 # write_eng( '2019/20' )
@@ -201,9 +232,9 @@ end
 # write_fr2( '2014/15' )
 # write_fr( '2015/16' )
 # write_fr( '2016/17' )
-write_fr( '2017/18' )
-write_fr( '2018/19' )
-write_fr( '2019/20' )
+# write_fr( '2017/18' )
+# write_fr( '2018/19' )
+# write_fr( '2019/20' )
 
 
 # write_it( '2019/20' )
