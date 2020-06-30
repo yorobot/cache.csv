@@ -195,54 +195,133 @@ end
 
 
 
-def write_de2( season )
+def write_matches( path, matches, name:, lang: )
+  round = if lang == 'de'
+            'Spieltag'
+          else
+            puts "!! ERROR - unsupported lang >#{lang}<in write_matches"
+            exit 1
+          end
+
+  SportDb::TxtMatchWriter.write( path, matches,
+                                  name:  name,
+                                  round: round,
+                                  lang:  lang )
+end
+
+
+def split_matches( matches, season: )
+  matches_i  = []
+  matches_ii = []
+  matches.each do |match|
+    date = Date.strptime( match.date, '%Y-%m-%d' )
+    if date.year == season.start_year
+      matches_i << match
+    elsif date.year == season.end_year
+      matches_ii << match
+    else
+      puts "!! ERROR: match date-out-of-range for season:"
+      pp season
+      pp date
+      pp match
+      exit 1
+    end
+  end
+  [matches_i, matches_ii]
+end
+
+
+def write_worker_de( matches, season:, league_name:, basename:, split: )
+  pp matches[0]
+  puts "#{matches.size} matches"
+
+  matches = normalize( matches, league: league_name )
+
+  if split
+    matches_i, matches_ii = split_matches( matches, season: season )
+
+    path = "../../../openfootball/deutschland/#{season.path}/#{basename}-i.txt"
+    write_matches( path, matches_i, name: "#{league_name} #{season.key}",
+                                        lang:  'de' )
+    path = "../../../openfootball/deutschland/#{season.path}/#{basename}-ii.txt"
+    write_matches( path, matches_ii, name: "#{league_name} #{season.key}",
+                                        lang:  'de' )
+  else
+    path = "../../../openfootball/deutschland/#{season.path}/#{basename}.txt"
+    write_matches( path, matches, name: "#{league_name} #{season.key}",
+                                      lang:  'de' )
+  end
+end
+
+
+def write_de( season, split: false )
+  season = SportDb::Import::Season.new( season )  ## normalize season
+
+  path = "../cache.leagues/o/#{season.path}/de.1.csv"
+
+  matches = SportDb::CsvMatchParser.read( path )
+
+  write_worker_de( matches,
+                   season: season,
+                   league_name: 'Deutsche Bundesliga',
+                   basename: '1-bundesliga',
+                   split: split )
+end
+
+def write_de2( season, split: false )
       season = SportDb::Import::Season.new( season )  ## normalize season
 
-      in_path = "../cache.leagues/o/#{season.path}/de.2.csv"
+      path = "../cache.leagues/o/#{season.path}/de.2.csv"
 
-      matches = SportDb::CsvMatchParser.read( in_path )
+      matches = SportDb::CsvMatchParser.read( path )
 
-      pp matches[0]
-      puts "#{matches.size} matches"
-
-      league_name  = 'Deutsche 2. Bundesliga'
-
-      matches = normalize( matches, league: league_name )
-
-      out_path = "../../../openfootball/deutschland/#{season.path}/2-bundesliga2.txt"
-      SportDb::TxtMatchWriter.write( out_path, matches,
-                              name: "#{league_name} #{season.key}",
-                              round: 'Spieltag',
-                              lang:  'de')
+      write_worker_de( matches,
+                       season: season,
+                       league_name: 'Deutsche 2. Bundesliga',
+                       basename: '2-bundesliga2',
+                       split: split )
   end
 
-  def write_de3( season )
+  def write_de3( season, split: false )
         season = SportDb::Import::Season.new( season )  ## normalize season
 
-        in_path = "../cache.leagues/o/#{season.path}/de.3.csv"
+        path = "../cache.leagues/o/#{season.path}/de.3.csv"
 
-        matches = SportDb::CsvMatchParser.read( in_path )
+        matches = SportDb::CsvMatchParser.read( path )
 
-        pp matches[0]
-        puts "#{matches.size} matches"
-
-        league_name  = 'Deutsche 3. Liga'
-
-        matches = normalize( matches, league: league_name )
-
-        out_path = "../../../openfootball/deutschland/#{season.path}/3-liga3.txt"
-        SportDb::TxtMatchWriter.write( out_path, matches,
-                                name: "#{league_name} #{season.key}",
-                                round: 'Spieltag',
-                                lang:  'de')
+        write_worker_de( matches,
+                         season: season,
+                         league_name: 'Deutsche 3. Liga',
+                         basename: '3-liga3',
+                         split: split )
   end
 
+write_de( '2010-11' )
+write_de( '2011-12' )
+write_de( '2012-13', split: true )
+write_de( '2013-14', split: true )
 
-write_de2( '2019/20' )
-write_de3( '2019/20' )
+write_de( '2014-15', split: true )
+write_de2( '2014-15', split: true )
+write_de3( '2014-15', split: true )
 
-write_de2( '2018/19' )
-write_de3( '2018/19' )
+write_de( '2015-16', split: true )
+write_de2( '2015-16', split: true )
+write_de3( '2015-16', split: true )
+
+write_de( '2016-17', split: true )
+write_de2( '2016-17', split: true )
+write_de3( '2016-17', split: true )
+
+write_de( '2017-18', split: true )
+write_de2( '2017-18', split: true )
+write_de3( '2017-18', split: true )
+
+# write_de2( '2019/20' )
+# write_de3( '2019/20' )
+
+# write_de2( '2018/19' )
+# write_de3( '2018/19' )
 
 
 # write_eng( '1992/93', source: 'leagues', extra: 'archive/1990s' )
