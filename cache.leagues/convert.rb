@@ -12,7 +12,7 @@ MODS = {
 }
 
 
-datafiles = Dir["./dl/fbref/**/*csv"]
+datafiles = Dir.glob( "./dl/fbref/**/*csv" )
 puts "#{datafiles.size} datafiles"
 
 datafiles.each do |datafile|

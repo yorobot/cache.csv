@@ -64,7 +64,7 @@ def write_eng( season, source: nil, extra: nil )
 
   out_path = "../../../openfootball/england/#{season_path}/1-premierleague.txt"
   SportDb::TxtMatchWriter.write( out_path, matches,
-                               title: "#{league_name} #{season.key}",
+                               name: "#{league_name} #{season.key}",
                                round: 'Matchday',
                                lang:  'en')
 end
@@ -96,7 +96,7 @@ def write_es( season, source: nil )
 
     out_path = "../../../openfootball/espana/#{season.path}/1-liga.txt"
     SportDb::TxtMatchWriter.write( out_path, matches,
-                            title: "#{league_name} #{season.key}",
+                            name: "#{league_name} #{season.key}",
                             round: 'Jornada',
                             lang:  'es')
 end
@@ -117,7 +117,7 @@ def write_es2( season )
 
       out_path = "../../../openfootball/espana/#{season.path}/2-liga2.txt"
       SportDb::TxtMatchWriter.write( out_path, matches,
-                              title: "#{league_name} #{season.key}",
+                              name: "#{league_name} #{season.key}",
                               round: 'Jornada',
                               lang:  'es')
 end
@@ -139,7 +139,7 @@ def write_fr( season )
 
       out_path = "../../../openfootball/france/#{season.path}/1-ligue1.txt"
       SportDb::TxtMatchWriter.write( out_path, matches,
-                              title: "#{league_name} #{season.key}",
+                              name: "#{league_name} #{season.key}",
                               round: 'Journée',
                               lang:  'fr')
   end
@@ -160,7 +160,7 @@ def write_fr( season )
 
         out_path = "../../../openfootball/france/#{season.path}/2-ligue2.txt"
         SportDb::TxtMatchWriter.write( out_path, matches,
-                                title: "#{league_name} #{season.key}",
+                                name: "#{league_name} #{season.key}",
                                 round: 'Journée',
                                 lang:  'fr')
   end
@@ -188,10 +188,62 @@ def write_it( season, source: nil )
 
     out_path = "../../../openfootball/italy/#{season.path}/1-seriea.txt"
     SportDb::TxtMatchWriter.write( out_path, matches,
-                            title: "#{league_name} #{season.key}",
+                            name: "#{league_name} #{season.key}",
                             round: ->(round) { "%s^ Giornata" % round },
                             lang:  'it')
 end
+
+
+
+def write_de2( season )
+      season = SportDb::Import::Season.new( season )  ## normalize season
+
+      in_path = "../cache.leagues/o/#{season.path}/de.2.csv"
+
+      matches = SportDb::CsvMatchParser.read( in_path )
+
+      pp matches[0]
+      puts "#{matches.size} matches"
+
+      league_name  = 'Deutsche 2. Bundesliga'
+
+      matches = normalize( matches, league: league_name )
+
+      out_path = "../../../openfootball/deutschland/#{season.path}/2-bundesliga2.txt"
+      SportDb::TxtMatchWriter.write( out_path, matches,
+                              name: "#{league_name} #{season.key}",
+                              round: 'Spieltag',
+                              lang:  'de')
+  end
+
+  def write_de3( season )
+        season = SportDb::Import::Season.new( season )  ## normalize season
+
+        in_path = "../cache.leagues/o/#{season.path}/de.3.csv"
+
+        matches = SportDb::CsvMatchParser.read( in_path )
+
+        pp matches[0]
+        puts "#{matches.size} matches"
+
+        league_name  = 'Deutsche 3. Liga'
+
+        matches = normalize( matches, league: league_name )
+
+        out_path = "../../../openfootball/deutschland/#{season.path}/3-liga3.txt"
+        SportDb::TxtMatchWriter.write( out_path, matches,
+                                name: "#{league_name} #{season.key}",
+                                round: 'Spieltag',
+                                lang:  'de')
+  end
+
+
+write_de2( '2019/20' )
+write_de3( '2019/20' )
+
+write_de2( '2018/19' )
+write_de3( '2018/19' )
+
 
 # write_eng( '1992/93', source: 'leagues', extra: 'archive/1990s' )
 # write_eng( '1993/94', source: 'leagues', extra: 'archive/1990s' )
@@ -201,9 +253,9 @@ end
 # write_eng( '1997/98', source: 'leagues', extra: 'archive/1990s' )
 # write_eng( '2000/01', source: 'leagues', extra: 'archive/2000s')
 
-write_eng( '2001/02', source: 'leagues', extra: 'archive/2000s')
-write_eng( '2002/03', source: 'leagues', extra: 'archive/2000s')
-write_eng( '2003/04', source: 'leagues', extra: 'archive/2000s')
+# write_eng( '2001/02', source: 'leagues', extra: 'archive/2000s')
+# write_eng( '2002/03', source: 'leagues', extra: 'archive/2000s')
+# write_eng( '2003/04', source: 'leagues', extra: 'archive/2000s')
 
 
 # write_eng( '2010/11', source: 'leagues' )
