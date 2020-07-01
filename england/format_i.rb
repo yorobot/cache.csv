@@ -8,6 +8,22 @@ OUT_DIR='../../../openfootball/england'
 # OUT_DIR='./o'
 
 
+## quick fix for Nottingham
+##  add option fo all leagues - why? why not?
+MODS = {
+ 'eng.1' => {
+    'Nottingham' => 'Nottingham Forest',  # in 1998/99
+ },
+ 'eng.2' => {
+    'Nottingham' => 'Nottingham Forest',  # in 1999/00 -
+ },
+ 'eng.3' => {
+    'Nottingham' => 'Nottingham Forest',  # in 2005/06 -
+ },
+}
+
+
+
 
 def read_matches( path )
   secs = SportDb::LeagueOutlineReader.read( path )
@@ -43,6 +59,28 @@ def read_matches( path )
 
 
   puts "#{matches.size} matches:"
+
+
+  ## check for mods
+  mods = MODS[ league.key ]
+  if mods
+    puts "checking mods for league >#{league.key}<:"
+    pp mods
+
+    matches = matches.map do |match|
+      team1 = match.team1.is_a?( String ) ? match.team1 : match.team1.name
+      team2 = match.team2.is_a?( String ) ? match.team2 : match.team2.name
+
+      ## todo/fix:  fix name in struct !!! how possible
+      ## hack/workaround for now: downgrade all to strings!!!
+      team1 = mods[ team1 ]   if mods[ team1 ]
+      team2 = mods[ team2 ]   if mods[ team2 ]
+
+      match.update( team1: team1 )
+      match.update( team2: team2 )
+      match
+    end
+  end
 
 
   ## convert rounds / matchday to integer from string
@@ -87,7 +125,7 @@ def write_eng( season,   basename:,
 
    out_path = "#{OUT_DIR}/#{season_path}/#{basename}.txt"
    SportDb::TxtMatchWriter.write( out_path, matches,
-                             title: "#{name} #{season.key}",
+                             name: "#{name} #{season.key}",
                              round: 'Matchday',
                              lang:  'en')
 end
@@ -147,15 +185,17 @@ def write_eng4( season_q, extra: nil )
 end
 
 
-# write_eng1( '1998/99', extra: 'archive/1990s' )
+write_eng1( '1998/99', extra: 'archive/1990s' )
 # write_eng2( '1998/99', extra: 'archive/1990s' )
 # write_eng3( '1998/99', extra: 'archive/1990s' )
 # write_eng4( '1998/99', extra: 'archive/1990s' )
 
 # write_eng1( '1999/00', extra: 'archive/1990s' )
-# write_eng2( '1999/00', extra: 'archive/1990s' )
+write_eng2( '1999/00', extra: 'archive/1990s' )
 # write_eng3( '1999/00', extra: 'archive/1990s' )
 # write_eng4( '1999/00', extra: 'archive/1990s' )
+
+
 
 # write_eng1( '2000/01', extra: 'archive/2000s' )
 # write_eng1( '2001/02', extra: 'archive/2000s' )
@@ -169,47 +209,47 @@ end
 # write_eng1( '2009/10', extra: 'archive/2000s' )
 
 
-# write_eng2( '2000/01', extra: 'archive/2000s' )
+write_eng2( '2000/01', extra: 'archive/2000s' )
 # write_eng3( '2000/01', extra: 'archive/2000s' )
 # write_eng4( '2000/01', extra: 'archive/2000s' )
 
-# write_eng2( '2001/02', extra: 'archive/2000s' )
+write_eng2( '2001/02', extra: 'archive/2000s' )
 # write_eng3( '2001/02', extra: 'archive/2000s' )
 # write_eng4( '2001/02', extra: 'archive/2000s' )
 
-# write_eng2( '2002/03', extra: 'archive/2000s' )
+write_eng2( '2002/03', extra: 'archive/2000s' )
 # write_eng3( '2002/03', extra: 'archive/2000s' )
 # write_eng4( '2002/03', extra: 'archive/2000s' )
 
-# write_eng2( '2003/04', extra: 'archive/2000s' )
+write_eng2( '2003/04', extra: 'archive/2000s' )
 # write_eng3( '2003/04', extra: 'archive/2000s' )
 # write_eng4( '2003/04', extra: 'archive/2000s' )
 
 
 
 write_eng2( '2004/05', extra: 'archive/2000s' )
-write_eng3( '2004/05', extra: 'archive/2000s' )
-write_eng4( '2004/05', extra: 'archive/2000s' )
+# write_eng3( '2004/05', extra: 'archive/2000s' )
+# write_eng4( '2004/05', extra: 'archive/2000s' )
 
-write_eng2( '2005/06', extra: 'archive/2000s' )
+# write_eng2( '2005/06', extra: 'archive/2000s' )
 write_eng3( '2005/06', extra: 'archive/2000s' )
-write_eng4( '2005/06', extra: 'archive/2000s' )
+# write_eng4( '2005/06', extra: 'archive/2000s' )
 
-write_eng2( '2006/07', extra: 'archive/2000s' )
+# write_eng2( '2006/07', extra: 'archive/2000s' )
 write_eng3( '2006/07', extra: 'archive/2000s' )
-write_eng4( '2006/07', extra: 'archive/2000s' )
+# write_eng4( '2006/07', extra: 'archive/2000s' )
 
-write_eng2( '2007/08', extra: 'archive/2000s' )
+# write_eng2( '2007/08', extra: 'archive/2000s' )
 write_eng3( '2007/08', extra: 'archive/2000s' )
-write_eng4( '2007/08', extra: 'archive/2000s' )
+# write_eng4( '2007/08', extra: 'archive/2000s' )
 
 write_eng2( '2008/09', extra: 'archive/2000s' )
-write_eng3( '2008/09', extra: 'archive/2000s' )
-write_eng4( '2008/09', extra: 'archive/2000s' )
+# write_eng3( '2008/09', extra: 'archive/2000s' )
+# write_eng4( '2008/09', extra: 'archive/2000s' )
 
 write_eng2( '2009/10', extra: 'archive/2000s' )
-write_eng3( '2009/10', extra: 'archive/2000s' )
-write_eng4( '2009/10', extra: 'archive/2000s' )
+# write_eng3( '2009/10', extra: 'archive/2000s' )
+# write_eng4( '2009/10', extra: 'archive/2000s' )
 
 
 # write_eng1( '2010/11' )
