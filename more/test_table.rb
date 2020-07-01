@@ -1,15 +1,10 @@
 require 'pp'
 require 'nokogiri'
 
+require 'sportdb/formats'   ## for Season -- move to test_schedule /fetch!!!!
+
 require_relative '../csv'
 
-
-# path = './dl/weltfussball-at1-2010-2011.html'
-
-season = '2013-2014'
-basename = 'de.2'
-path = "./dl/weltfussball-#{basename}-#{season}.html"
-html =  File.open( path, 'r:utf-8' ) { |f| f.read }
 
 
 
@@ -25,14 +20,25 @@ MODS = {
 }
 
 
-doc = Nokogiri::HTML.fragment( html )   ## note: use a fragment NOT a document
-
 
 def squish( str )
   str = str.strip
   str = str.gsub( /[ \t\n]+/, ' ' )  ## fold whitespace to one max.
   str
 end
+
+
+def convert( season, league )
+   # season   = '2019-2020'
+   # basename = 'at.2'
+  basename =   league
+
+  path = "./dl/weltfussball-#{basename}-#{season}.html"
+
+
+html =  File.open( path, 'r:utf-8' ) { |f| f.read }
+
+doc = Nokogiri::HTML.fragment( html )   ## note: use a fragment NOT a document
 
 
 # <div class="data">
@@ -85,36 +91,119 @@ trs.each do |tr|
     team1_str = MODS[ team1_str ]   if MODS[ team1_str ]
     team2_str = MODS[ team2_str ]   if MODS[ team2_str ]
 
+    date_str = last_date_str    if date_str.empty?
+
     print '[%03d]    ' % (i+1)
-    print "%-10s | " % ( date_str.empty? ? last_date_str : date_str )
+    print "%-10s | " % date_str
     print "%-5s | " % time_str
     print "%-22s | " % team1_str
     print "%-22s | " % team2_str
     print score_str
     print "\n"
 
+
+
+    ## convert date from 25.10.2019 to 2019-25-10
+    date = Date.strptime( date_str, '%d.%m.%Y' )
+
+    comments = String.new( '' )
+
+    ## split score
+    ft = ''
+    ht = ''
+    if score_str =~ /---/
+      ft = ''
+      ht = ''
+    elsif score_str =~ /([0-9]+)
+                            [ ]*-[ ]*
+                        ([0-9]+)
+                            [ ]*
+                        \(([0-9]+)
+                            [ ]*-[ ]*
+                          ([0-9]+)
+                        \)
+                       /x
+      ft = "#{$1}-#{$2}"
+      ht = "#{$3}-#{$4}"
+    elsif  score_str =~ /([0-9]+)
+                           [ ]*-[ ]*
+                         ([0-9]+)
+                           [ ]*
+                          ([a-z.]+)
+                         /x
+      ft = "#{$1}-#{$2} (*)"
+      ht = ''
+      comments = $3
+    else
+       puts "!! ERROR - unsupported score format #{score_str} - sorry"
+       exit 1
+    end
+
     recs << [last_round,
-             date_str.empty? ? last_date_str : date_str,
+             date.strftime( '%Y-%m-%d' ),
              time_str,
              team1_str,
-             score_str,
-             team2_str
-            ]
+             ft,
+             ht,
+             team2_str,
+             comments]
 
-    last_date_str = date_str  if date_str.size > 0
+    last_date_str = date_str
   end
 end
 
 
-out_path = "./o/#{season}/#{basename}.csv"
+season = SportDb::Import::Season.new( season )
+
+
+
+##   note:  sort matches by date before saving/writing!!!!
+##     note: for now assume date in string in 1999-11-30 format (allows sort by "simple" a-z)
+## note: assume date is first column!!!
+recs = recs.sort { |l,r| l[1] <=> r[1] }
+## reformat date / beautify e.g. Sat Aug 7 1993
+recs.each { |rec| rec[1] = Date.strptime( rec[1], '%Y-%m-%d' ).strftime( '%a %b %-d %Y' ) }
+
+
+out_path = "./o/#{season.path}/#{basename}.csv"
+
+puts "write #{out_path}..."
+
 
 headers = [
   'Matchday',
   'Date',
   'Time',
   'Team 1',
-  'Score',
-  'Team 2'
+  'FT',
+  'HT',
+  'Team 2',
+  'Comments'    ## e.g. awarded
 ]
 
 Cache::CsvMatchWriter.write( out_path, recs, headers: headers )
+end
+
+
+# path = './dl/weltfussball-at1-2010-2011.html'
+
+# season = '2013-2014'
+# basename = 'de.2'
+
+LEAGUES = [['at.1', ['2010-2011', '2011-2012', '2012-2013', '2013-2014','2014-2015',
+                     '2015-2016', '2016-2017', '2017-2018']],
+           ['at.2', ['2010-2011', '2011-2012',
+                     '2018-2019', '2019-2020']],
+           ['de.2', ['2013-2014']],
+          ]
+
+pp LEAGUES
+
+
+LEAGUES.each do |league|
+  basename = league[0]
+  league[1].each do |season|
+    convert( season, basename )
+  end
+end
+

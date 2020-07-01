@@ -268,10 +268,14 @@ def write_de( season, split: false )
                    split: split )
 end
 
-def write_de2( season, split: false )
+def write_de2( season, source:, split: false )
       season = SportDb::Import::Season.new( season )  ## normalize season
 
-      path = "../cache.leagues/o/#{season.path}/de.2.csv"
+      path =  if source == 'more'
+                "../more/o/#{season.path}/de.2.csv"
+             else
+                "../cache.leagues/o/#{season.path}/de.2.csv"
+              end
 
       matches = SportDb::CsvMatchParser.read( path )
 
@@ -296,26 +300,32 @@ def write_de2( season, split: false )
                          split: split )
   end
 
-write_de( '2010-11' )
-write_de( '2011-12' )
-write_de( '2012-13', split: true )
-write_de( '2013-14', split: true )
 
-write_de( '2014-15', split: true )
-write_de2( '2014-15', split: true )
-write_de3( '2014-15', split: true )
+### todo/fix: add normalize: false   option too; use for AT for now!!!!
 
-write_de( '2015-16', split: true )
-write_de2( '2015-16', split: true )
-write_de3( '2015-16', split: true )
 
-write_de( '2016-17', split: true )
-write_de2( '2016-17', split: true )
-write_de3( '2016-17', split: true )
+# write_de( '2010-11' )
+# write_de( '2011-12' )
+# write_de( '2012-13', split: true )
 
-write_de( '2017-18', split: true )
-write_de2( '2017-18', split: true )
-write_de3( '2017-18', split: true )
+# write_de( '2013-14', split: true )
+write_de2( '2013-14', source: 'more', split: true)
+
+# write_de( '2014-15', split: true )
+# write_de2( '2014-15', split: true )
+# write_de3( '2014-15', split: true )
+
+# write_de( '2015-16', split: true )
+# write_de2( '2015-16', split: true )
+# write_de3( '2015-16', split: true )
+
+# write_de( '2016-17', split: true )
+# write_de2( '2016-17', split: true )
+# write_de3( '2016-17', split: true )
+
+# write_de( '2017-18', split: true )
+# write_de2( '2017-18', split: true )
+# write_de3( '2017-18', split: true )
 
 # write_de2( '2019/20' )
 # write_de3( '2019/20' )
