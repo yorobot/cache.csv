@@ -2,12 +2,13 @@ require_relative '../boot'
 require_relative '../csv'
 
 
+##########
+## convert "old" csv datasets from football.csv before switch-over to mirror
 
-def write_matches( season )
-  season = SportDb::Import::Season.new( season )
-  decade = '%3d0s' % [season.start_year/10]
+def convert( season )
+  season_path = season.to_path( :archive )  ## e.g. 1990s/1999-00
 
-  path = "../../../footballcsv/deutschland/#{decade}/#{season.path}/de.1.csv"
+  path = "../../../footballcsv/deutschland/#{season_path}/de.1.csv"
 
   matches = SportDb::CsvMatchParser.read( path )
   puts "  #{matches.size} records"
@@ -37,22 +38,14 @@ def write_matches( season )
     'Team 2'
   ]
 
-  ## out_path = "./o/#{decade}/#{season.path}/de.1.csv"
-  out_path = "./o/#{season.path}/de.1.csv"
+  season_path = season.to_path   ## use default format e.g. 1999-00
+  out_path = "./o/#{season_path}/de.1.csv"
+  ## out_path ="../../../footballcsv/cache.leagues/#{season_path}/de.1.csv"
   Cache::CsvMatchWriter.write( out_path, recs, headers: headers )
 end
 
 
-def season_next( season )
-  season = SportDb::Import::Season.new( season )
-  "%4d/%02d" % [season.start_year+1, (season.start_year+2)%100]
-end
-
-
-season = '1963/64'
-loop do
-  write_matches( season )
-  season = season_next( season )
-
-  break if season == '2014/15'
+## range up-to (incl.) 2013/14
+(Season.new('1963/64')..Season.new('2013/14')).each do |season|
+  convert( season )
 end
