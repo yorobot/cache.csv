@@ -17,8 +17,8 @@ require 'pp'
 # package_dir =  '../../../openfootball/france'
 # package_dir =  '../../../openfootball/italy'
 # package_dir =  '../../../openfootball/england'
-# package_dir =  '../../../openfootball/austria'
-package_dir =  '../../../openfootball/deutschland'
+package_dir =  '../../../openfootball/austria'
+# package_dir =  '../../../openfootball/deutschland'
 datafiles = Dir.glob( "#{package_dir}/**/{*,.*}.txt" )
 
 ## filter

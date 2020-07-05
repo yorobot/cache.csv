@@ -198,6 +198,9 @@ end
 def write_matches( path, matches, name:, lang: )
   round = if lang == 'de'
             'Spieltag'
+          elsif lang == 'de_at'
+            lang = 'de'  ## !! note - MUST reset lang to de before passing on
+            ->(round) { "%s. Runde" % round }   # return lambda (inline-func/proc)
           else
             puts "!! ERROR - unsupported lang >#{lang}<in write_matches"
             exit 1
@@ -229,6 +232,70 @@ def split_matches( matches, season: )
   end
   [matches_i, matches_ii]
 end
+
+
+def write_worker_at( matches, season:, league_name:, basename:,
+  split: false, normalize: true )
+
+  pp matches[0]
+  puts "#{matches.size} matches"
+
+  matches = normalize( matches, league: league_name )   if normalize
+
+  season_path = season.path
+
+  if split
+    matches_i, matches_ii = split_matches( matches, season: season )
+
+    path = "../../../openfootball/austria/#{season_path}/#{basename}-i.txt"
+    write_matches( path, matches_i, name: "#{league_name} #{season.key}",
+            lang:  'de_at' )
+    path = "../../../openfootball/austria/#{season_path}/#{basename}-ii.txt"
+    write_matches( path, matches_ii, name: "#{league_name} #{season.key}",
+            lang:  'de_at' )
+  else
+     path = "../../../openfootball/austria/#{season_path}/#{basename}.txt"
+     write_matches( path, matches, name: "#{league_name} #{season.key}",
+            lang:  'de_at' )
+  end
+end
+
+def write_at( season, split: false, normalize: true )
+  season = SportDb::Import::Season.new( season )  ## normalize season
+
+  path = "../more/o/#{season.path}/at.1.csv"
+
+  matches = SportDb::CsvMatchParser.read( path )
+
+  write_worker_at( matches,
+                   season: season,
+                   league_name: 'Österr. Bundesliga',
+                   basename: '1-bundesliga',
+                   split: split,
+                   normalize: normalize )
+end
+
+def write_at2( season, split: false, normalize: true )
+  season = SportDb::Import::Season.new( season )  ## normalize season
+
+  path = "../more/o/#{season.path}/at.2.csv"
+
+  matches = SportDb::CsvMatchParser.read( path )
+
+  league_name, basename = if season.start_year >= 2018
+                            ['Österr. 2. Liga',     '2-liga2']
+                          else
+                            ['Österr. Erste Liga',  '2-liga1']
+                          end
+
+  write_worker_at( matches,
+                   season: season,
+                   league_name: league_name,
+                   basename: basename,
+                   split: split,
+                   normalize: normalize )
+end
+
 
 
 def write_worker_de( matches, season:, league_name:, basename:, extra: nil,
@@ -315,22 +382,24 @@ def write_de2( season, source:, split: false )
 ### todo/fix: add normalize: false   option too; use for AT for now!!!!
 
 
-def season_next( season )
-  SportDb::Import::Season.new(
-    "%4d/%02d" % [season.start_year+1, (season.start_year+2)%100] )
-end
+# write_at( '2010-11', split: true, normalize: false )
+# write_at2( '2010-11', split: true, normalize: false )
 
-season = SportDb::Import::Season.new( '1963/64' )
-loop do
-  decade = '%3d0s' % [season.start_year/10]
-  extra_path = "archive/#{decade}"
+# write_at( '2011-12', split: true, normalize: false )
+# write_at2( '2011-12', split: true, normalize: false )
 
-  write_de( season.key, source: 'de', extra: extra_path, normalize: false )
+# write_at( '2012-13', split: true, normalize: false )
 
-  season = season_next( season )
+# write_at( '2013-14', split: true, normalize: false )
 
-  break if season.key == '2010/11'
-end
+# write_at( '2014-15', split: true, normalize: false )
+
+write_at( '2015-16', split: true, normalize: false )
+write_at( '2016-17', split: true, normalize: false )
+write_at( '2017-18', split: true, normalize: false )
+
+write_at2( '2018-19', normalize: false )
+write_at2( '2019-20', normalize: false )
 
 
 # write_de( '2010-11' )
