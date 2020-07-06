@@ -118,13 +118,21 @@ trs.each do |tr|
     ## split score
     ft = ''
     ht = ''
-    if score_str == '---'
+    if score_str == '---'   ## in the future (no score yet)
       ft = ''
       ht = ''
     elsif score_str == 'n.gesp.'   ## cancelled (british) / canceled (us)
       ft = '(*)'
       ht = ''
       comments = 'cancelled'
+    elsif score_str == 'abgebr.'  ## abandoned  -- waiting for replay?
+      ft = '(*)'
+      ht = ''
+      comments = 'abandoned'
+    elsif score_str == 'verl.'   ## postponed
+      ft = ''
+      ht = ''
+      comments = 'postponed'
     elsif score_str =~ /([0-9]+)
                             [ ]*-[ ]*
                         ([0-9]+)
@@ -145,6 +153,10 @@ trs.each do |tr|
       ft = "#{$1}-#{$2} (*)"
       ht = ''
       comments = $3
+    elsif score_str =~ /[0-9]+-[0-9]+/
+      puts "!! WARN - skipping LIVE score for match"
+      ft = ''
+      ht = ''
     else
        puts "!! ERROR - unsupported score format >#{score_str}< - sorry"
        exit 1
@@ -201,6 +213,19 @@ DATAFILES = [['at.1',  %w[2010/11 2011/12 2012/13 2013/14 2014/15
              ['de.2',  %w[2013/14]],
              ['eng.3', %w[2018/19 2019/20]],
              ['eng.4', %w[2017/18 2018/19 2019/20]],
+
+             ['ch.1', %w[2019/20]],
+             ['ch.2', %w[2019/20]],
+
+             ['fr.2', %w[2019/20]],
+
+             ['it.2', %w[2019/20]],
+
+             ['ru.1', %w[2019/20]],
+             ['ru.2', %w[2019/20]],
+
+             ['tr.1', %w[2019/20]],
+             ['tr.2', %w[2019/20]],
             ]
 
 pp DATAFILES

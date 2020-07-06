@@ -22,9 +22,19 @@ module Worldfootball
 # url = 'https://www.weltfussball.de/alle_spiele/aut-bundesliga-2010-2011/'
 #        https://www.weltfussball.de/alle_spiele/aut-erste-liga-2010-2011/
 #        https://www.weltfussball.de/alle_spiele/2-bundesliga-2013-2014/
+#        https://www.weltfussball.de/alle_spiele/fra-ligue-2-2019-2020/
+#        https://www.weltfussball.de/alle_spiele/ita-serie-b-2019-2020/
+#        https://www.weltfussball.de/alle_spiele/rus-premier-liga-2019-2020/
+#        https://www.weltfussball.de/alle_spiele/rus-1-division-2019-2020/
+#        https://www.weltfussball.de/alle_spiele/sui-super-league-2019-2020/
+#        https://www.weltfussball.de/alle_spiele/sui-challenge-league-2019-2020/
+#        https://www.weltfussball.de/alle_spiele/tur-sueperlig-2019-2020/
+#        https://www.weltfussball.de/alle_spiele/tur-1-lig-2019-2020/
+
 ## e.g. 2010-2011,
 ##      2011-2012,
 ##      2012-2013, 2013-2014, 2014-2015, 2015-2016, 2016-2017, 2017-2018
+
 
   LEAGUES = {
     'de.2' => '2-bundesliga',
@@ -33,9 +43,23 @@ module Worldfootball
     'at.2' =>  ->(season) { season.start_year >= 2019 ?
                                'aut-2-liga' : 'aut-erste-liga' },
 
+    'ch.1' => 'sui-super-league',
+    'ch.2' => 'sui-challenge-league',
+
     'eng.3' => 'eng-league-one',
     'eng.4' => 'eng-league-two',
+
+    'fr.2'  => 'fra-ligue-2',
+
+    'it.2'  => 'ita-serie-b',
+
+    'ru.1'  => 'rus-premier-liga',
+    'ru.2'  => 'rus-1-division',
+
+    'tr.1'  => 'tur-sueperlig',
+    'tr.2'  => 'tur-1-lig',
   }
+
 
   def self.league_slug( league:, season: )
     val = LEAGUES[ league ]
@@ -77,6 +101,16 @@ end
 
 
 
-Worldfootball.schedule( league: 'eng.4', season: '2017/18' )
+# Worldfootball.schedule( league: 'eng.4', season: '2017/18' )
 
+# Worldfootball.schedule( league: 'fr.2', season: '2019/20' )
+# Worldfootball.schedule( league: 'it.2', season: '2019/20' )
 
+# Worldfootball.schedule( league: 'ru.1', season: '2019/20' )
+# Worldfootball.schedule( league: 'ru.2', season: '2019/20' )
+
+# Worldfootball.schedule( league: 'ch.1', season: '2019/20' )
+# Worldfootball.schedule( league: 'ch.2', season: '2019/20' )
+
+# Worldfootball.schedule( league: 'tr.1', season: '2019/20' )
+# Worldfootball.schedule( league: 'tr.2', season: '2019/20' )
