@@ -1,11 +1,15 @@
 require 'pp'
 require 'nokogiri'
 
+$LOAD_PATH.unshift( File.expand_path( '../../../sportdb/sport.db/sportdb-formats/lib') )
 require 'sportdb/formats'   ## for Season -- move to test_schedule /fetch!!!!
 
 require_relative '../csv'
 
 
+
+# OUT_DIR='./o'
+OUT_DIR='../../stage/two'
 
 
 MODS = {
@@ -28,17 +32,20 @@ def squish( str )
 end
 
 
-def convert( season, league )
-   # season   = '2019-2020'
+def convert( season:, league: )
+  season = Season.new( season )  if season.is_a?( String )
+
+   # season   = '2019/20'
    # basename = 'at.2'
   basename =   league
+  season_path = season.to_path( :long )  # e.g. 2010-2011  etc.
 
-  path = "./dl/weltfussball-#{basename}-#{season}.html"
+  path = "./dl/weltfussball-#{basename}-#{season_path}.html"
 
 
-html =  File.open( path, 'r:utf-8' ) { |f| f.read }
+   html =  File.open( path, 'r:utf-8' ) { |f| f.read }
 
-doc = Nokogiri::HTML.fragment( html )   ## note: use a fragment NOT a document
+   doc = Nokogiri::HTML.fragment( html )   ## note: use a fragment NOT a document
 
 
 # <div class="data">
@@ -157,10 +164,6 @@ trs.each do |tr|
 end
 
 
-season = SportDb::Import::Season.new( season )
-
-
-
 ##   note:  sort matches by date before saving/writing!!!!
 ##     note: for now assume date in string in 1999-11-30 format (allows sort by "simple" a-z)
 ## note: assume date is first column!!!
@@ -169,7 +172,7 @@ recs = recs.sort { |l,r| l[1] <=> r[1] }
 recs.each { |rec| rec[1] = Date.strptime( rec[1], '%Y-%m-%d' ).strftime( '%a %b %-d %Y' ) }
 
 
-out_path = "./o/#{season.path}/#{basename}.csv"
+out_path = "#{OUT_DIR}/#{season.path}/#{basename}.csv"
 
 puts "write #{out_path}..."
 
@@ -182,39 +185,35 @@ headers = [
   'FT',
   'HT',
   'Team 2',
-  'Comments'    ## e.g. awarded
+  'Comments'    ## e.g. awarded, cancelled/canceled, etc.
 ]
 
 Cache::CsvMatchWriter.write( out_path, recs, headers: headers )
 end
 
 
-# path = './dl/weltfussball-at1-2010-2011.html'
 
-# season = '2013-2014'
-# basename = 'de.2'
 
-LEAGUES = [['at.1', ['2010-2011', '2011-2012', '2012-2013', '2013-2014','2014-2015',
-                     '2015-2016', '2016-2017', '2017-2018']],
-           ['at.2', ['2010-2011', '2011-2012',
-                     '2018-2019', '2019-2020']],
-           ['de.2', ['2013-2014']],
-          ]
+DATAFILES = [['at.1',  %w[2010/11 2011/12 2012/13 2013/14 2014/15
+                          2015/16 2016/17 2017/18]],
+             ['at.2',  %w[2010/11 2011/12
+                          2018/19 2019/20]],
+             ['de.2',  %w[2013/14]],
+             ['eng.3', %w[2018/19 2019/20]],
+             ['eng.4', %w[2017/18 2018/19 2019/20]],
+            ]
 
-pp LEAGUES
+pp DATAFILES
 
-=begin
-LEAGUES.each do |league|
-  basename = league[0]
-  league[1].each do |season|
-    convert( season, basename )
+DATAFILES.each do |datafile|
+  basename = datafile[0]
+  datafile[1].each do |season|
+    convert( league: basename, season: season )
   end
 end
-=end
 
-# convert( '2019-2020', 'eng.3' )
-# convert( '2018-2019', 'eng.3' )
 
-convert( '2019-2020', 'eng.4' )
-convert( '2018-2019', 'eng.4' )
+# convert( league: 'eng.4', season: '2019/20' )
+# convert( league: 'eng.4', season: '2018/19' )
+# convert( league: 'eng.4', season: '2017/18' )
 

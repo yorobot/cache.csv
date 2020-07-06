@@ -1,7 +1,24 @@
 require 'fetcher'
 
-worker = Fetcher::Worker.new
+$LOAD_PATH.unshift( File.expand_path( '../../../sportdb/sport.db/sportdb-formats/lib') )
+require 'sportdb/formats'
 
+
+
+module Worldfootball
+
+  BASE_URL = 'https://www.weltfussball.de/alle_spiele/'
+
+  def self.worker
+    @worker ||= Fetcher::Worker.new
+  end
+
+## note: use aut-2-liga !!! starting 2019-2018 !!!
+##       use aut-erste-liga !!! before e.g. 2010-2011 etc.
+# url = "https://www.weltfussball.de/alle_spiele/aut-erste-liga-#{season}/"
+# url = "https://www.weltfussball.de/alle_spiele/2-bundesliga-#{season}/"
+# url = "https://www.weltfussball.de/alle_spiele/eng-league-one-#{season}/"
+# url = "https://www.weltfussball.de/alle_spiele/eng-league-two-#{season}/"
 # url = 'https://www.weltfussball.de/alle_spiele/aut-bundesliga-2010-2011/'
 #        https://www.weltfussball.de/alle_spiele/aut-erste-liga-2010-2011/
 #        https://www.weltfussball.de/alle_spiele/2-bundesliga-2013-2014/
@@ -9,24 +26,57 @@ worker = Fetcher::Worker.new
 ##      2011-2012,
 ##      2012-2013, 2013-2014, 2014-2015, 2015-2016, 2016-2017, 2017-2018
 
-season = '2019-2020'
-basename = 'eng.4'
+  LEAGUES = {
+    'de.2' => '2-bundesliga',
 
-## note: use aut-2-liga !!! starting 2019-2018 !!!
-##       use aut-erste-liga !!! before e.g. 2010-2011 etc.
-# url = "https://www.weltfussball.de/alle_spiele/aut-erste-liga-#{season}/"
-# url = "https://www.weltfussball.de/alle_spiele/2-bundesliga-#{season}/"
-# url = "https://www.weltfussball.de/alle_spiele/eng-league-one-#{season}/"
-url = "https://www.weltfussball.de/alle_spiele/eng-league-two-#{season}/"
+    'at.1' => 'aut-bundesliga',
+    'at.2' =>  ->(season) { season.start_year >= 2019 ?
+                               'aut-2-liga' : 'aut-erste-liga' },
 
-response = worker.get( url )
+    'eng.3' => 'eng-league-one',
+    'eng.4' => 'eng-league-two',
+  }
 
-if response.code == '200'
-  html = response.body.to_s
-  html = html.force_encoding( Encoding::UTF_8 )
+  def self.league_slug( league:, season: )
+    val = LEAGUES[ league ]
 
-  File.open( "./dl/weltfussball-#{basename}-#{season}.html", 'w:utf-8' ) {|f| f.write( html ) }
-else
-  puts "!! #{response.code}:"
-  pp response
+    val = val.call( season )   if val.is_a?( Proc )
+
+    if val.nil?
+      puts "!! ERROR - no league found for >#{league}<; add to leagues tables"
+      exit 1
+    end
+
+    val
+  end
+
+
+  ## fetch and save match schedule
+  def self.schedule( league:, season: )
+    season = Season.new( season )  if season.is_a?( String )
+
+    slug = league_slug( league: league, season: season )
+
+    season_path = season.to_path( :long )  # e.g. 2010-2011  etc.
+    url = "#{BASE_URL}#{slug}-#{season_path}/"
+
+    response = worker.get( url )
+
+    if response.code == '200'
+      html = response.body.to_s
+      html = html.force_encoding( Encoding::UTF_8 )
+
+      File.open( "./dl/weltfussball-#{league}-#{season_path}.html", 'w:utf-8' ) {|f| f.write( html ) }
+    else
+      puts "!! ERROR - #{response.code}:"
+      pp response
+      exit 1
+    end
+  end
 end
+
+
+
+Worldfootball.schedule( league: 'eng.4', season: '2017/18' )
+
+

@@ -2,9 +2,9 @@ require_relative '../boot'
 
 
 
-DATAFILES_DIR = '../../stage/one'
+DATAFILES_DIR = '../../stage/two'
 
-team_buf,   team_errors   = SportDb::TeamSummary.build( DATAFILES_DIR )
+team_buf,   team_errors   = SportDb::TeamSummary.build( DATAFILES_DIR)
 
 OUT_DIR = DATAFILES_DIR
 # OUT_DIR  = './o'   ## for (local) debugging

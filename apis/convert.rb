@@ -315,6 +315,28 @@ end   # method convert
 
 
 
+
+DATASETS = [['BR.1',  %w[2018 2019 2020]],
+            ['DE.1',  %w[2018 2019]],
+            ['NL.1',  %w[2018 2019]],
+            ['ES.1',  %w[2018 2019]],
+            ['PT.1',  %w[2018 2019]],
+            ['ENG.1', %w[2018 2019]],
+            ['ENG.2', %w[2018 2019]],
+            ['FR.1',  %w[2018 2019]],
+            ['IT.1',  %w[2018 2019]],
+           ]
+
+pp DATASETS
+
+DATASETS.each do |dataset|
+  basename = dataset[0]
+  dataset[1].each do |year|
+    convert( league: basename, year: year )
+  end
+end
+
+
 =begin
 convert( league: 'ENG.1', year: 2018 )
 convert( league: 'ENG.1', year: 2019 )
@@ -328,7 +350,7 @@ convert( league: 'ES.1', year: 2019 )
 convert( league: 'PT.1', year: 2018 )
 convert( league: 'PT.1', year: 2019 )
 
-convert( league: 'DE.1', year: 2018 )
+convert( league: , year: 2018 )
 convert( league: 'DE.1', year: 2019 )
 
 convert( league: 'NL.1', year: 2018 )
@@ -348,8 +370,5 @@ convert( league: 'BR.1', year: 2020 )
 # convert( league: 'FR.1',  year: 2019 )
 # convert( league: 'ENG.1', year: 2018 )
 
-
-###############
-# up (ongoing) 2019-20 season
-convert( league: 'ENG.1', year: 2019 )
-convert( league: 'ENG.2', year: 2019 )
+# convert( league: 'ENG.1', year: 2019 )
+# convert( league: 'ENG.2', year: 2019 )
