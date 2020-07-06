@@ -111,9 +111,13 @@ trs.each do |tr|
     ## split score
     ft = ''
     ht = ''
-    if score_str =~ /---/
+    if score_str == '---'
       ft = ''
       ht = ''
+    elsif score_str == 'n.gesp.'   ## cancelled (british) / canceled (us)
+      ft = '(*)'
+      ht = ''
+      comments = 'cancelled'
     elsif score_str =~ /([0-9]+)
                             [ ]*-[ ]*
                         ([0-9]+)
@@ -135,7 +139,7 @@ trs.each do |tr|
       ht = ''
       comments = $3
     else
-       puts "!! ERROR - unsupported score format #{score_str} - sorry"
+       puts "!! ERROR - unsupported score format >#{score_str}< - sorry"
        exit 1
     end
 
@@ -199,11 +203,18 @@ LEAGUES = [['at.1', ['2010-2011', '2011-2012', '2012-2013', '2013-2014','2014-20
 
 pp LEAGUES
 
-
+=begin
 LEAGUES.each do |league|
   basename = league[0]
   league[1].each do |season|
     convert( season, basename )
   end
 end
+=end
+
+# convert( '2019-2020', 'eng.3' )
+# convert( '2018-2019', 'eng.3' )
+
+convert( '2019-2020', 'eng.4' )
+convert( '2018-2019', 'eng.4' )
 

@@ -152,7 +152,6 @@ end # module Footballdata
 ## data = Footballdata.fr( 2019 )  ## 2018-19
 ## data = Footballdata.fr( 2017 )  ## 2017-18   -- requires subscription ???
 
-## Footballdata.eng( 2019 )
 ## Footballdata.eng( 2018 )
 ## Footballdata.eng( 2017 )
 
@@ -168,8 +167,13 @@ end # module Footballdata
 ## Footballdata.de( 2018 )
 ## Footballdata.de( 2019 )
 
-Footballdata.it( 2018 )
-Footballdata.it( 2019 )
+# Footballdata.it( 2018 )
+# Footballdata.it( 2019 )
 
-Footballdata.cl( 2018 )
-Footballdata.cl( 2019 )
+# Footballdata.cl( 2018 )
+# Footballdata.cl( 2019 )
+
+#############
+## up (ongoing) 2019/20 seasons
+Footballdata.eng( 2019 )
+

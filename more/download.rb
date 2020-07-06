@@ -9,13 +9,16 @@ worker = Fetcher::Worker.new
 ##      2011-2012,
 ##      2012-2013, 2013-2014, 2014-2015, 2015-2016, 2016-2017, 2017-2018
 
-season = '2013-2014'
-basename = 'de.2'
+season = '2019-2020'
+basename = 'eng.4'
 
 ## note: use aut-2-liga !!! starting 2019-2018 !!!
 ##       use aut-erste-liga !!! before e.g. 2010-2011 etc.
 # url = "https://www.weltfussball.de/alle_spiele/aut-erste-liga-#{season}/"
-url = "https://www.weltfussball.de/alle_spiele/2-bundesliga-#{season}/"
+# url = "https://www.weltfussball.de/alle_spiele/2-bundesliga-#{season}/"
+# url = "https://www.weltfussball.de/alle_spiele/eng-league-one-#{season}/"
+url = "https://www.weltfussball.de/alle_spiele/eng-league-two-#{season}/"
+
 response = worker.get( url )
 
 if response.code == '200'

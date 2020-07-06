@@ -315,7 +315,7 @@ end   # method convert
 
 
 
-#=begin
+=begin
 convert( league: 'ENG.1', year: 2018 )
 convert( league: 'ENG.1', year: 2019 )
 
@@ -343,9 +343,13 @@ convert( league: 'IT.1', year: 2019 )
 convert( league: 'BR.1', year: 2018 )
 convert( league: 'BR.1', year: 2019 )
 convert( league: 'BR.1', year: 2020 )
-#=end
+=end
 
 # convert( league: 'FR.1',  year: 2019 )
 # convert( league: 'ENG.1', year: 2018 )
 
 
+###############
+# up (ongoing) 2019-20 season
+convert( league: 'ENG.1', year: 2019 )
+convert( league: 'ENG.2', year: 2019 )

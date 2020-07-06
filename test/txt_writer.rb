@@ -40,6 +40,27 @@ end
 ##########
 # start
 
+def write_eng_worker( season, matches, league_name:, basename:,
+                                       extra: nil )
+
+  pp matches[0]
+  puts "#{matches.size} matches"
+
+  matches = normalize( matches, league: league_name )
+
+  season_path = String.new('')    ## note: allow extra path for output!!!! e.g. archive/2000s etc.
+  season_path << "#{extra}/"   if extra
+  season_path << season.path
+
+  out_path = "../../../openfootball/england/#{season_path}/#{basename}.txt"
+  SportDb::TxtMatchWriter.write( out_path, matches,
+                               name: "#{league_name} #{season.key}",
+                               round: 'Matchday',
+                               lang:  'en')
+end
+
+
+
 def write_eng( season, source: nil, extra: nil )
   season = SportDb::Import::Season.new( season )  ## normalize season
 
@@ -51,23 +72,51 @@ def write_eng( season, source: nil, extra: nil )
 
   matches = SportDb::CsvMatchParser.read( in_path )
 
-  pp matches[0]
-  puts "#{matches.size} matches"
-
-  league_name  = 'English Premier League'
-
-  matches = normalize( matches, league: league_name )
-
-  season_path = String.new('')    ## note: allow extra path for output!!!! e.g. archive/2000s etc.
-  season_path << "#{extra}/"   if extra
-  season_path << season.path
-
-  out_path = "../../../openfootball/england/#{season_path}/1-premierleague.txt"
-  SportDb::TxtMatchWriter.write( out_path, matches,
-                               name: "#{league_name} #{season.key}",
-                               round: 'Matchday',
-                               lang:  'en')
+  write_eng_worker( season, matches,
+                      league_name: 'English Premier League',
+                      basename:    '1-premierleague',
+                      extra: extra)
 end
+
+def write_eng2( season, extra: nil )
+  season = SportDb::Import::Season.new( season )  ## normalize season
+
+  in_path =  "../../stage/one/#{season.path}/eng.2.csv"
+
+  matches = SportDb::CsvMatchParser.read( in_path )
+
+  write_eng_worker( season, matches,
+                      league_name: 'English Championship',
+                      basename:    '2-championship',
+                      extra: extra)
+end
+
+def write_eng3( season, extra: nil )
+  season = SportDb::Import::Season.new( season )  ## normalize season
+
+  in_path =  "../more/o/#{season.path}/eng.3.csv"
+
+  matches = SportDb::CsvMatchParser.read( in_path )
+
+  write_eng_worker( season, matches,
+                      league_name: 'English League One',
+                      basename:    '3-league1',
+                      extra: extra)
+end
+
+def write_eng4( season, extra: nil )
+  season = SportDb::Import::Season.new( season )  ## normalize season
+
+  in_path =  "../more/o/#{season.path}/eng.4.csv"
+
+  matches = SportDb::CsvMatchParser.read( in_path )
+
+  write_eng_worker( season, matches,
+                      league_name: 'English League Two',
+                      basename:    '4-league2',
+                      extra: extra)
+end
+
 
 
 def write_es( season, source: nil )
@@ -394,12 +443,12 @@ def write_de2( season, source:, split: false )
 
 # write_at( '2014-15', split: true, normalize: false )
 
-write_at( '2015-16', split: true, normalize: false )
-write_at( '2016-17', split: true, normalize: false )
-write_at( '2017-18', split: true, normalize: false )
+# write_at( '2015-16', split: true, normalize: false )
+# write_at( '2016-17', split: true, normalize: false )
+# write_at( '2017-18', split: true, normalize: false )
 
-write_at2( '2018-19', normalize: false )
-write_at2( '2019-20', normalize: false )
+# write_at2( '2018-19', normalize: false )
+# write_at2( '2019-20', normalize: false )
 
 
 # write_de( '2010-11' )
@@ -455,7 +504,19 @@ write_at2( '2019-20', normalize: false )
 # write_eng( '2017/18', source: 'leagues' )
 
 # write_eng( '2018/19' )
+
+
+# write_eng2( '2018/19' )
+
 # write_eng( '2019/20' )
+# write_eng2( '2019/20' )
+
+write_eng3( '2019/20' )
+write_eng4( '2019/20' )
+
+write_eng3( '2018/19' )
+write_eng4( '2018/19' )
+
 
 # write_es( '2012/13', source: 'leagues' )
 # write_es( '2013/14', source: 'leagues' )
