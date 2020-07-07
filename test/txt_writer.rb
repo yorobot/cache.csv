@@ -118,6 +118,95 @@ def write_eng4( season, extra: nil )
 end
 
 
+def write_ch( season )
+  season = SportDb::Import::Season.new( season )  ## normalize season
+
+  in_path = "../../stage/two/#{season.path}/ch.1.csv"
+
+  matches = SportDb::CsvMatchParser.read( in_path )
+
+  pp matches[0]
+  puts "#{matches.size} matches"
+
+  league_name  = 'Swiss Super League'
+
+  matches = normalize( matches, league: league_name )
+
+  out_path = "../../../openfootball/world/europe/switzerland/#{season.path}/1-superleague.txt"
+      SportDb::TxtMatchWriter.write( out_path, matches,
+                              name: "#{league_name} #{season.key}",
+                              round: 'Spieltag',
+                              lang:  'de')
+end
+
+def write_ch2( season )
+  season = SportDb::Import::Season.new( season )  ## normalize season
+
+  in_path = "../../stage/two/#{season.path}/ch.2.csv"
+
+  matches = SportDb::CsvMatchParser.read( in_path )
+
+  pp matches[0]
+  puts "#{matches.size} matches"
+
+  league_name  = 'Swiss Challenge League'
+
+  matches = normalize( matches, league: league_name )
+
+  out_path = "../../../openfootball/world/europe/switzerland/#{season.path}/2-challengeleague.txt"
+      SportDb::TxtMatchWriter.write( out_path, matches,
+                              name: "#{league_name} #{season.key}",
+                              round: 'Spieltag',
+                              lang:  'de')
+end
+
+
+
+def write_tr( season )
+  season = SportDb::Import::Season.new( season )  ## normalize season
+
+  in_path = "../../stage/two/#{season.path}/tr.1.csv"
+
+  matches = SportDb::CsvMatchParser.read( in_path )
+
+  pp matches[0]
+  puts "#{matches.size} matches"
+
+  league_name  = 'Turkish Süper Lig'
+
+  matches = normalize( matches, league: league_name )
+
+  out_path = "../../../openfootball/world/europe/turkey/#{season.path}/1-superlig.txt"
+      SportDb::TxtMatchWriter.write( out_path, matches,
+                              name: "#{league_name} #{season.key}",
+                              round: 'Matchday',
+                              lang:  'en')
+end
+
+def write_tr2( season )
+  season = SportDb::Import::Season.new( season )  ## normalize season
+
+  in_path = "../../stage/two/#{season.path}/tr.2.csv"
+
+  matches = SportDb::CsvMatchParser.read( in_path )
+
+  pp matches[0]
+  puts "#{matches.size} matches"
+
+  league_name  = 'Turkish 1. Lig'
+
+  matches = normalize( matches, league: league_name )
+
+  out_path = "../../../openfootball/world/europe/turkey/#{season.path}/2-lig1.txt"
+      SportDb::TxtMatchWriter.write( out_path, matches,
+                              name: "#{league_name} #{season.key}",
+                              round: 'Matchday',
+                              lang:  'en')
+end
+
+
+
+
 
 def write_es( season, source: nil )
 ## todo/fix:
@@ -511,11 +600,11 @@ def write_de2( season, source:, split: false )
 # write_eng( '2019/20' )
 # write_eng2( '2019/20' )
 
-write_eng3( '2019/20' )
-write_eng4( '2019/20' )
+# write_eng3( '2019/20' )
+# write_eng4( '2019/20' )
 
-write_eng3( '2018/19' )
-write_eng4( '2018/19' )
+# write_eng3( '2018/19' )
+# write_eng4( '2018/19' )
 
 
 # write_es( '2012/13', source: 'leagues' )
@@ -546,5 +635,11 @@ write_eng4( '2018/19' )
 # write_it( '2017/18', source: 'leagues' )
 # write_it( '2018/19', source: 'leagues' )
 
+
+write_ch( '2019/20' )
+write_ch2( '2019/20' )
+
+write_tr( '2019/20' )
+write_tr2( '2019/20' )
 
 puts "bye"
