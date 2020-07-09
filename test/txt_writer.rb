@@ -161,6 +161,48 @@ def write_ch2( season )
 end
 
 
+def write_nl( season )
+  season = SportDb::Import::Season.new( season )  ## normalize season
+
+  in_path = "../../stage/one/#{season.path}/nl.1.csv"
+
+  matches = SportDb::CsvMatchParser.read( in_path )
+
+  pp matches[0]
+  puts "#{matches.size} matches"
+
+  league_name  = 'Dutch Eredivisie'
+
+  matches = normalize( matches, league: league_name )
+
+  out_path = "../../../openfootball/world/europe/netherlands/#{season.path}/1-eredivisie.txt"
+      SportDb::TxtMatchWriter.write( out_path, matches,
+                              name: "#{league_name} #{season.key}",
+                              round: 'Matchday',
+                              lang:  'en')
+end
+
+def write_pt( season )
+  season = SportDb::Import::Season.new( season )  ## normalize season
+
+  in_path = "../../stage/one/#{season.path}/pt.1.csv"
+
+  matches = SportDb::CsvMatchParser.read( in_path )
+
+  pp matches[0]
+  puts "#{matches.size} matches"
+
+  league_name  = 'Portuguese Primeira Liga'
+
+  matches = normalize( matches, league: league_name )
+
+  out_path = "../../../openfootball/world/europe/portugal/#{season.path}/1-primeiraliga.txt"
+      SportDb::TxtMatchWriter.write( out_path, matches,
+                              name: "#{league_name} #{season.key}",
+                              round: 'Jornada',
+                              lang:  'pt')
+end
+
 
 def write_tr( season )
   season = SportDb::Import::Season.new( season )  ## normalize season
@@ -636,10 +678,16 @@ def write_de2( season, source:, split: false )
 # write_it( '2018/19', source: 'leagues' )
 
 
-write_ch( '2019/20' )
-write_ch2( '2019/20' )
+# write_ch( '2019/20' )
+# write_ch2( '2019/20' )
 
-write_tr( '2019/20' )
-write_tr2( '2019/20' )
+# write_tr( '2019/20' )
+# write_tr2( '2019/20' )
+
+write_nl( '2018/19' )
+write_nl( '2019/20' )
+
+write_pt( '2018/19' )
+write_pt( '2019/20' )
 
 puts "bye"

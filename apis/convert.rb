@@ -169,6 +169,9 @@ matches.each do |m|
     when 'SCHEDULED'
       ft = ''
       ht = ''
+    when 'IN_PLAY'
+      ft = ''
+      ht = ''
     when 'FINISHED'
       ft = "#{score['fullTime']['homeTeam']}-#{score['fullTime']['awayTeam']}"
       ht = "#{score['halfTime']['homeTeam']}-#{score['halfTime']['awayTeam']}"
@@ -315,7 +318,7 @@ end   # method convert
 
 
 
-
+=begin
 DATASETS = [['BR.1',  %w[2018 2019 2020]],
             ['DE.1',  %w[2018 2019]],
             ['NL.1',  %w[2018 2019]],
@@ -325,6 +328,11 @@ DATASETS = [['BR.1',  %w[2018 2019 2020]],
             ['ENG.2', %w[2018 2019]],
             ['FR.1',  %w[2018 2019]],
             ['IT.1',  %w[2018 2019]],
+           ]
+=end
+
+DATASETS = [['NL.1',  %w[2018 2019]],
+            ['PT.1',  %w[2018 2019]],
            ]
 
 pp DATASETS
