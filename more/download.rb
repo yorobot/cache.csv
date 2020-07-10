@@ -53,6 +53,8 @@ module Worldfootball
 
     'it.2'  => 'ita-serie-b',
 
+    'es.2'  => 'esp-segunda-division',
+
     'ru.1'  => 'rus-premier-liga',
     'ru.2'  => 'rus-1-division',
 
@@ -104,7 +106,31 @@ end
 # Worldfootball.schedule( league: 'eng.4', season: '2017/18' )
 
 # Worldfootball.schedule( league: 'fr.2', season: '2019/20' )
+# Worldfootball.schedule( league: 'fr.2', season: '2015/16' )
+# Worldfootball.schedule( league: 'fr.2', season: '2016/17' )
+# Worldfootball.schedule( league: 'fr.2', season: '2017/18' )
+# Worldfootball.schedule( league: 'fr.2', season: '2018/19' )
+
+
+Worldfootball.schedule( league: 'es.2', season: '2012/13' )
+Worldfootball.schedule( league: 'es.2', season: '2013/14' )
+Worldfootball.schedule( league: 'es.2', season: '2014/15' )
+Worldfootball.schedule( league: 'es.2', season: '2015/16' )
+Worldfootball.schedule( league: 'es.2', season: '2016/17' )
+Worldfootball.schedule( league: 'es.2', season: '2017/18' )
+Worldfootball.schedule( league: 'es.2', season: '2018/19' )
+Worldfootball.schedule( league: 'es.2', season: '2019/20' )
+
+
+
 # Worldfootball.schedule( league: 'it.2', season: '2019/20' )
+# Worldfootball.schedule( league: 'it.2', season: '2013/14' )
+# Worldfootball.schedule( league: 'it.2', season: '2014/15' )
+# Worldfootball.schedule( league: 'it.2', season: '2015/16' )
+# Worldfootball.schedule( league: 'it.2', season: '2016/17' )
+# Worldfootball.schedule( league: 'it.2', season: '2017/18' )
+# Worldfootball.schedule( league: 'it.2', season: '2018/19' )
+
 
 # Worldfootball.schedule( league: 'ru.1', season: '2019/20' )
 # Worldfootball.schedule( league: 'ru.2', season: '2019/20' )

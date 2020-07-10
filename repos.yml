@@ -19,9 +19,17 @@ openfootball:
 ## add basics
 - leagues
 - clubs
+## leagues
 - england
 - espana
+- deutschland
 - italy
+- france
+- austria
+- russia
+- brazil
+- world
+
 
 #####################
 # football.csv

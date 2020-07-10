@@ -161,6 +161,50 @@ def write_ch2( season )
 end
 
 
+def write_ru( season )
+  season = SportDb::Import::Season.new( season )  ## normalize season
+
+  in_path = "../../stage/two/#{season.path}/ru.1.csv"
+
+  matches = SportDb::CsvMatchParser.read( in_path )
+
+  pp matches[0]
+  puts "#{matches.size} matches"
+
+  league_name  = 'Russian Premier League'
+
+  matches = normalize( matches, league: league_name )
+
+  out_path = "../../../openfootball/russia/#{season.path}/1-premierliga.txt"
+      SportDb::TxtMatchWriter.write( out_path, matches,
+                              name: "#{league_name} #{season.key}",
+                              round: 'Matchday',
+                              lang:  'en')
+end
+
+def write_ru2( season )
+  season = SportDb::Import::Season.new( season )  ## normalize season
+
+  in_path = "../../stage/two/#{season.path}/ru.2.csv"
+
+  matches = SportDb::CsvMatchParser.read( in_path )
+
+  pp matches[0]
+  puts "#{matches.size} matches"
+
+  league_name  = 'Russian 1. Division'
+
+  matches = normalize( matches, league: league_name )
+
+  out_path = "../../../openfootball/russia/#{season.path}/2-division1.txt"
+      SportDb::TxtMatchWriter.write( out_path, matches,
+                              name: "#{league_name} #{season.key}",
+                              round: 'Matchday',
+                              lang:  'en')
+end
+
+
+
 def write_nl( season )
   season = SportDb::Import::Season.new( season )  ## normalize season
 
@@ -284,7 +328,7 @@ end
 def write_es2( season )
       season = SportDb::Import::Season.new( season )  ## normalize season
 
-      in_path = "../cache.leagues/o/#{season.path}/es.2.csv"
+      in_path =  "../../stage/two/#{season.path}/es.2.csv"
 
       matches = SportDb::CsvMatchParser.read( in_path )
 
@@ -327,7 +371,7 @@ def write_fr( season )
   def write_fr2( season )
         season = SportDb::Import::Season.new( season )  ## normalize season
 
-        in_path = "../cache.leagues/o/#{season.path}/fr.2.csv"
+        in_path =  "../../stage/two/#{season.path}/fr.2.csv"
 
         matches = SportDb::CsvMatchParser.read( in_path )
 
@@ -372,6 +416,31 @@ def write_it( season, source: nil )
                             round: ->(round) { "%s^ Giornata" % round },
                             lang:  'it')
 end
+
+def write_it2( season )
+  season = SportDb::Import::Season.new( season )  ## normalize season
+
+  in_path =  "../../stage/two/#{season.path}/it.2.csv"
+
+  matches = SportDb::CsvMatchParser.read( in_path )
+
+  pp matches[0]
+  puts "#{matches.size} matches"
+
+  league_name  = 'Italian Serie B'
+
+  matches = normalize( matches, league: league_name )
+
+  out_path = "../../../openfootball/italy/#{season.path}/2-serieb.txt"
+  SportDb::TxtMatchWriter.write( out_path, matches,
+                          name: "#{league_name} #{season.key}",
+                          round: ->(round) { "%s^ Giornata" % round },
+                          lang:  'it')
+end
+
+
+
+
 
 
 
@@ -657,6 +726,14 @@ def write_de2( season, source:, split: false )
 # write_es( '2017/18', source: 'leagues' )
 # write_es( '2018/19', source: 'leagues' )
 # write_es( '2019/20' )
+
+# write_es2( '2012/13' )
+# write_es2( '2013/14' )
+# write_es2( '2014/15' )
+# write_es2( '2015/16' )
+# write_es2( '2016/17' )
+# write_es2( '2017/18' )
+# write_es2( '2018/19' )
 # write_es2( '2019/20' )
 
 # write_fr( '2014/15' )
@@ -666,6 +743,12 @@ def write_de2( season, source:, split: false )
 # write_fr( '2017/18' )
 # write_fr( '2018/19' )
 # write_fr( '2019/20' )
+
+# write_fr2( '2015/16' )
+# write_fr2( '2016/17' )
+# write_fr2( '2017/18' )
+# write_fr2( '2018/19' )
+# write_fr2( '2019/20' )
 
 
 # write_it( '2019/20' )
@@ -677,6 +760,15 @@ def write_de2( season, source:, split: false )
 # write_it( '2017/18', source: 'leagues' )
 # write_it( '2018/19', source: 'leagues' )
 
+# write_it2( '2013/14' )
+# write_it2( '2014/15' )
+# write_it2( '2015/16' )
+# write_it2( '2016/17' )
+# write_it2( '2017/18' )
+# write_it2( '2018/19' )
+
+# write_it2( '2019/20' )
+
 
 # write_ch( '2019/20' )
 # write_ch2( '2019/20' )
@@ -684,10 +776,13 @@ def write_de2( season, source:, split: false )
 # write_tr( '2019/20' )
 # write_tr2( '2019/20' )
 
-write_nl( '2018/19' )
-write_nl( '2019/20' )
+# write_nl( '2018/19' )
+# write_nl( '2019/20' )
 
-write_pt( '2018/19' )
-write_pt( '2019/20' )
+# write_pt( '2018/19' )
+# write_pt( '2019/20' )
+
+write_ru( '2019/20' )
+write_ru2( '2019/20' )
 
 puts "bye"
