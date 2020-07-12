@@ -35,433 +35,6 @@ end
 
 
 
-
-
-##########
-# start
-
-def write_eng_worker( season, matches, league_name:, basename:,
-                                       extra: nil )
-
-  pp matches[0]
-  puts "#{matches.size} matches"
-
-  matches = normalize( matches, league: league_name )
-
-  season_path = String.new('')    ## note: allow extra path for output!!!! e.g. archive/2000s etc.
-  season_path << "#{extra}/"   if extra
-  season_path << season.path
-
-  out_path = "../../../openfootball/england/#{season_path}/#{basename}.txt"
-  SportDb::TxtMatchWriter.write( out_path, matches,
-                               name: "#{league_name} #{season.key}",
-                               round: 'Matchday',
-                               lang:  'en')
-end
-
-
-
-def write_eng( season, source: nil, extra: nil )
-  season = SportDb::Import::Season.new( season )  ## normalize season
-
-  in_path = if source == 'leagues'
-              "../cache.leagues/o/#{season.path}/eng.1.csv"
-            else
-              "../../stage/one/#{season.path}/eng.1.csv"
-            end
-
-  matches = SportDb::CsvMatchParser.read( in_path )
-
-  write_eng_worker( season, matches,
-                      league_name: 'English Premier League',
-                      basename:    '1-premierleague',
-                      extra: extra)
-end
-
-def write_eng2( season, extra: nil )
-  season = SportDb::Import::Season.new( season )  ## normalize season
-
-  in_path =  "../../stage/one/#{season.path}/eng.2.csv"
-
-  matches = SportDb::CsvMatchParser.read( in_path )
-
-  write_eng_worker( season, matches,
-                      league_name: 'English Championship',
-                      basename:    '2-championship',
-                      extra: extra)
-end
-
-def write_eng3( season, extra: nil )
-  season = SportDb::Import::Season.new( season )  ## normalize season
-
-  in_path =  "../more/o/#{season.path}/eng.3.csv"
-
-  matches = SportDb::CsvMatchParser.read( in_path )
-
-  write_eng_worker( season, matches,
-                      league_name: 'English League One',
-                      basename:    '3-league1',
-                      extra: extra)
-end
-
-def write_eng4( season, extra: nil )
-  season = SportDb::Import::Season.new( season )  ## normalize season
-
-  in_path =  "../more/o/#{season.path}/eng.4.csv"
-
-  matches = SportDb::CsvMatchParser.read( in_path )
-
-  write_eng_worker( season, matches,
-                      league_name: 'English League Two',
-                      basename:    '4-league2',
-                      extra: extra)
-end
-
-
-def write_ch( season )
-  season = SportDb::Import::Season.new( season )  ## normalize season
-
-  in_path = "../../stage/two/#{season.path}/ch.1.csv"
-
-  matches = SportDb::CsvMatchParser.read( in_path )
-
-  pp matches[0]
-  puts "#{matches.size} matches"
-
-  league_name  = 'Swiss Super League'
-
-  matches = normalize( matches, league: league_name )
-
-  out_path = "../../../openfootball/world/europe/switzerland/#{season.path}/1-superleague.txt"
-      SportDb::TxtMatchWriter.write( out_path, matches,
-                              name: "#{league_name} #{season.key}",
-                              round: 'Spieltag',
-                              lang:  'de')
-end
-
-def write_ch2( season )
-  season = SportDb::Import::Season.new( season )  ## normalize season
-
-  in_path = "../../stage/two/#{season.path}/ch.2.csv"
-
-  matches = SportDb::CsvMatchParser.read( in_path )
-
-  pp matches[0]
-  puts "#{matches.size} matches"
-
-  league_name  = 'Swiss Challenge League'
-
-  matches = normalize( matches, league: league_name )
-
-  out_path = "../../../openfootball/world/europe/switzerland/#{season.path}/2-challengeleague.txt"
-      SportDb::TxtMatchWriter.write( out_path, matches,
-                              name: "#{league_name} #{season.key}",
-                              round: 'Spieltag',
-                              lang:  'de')
-end
-
-
-def write_ru( season )
-  season = SportDb::Import::Season.new( season )  ## normalize season
-
-  in_path = "../../stage/two/#{season.path}/ru.1.csv"
-
-  matches = SportDb::CsvMatchParser.read( in_path )
-
-  pp matches[0]
-  puts "#{matches.size} matches"
-
-  league_name  = 'Russian Premier League'
-
-  matches = normalize( matches, league: league_name )
-
-  out_path = "../../../openfootball/russia/#{season.path}/1-premierliga.txt"
-      SportDb::TxtMatchWriter.write( out_path, matches,
-                              name: "#{league_name} #{season.key}",
-                              round: 'Matchday',
-                              lang:  'en')
-end
-
-def write_ru2( season )
-  season = SportDb::Import::Season.new( season )  ## normalize season
-
-  in_path = "../../stage/two/#{season.path}/ru.2.csv"
-
-  matches = SportDb::CsvMatchParser.read( in_path )
-
-  pp matches[0]
-  puts "#{matches.size} matches"
-
-  league_name  = 'Russian 1. Division'
-
-  matches = normalize( matches, league: league_name )
-
-  out_path = "../../../openfootball/russia/#{season.path}/2-division1.txt"
-      SportDb::TxtMatchWriter.write( out_path, matches,
-                              name: "#{league_name} #{season.key}",
-                              round: 'Matchday',
-                              lang:  'en')
-end
-
-
-
-def write_nl( season )
-  season = SportDb::Import::Season.new( season )  ## normalize season
-
-  in_path = "../../stage/one/#{season.path}/nl.1.csv"
-
-  matches = SportDb::CsvMatchParser.read( in_path )
-
-  pp matches[0]
-  puts "#{matches.size} matches"
-
-  league_name  = 'Dutch Eredivisie'
-
-  matches = normalize( matches, league: league_name )
-
-  out_path = "../../../openfootball/world/europe/netherlands/#{season.path}/1-eredivisie.txt"
-      SportDb::TxtMatchWriter.write( out_path, matches,
-                              name: "#{league_name} #{season.key}",
-                              round: 'Matchday',
-                              lang:  'en')
-end
-
-def write_pt( season )
-  season = SportDb::Import::Season.new( season )  ## normalize season
-
-  in_path = "../../stage/one/#{season.path}/pt.1.csv"
-
-  matches = SportDb::CsvMatchParser.read( in_path )
-
-  pp matches[0]
-  puts "#{matches.size} matches"
-
-  league_name  = 'Portuguese Primeira Liga'
-
-  matches = normalize( matches, league: league_name )
-
-  out_path = "../../../openfootball/world/europe/portugal/#{season.path}/1-primeiraliga.txt"
-      SportDb::TxtMatchWriter.write( out_path, matches,
-                              name: "#{league_name} #{season.key}",
-                              round: 'Jornada',
-                              lang:  'pt')
-end
-
-
-def write_tr( season )
-  season = SportDb::Import::Season.new( season )  ## normalize season
-
-  in_path = "../../stage/two/#{season.path}/tr.1.csv"
-
-  matches = SportDb::CsvMatchParser.read( in_path )
-
-  pp matches[0]
-  puts "#{matches.size} matches"
-
-  league_name  = 'Turkish Süper Lig'
-
-  matches = normalize( matches, league: league_name )
-
-  out_path = "../../../openfootball/world/europe/turkey/#{season.path}/1-superlig.txt"
-      SportDb::TxtMatchWriter.write( out_path, matches,
-                              name: "#{league_name} #{season.key}",
-                              round: 'Matchday',
-                              lang:  'en')
-end
-
-def write_tr2( season )
-  season = SportDb::Import::Season.new( season )  ## normalize season
-
-  in_path = "../../stage/two/#{season.path}/tr.2.csv"
-
-  matches = SportDb::CsvMatchParser.read( in_path )
-
-  pp matches[0]
-  puts "#{matches.size} matches"
-
-  league_name  = 'Turkish 1. Lig'
-
-  matches = normalize( matches, league: league_name )
-
-  out_path = "../../../openfootball/world/europe/turkey/#{season.path}/2-lig1.txt"
-      SportDb::TxtMatchWriter.write( out_path, matches,
-                              name: "#{league_name} #{season.key}",
-                              round: 'Matchday',
-                              lang:  'en')
-end
-
-
-
-
-
-def write_es( season, source: nil )
-## todo/fix:
-## extras - add more info
-## 2018/19
-##   Jornada 6 /  Sevilla FC - Real Madrid
-##      [André Silva 17', 21' Wissam Ben Yedder 39']
-
-    season = SportDb::Import::Season.new( season )  ## normalize season
-
-    in_path = if source == 'leagues'
-      "../cache.leagues/o/#{season.path}/es.1.csv"
-    else
-      "../../stage/one/#{season.path}/es.1.csv"
-    end
-
-    matches = SportDb::CsvMatchParser.read( in_path )
-
-    pp matches[0]
-    puts "#{matches.size} matches"
-
-    league_name  = 'Primera División de España'
-
-    matches = normalize( matches, league: league_name )
-
-    out_path = "../../../openfootball/espana/#{season.path}/1-liga.txt"
-    SportDb::TxtMatchWriter.write( out_path, matches,
-                            name: "#{league_name} #{season.key}",
-                            round: 'Jornada',
-                            lang:  'es')
-end
-
-def write_es2( season )
-      season = SportDb::Import::Season.new( season )  ## normalize season
-
-      in_path =  "../../stage/two/#{season.path}/es.2.csv"
-
-      matches = SportDb::CsvMatchParser.read( in_path )
-
-      pp matches[0]
-      puts "#{matches.size} matches"
-
-      league_name  = 'Segunda División de España'
-
-      matches = normalize( matches, league: league_name )
-
-      out_path = "../../../openfootball/espana/#{season.path}/2-liga2.txt"
-      SportDb::TxtMatchWriter.write( out_path, matches,
-                              name: "#{league_name} #{season.key}",
-                              round: 'Jornada',
-                              lang:  'es')
-end
-
-
-def write_fr( season )
-      season = SportDb::Import::Season.new( season )  ## normalize season
-
-      in_path = "../cache.leagues/o/#{season.path}/fr.1.csv"
-
-      matches = SportDb::CsvMatchParser.read( in_path )
-
-      pp matches[0]
-      puts "#{matches.size} matches"
-
-      league_name  = 'French Ligue 1'
-
-      matches = normalize( matches, league: league_name )
-
-      out_path = "../../../openfootball/france/#{season.path}/1-ligue1.txt"
-      SportDb::TxtMatchWriter.write( out_path, matches,
-                              name: "#{league_name} #{season.key}",
-                              round: 'Journée',
-                              lang:  'fr')
-  end
-
-  def write_fr2( season )
-        season = SportDb::Import::Season.new( season )  ## normalize season
-
-        in_path =  "../../stage/two/#{season.path}/fr.2.csv"
-
-        matches = SportDb::CsvMatchParser.read( in_path )
-
-        pp matches[0]
-        puts "#{matches.size} matches"
-
-        league_name  = 'French Ligue 2'
-
-        matches = normalize( matches, league: league_name )
-
-        out_path = "../../../openfootball/france/#{season.path}/2-ligue2.txt"
-        SportDb::TxtMatchWriter.write( out_path, matches,
-                                name: "#{league_name} #{season.key}",
-                                round: 'Journée',
-                                lang:  'fr')
-  end
-
-
-
-
-def write_it( season, source: nil )
-    season = SportDb::Import::Season.new( season )  ## normalize season
-
-    in_path = if source == 'leagues'
-                "../cache.leagues/o/#{season.path}/it.1.csv"
-              else
-                "../../stage/one/#{season.path}/it.1.csv"
-              end
-
-    matches = SportDb::CsvMatchParser.read( in_path )
-
-    pp matches[0]
-    puts "#{matches.size} matches"
-
-    league_name  = 'Italian Serie A'
-
-    matches = normalize( matches, league: league_name )
-
-    out_path = "../../../openfootball/italy/#{season.path}/1-seriea.txt"
-    SportDb::TxtMatchWriter.write( out_path, matches,
-                            name: "#{league_name} #{season.key}",
-                            round: ->(round) { "%s^ Giornata" % round },
-                            lang:  'it')
-end
-
-def write_it2( season )
-  season = SportDb::Import::Season.new( season )  ## normalize season
-
-  in_path =  "../../stage/two/#{season.path}/it.2.csv"
-
-  matches = SportDb::CsvMatchParser.read( in_path )
-
-  pp matches[0]
-  puts "#{matches.size} matches"
-
-  league_name  = 'Italian Serie B'
-
-  matches = normalize( matches, league: league_name )
-
-  out_path = "../../../openfootball/italy/#{season.path}/2-serieb.txt"
-  SportDb::TxtMatchWriter.write( out_path, matches,
-                          name: "#{league_name} #{season.key}",
-                          round: ->(round) { "%s^ Giornata" % round },
-                          lang:  'it')
-end
-
-
-
-
-
-
-
-def write_matches( path, matches, name:, lang: )
-  round = if lang == 'de'
-            'Spieltag'
-          elsif lang == 'de_at'
-            lang = 'de'  ## !! note - MUST reset lang to de before passing on
-            ->(round) { "%s. Runde" % round }   # return lambda (inline-func/proc)
-          else
-            puts "!! ERROR - unsupported lang >#{lang}<in write_matches"
-            exit 1
-          end
-
-  SportDb::TxtMatchWriter.write( path, matches,
-                                  name:  name,
-                                  round: round,
-                                  lang:  lang )
-end
-
-
 def split_matches( matches, season: )
   matches_i  = []
   matches_ii = []
@@ -483,152 +56,256 @@ def split_matches( matches, season: )
 end
 
 
-def write_worker_at( matches, season:, league_name:, basename:,
-  split: false, normalize: true )
+def write_worker( league, season, source:,
+                                  extra: nil,
+                                  split: false,
+                                  normalize: true )
+  season = SportDb::Import::Season.new( season )  ## normalize season
+
+  league_info = LEAGUES[ league ]
+
+  source_info = SOURCES[ source ]
+  source_path = source_info[:path]
+
+  in_path = "#{source_path}/#{season.path}/#{league}.csv"   # e.g. ../stage/one/2020/br.1.csv
+
+  matches = SportDb::CsvMatchParser.read( in_path )
 
   pp matches[0]
   puts "#{matches.size} matches"
 
-  matches = normalize( matches, league: league_name )   if normalize
 
-  season_path = season.path
+  matches = normalize( matches, league: league )   if normalize
 
-  if split
-    matches_i, matches_ii = split_matches( matches, season: season )
+  league_name  = league_info[ :name ]      # e.g. Brasileiro Série A
+  basename     = league_info[ :basename]   #.e.g  1-seriea
 
-    path = "../../../openfootball/austria/#{season_path}/#{basename}-i.txt"
-    write_matches( path, matches_i, name: "#{league_name} #{season.key}",
-            lang:  'de_at' )
-    path = "../../../openfootball/austria/#{season_path}/#{basename}-ii.txt"
-    write_matches( path, matches_ii, name: "#{league_name} #{season.key}",
-            lang:  'de_at' )
-  else
-     path = "../../../openfootball/austria/#{season_path}/#{basename}.txt"
-     write_matches( path, matches, name: "#{league_name} #{season.key}",
-            lang:  'de_at' )
-  end
-end
+  league_name =  league_name.call( season )   if league_name.is_a?( Proc )  ## is proc/func - name depends on season
+  basename    =  basename.call( season )      if basename.is_a?( Proc )  ## is proc/func - name depends on season
 
-def write_at( season, split: false, normalize: true )
-  season = SportDb::Import::Season.new( season )  ## normalize season
-
-  path = "../more/o/#{season.path}/at.1.csv"
-
-  matches = SportDb::CsvMatchParser.read( path )
-
-  write_worker_at( matches,
-                   season: season,
-                   league_name: 'Österr. Bundesliga',
-                   basename: '1-bundesliga',
-                   split: split,
-                   normalize: normalize )
-end
-
-def write_at2( season, split: false, normalize: true )
-  season = SportDb::Import::Season.new( season )  ## normalize season
-
-  path = "../more/o/#{season.path}/at.2.csv"
-
-  matches = SportDb::CsvMatchParser.read( path )
-
-  league_name, basename = if season.start_year >= 2018
-                            ['Österr. 2. Liga',     '2-liga2']
-                          else
-                            ['Österr. Erste Liga',  '2-liga1']
-                          end
-
-  write_worker_at( matches,
-                   season: season,
-                   league_name: league_name,
-                   basename: basename,
-                   split: split,
-                   normalize: normalize )
-end
-
-
-
-def write_worker_de( matches, season:, league_name:, basename:, extra: nil,
-                              split: false, normalize: true )
-  pp matches[0]
-  puts "#{matches.size} matches"
-
-  matches = normalize( matches, league: league_name )   if normalize
+  repo_path    = league_info[ :path ]      # e.g. brazil or world/europe/portugal etc.
 
   season_path = String.new('')    ## note: allow extra path for output!!!! e.g. archive/2000s etc.
   season_path << "#{extra}/"   if extra
   season_path << season.path
 
+
+  lang_info = LANGS[ league_info[ :lang ] ]
+
   if split
     matches_i, matches_ii = split_matches( matches, season: season )
 
-    path = "../../../openfootball/deutschland/#{season_path}/#{basename}-i.txt"
-    write_matches( path, matches_i, name: "#{league_name} #{season.key}",
-                                        lang:  'de' )
-    path = "../../../openfootball/deutschland/#{season_path}/#{basename}-ii.txt"
-    write_matches( path, matches_ii, name: "#{league_name} #{season.key}",
-                                        lang:  'de' )
+    out_path = "./o/#{repo_path}/#{season_path}/#{basename}-i.txt"
+
+    SportDb::TxtMatchWriter.write( out_path, matches_i,
+                                   name: "#{league_name} #{season.key}",
+                                   round: lang_info[ :round ],
+                                   lang:  lang_info[ :lang] )
+
+    out_path = "./o/#{repo_path}/#{season_path}/#{basename}-ii.txt"
+
+    SportDb::TxtMatchWriter.write( out_path, matches_ii,
+                                   name: "#{league_name} #{season.key}",
+                                   round: lang_info[ :round ],
+                                   lang:  lang_info[ :lang] )
   else
-    path = "../../../openfootball/deutschland/#{season_path}/#{basename}.txt"
-    write_matches( path, matches, name: "#{league_name} #{season.key}",
-                                      lang:  'de' )
+    # out_path = "../../../openfootball/#{repo_path}/#{season_path}/#{basename}.txt"
+    out_path = "./o/#{repo_path}/#{season_path}/#{basename}.txt"
+
+    SportDb::TxtMatchWriter.write( out_path, matches,
+                                   name: "#{league_name} #{season.key}",
+                                   round: lang_info[ :round ],
+                                   lang:  lang_info[ :lang] )
   end
 end
 
 
-def write_de( season, source:, extra: nil, split: false, normalize: true )
-  season = SportDb::Import::Season.new( season )  ## normalize season
+def write_br( season, source: 'one' )   write_worker( 'br.1', season, source: source ); end
 
-  path = if source == 'de'
-           "../deutschland/o/#{season.path}/de.1.csv"
-         else
-           "../cache.leagues/o/#{season.path}/de.1.csv"
-         end
+def write_nl( season, source: 'one' )   write_worker( 'nl.1', season, source: source ); end
 
-  matches = SportDb::CsvMatchParser.read( path )
+def write_pt( season, source: 'one' )   write_worker( 'pt.1', season, source: source ); end
 
-  write_worker_de( matches,
-                   season: season,
-                   league_name: 'Deutsche Bundesliga',
-                   basename: '1-bundesliga',
-                   extra: extra,
-                   split: split,
-                   normalize: normalize )
-end
+def write_ru(  season, source: 'two' )  write_worker( 'ru.1', season, source: source ); end
+def write_ru2( season, source: 'two' )  write_worker( 'ru.2', season, source: source ); end
 
-def write_de2( season, source:, split: false )
-      season = SportDb::Import::Season.new( season )  ## normalize season
+def write_ch(  season, source: 'two' )  write_worker( 'ch.1', season, source: source ); end
+def write_ch2( season, source: 'two' )  write_worker( 'ch.2', season, source: source ); end
 
-      path =  if source == 'more'
-                "../more/o/#{season.path}/de.2.csv"
-             else
-                "../cache.leagues/o/#{season.path}/de.2.csv"
-              end
+def write_tr(  season, source: 'two' )  write_worker( 'tr.1', season, source: source ); end
+def write_tr2( season, source: 'two' )  write_worker( 'tr.2', season, source: source ); end
 
-      matches = SportDb::CsvMatchParser.read( path )
+def write_it(  season, source: 'one' )  write_worker( 'it.1', season, source: source ); end
+def write_it2( season, source: 'two' )  write_worker( 'it.2', season, source: source ); end
 
-      write_worker_de( matches,
-                       season: season,
-                       league_name: 'Deutsche 2. Bundesliga',
-                       basename: '2-bundesliga2',
-                       split: split )
-  end
+def write_fr(  season, source: 'leagues' )  write_worker( 'fr.1', season, source: source ); end
+def write_fr2( season, source: 'two' )      write_worker( 'fr.2', season, source: source ); end
 
-  def write_de3( season, split: false )
-        season = SportDb::Import::Season.new( season )  ## normalize season
+def write_es(  season, source: 'one' )      write_worker( 'es.1', season, source: source ); end
+def write_es2( season, source: 'two' )      write_worker( 'es.2', season, source: source ); end
 
-        path = "../cache.leagues/o/#{season.path}/de.3.csv"
+def write_eng(  season, source: 'one', extra: nil )  write_worker( 'eng.1', season, source: source, extra: extra ); end
+def write_eng2( season, source: 'one', extra: nil )  write_worker( 'eng.2', season, source: source, extra: extra ); end
+def write_eng3( season, source: 'two', extra: nil )  write_worker( 'eng.3', season, source: source, extra: extra ); end
+def write_eng4( season, source: 'two', extra: nil )  write_worker( 'eng.4', season, source: source, extra: extra ); end
 
-        matches = SportDb::CsvMatchParser.read( path )
+def write_de(   season, source: 'leagues', extra: nil, split: false, normalize: true )  write_worker( 'de.1', season, source: source, extra: extra, split: split, normalize: normalize ); end
+def write_de2(  season, source: 'leagues', extra: nil, split: false, normalize: true )  write_worker( 'de.2', season, source: source, extra: extra, split: split, normalize: normalize ); end
+def write_de3(  season, source: 'leagues', extra: nil, split: false, normalize: true )  write_worker( 'de.3', season, source: source, extra: extra, split: split, normalize: normalize ); end
 
-        write_worker_de( matches,
-                         season: season,
-                         league_name: 'Deutsche 3. Liga',
-                         basename: '3-liga3',
-                         split: split )
-  end
+def write_at(  season, source: 'two', split: false, normalize: true )  write_worker( 'at.1', season, source: source, split: split, normalize: normalize ); end
+def write_at2( season, source: 'two', split: false, normalize: true )  write_worker( 'at.2', season, source: source, split: split, normalize: normalize ); end
 
 
-### todo/fix: add normalize: false   option too; use for AT for now!!!!
+
+SOURCES = {
+  'one'     =>  { path: '../../stage/one' },
+  'two'     =>  { path: '../../stage/two' },
+  'leagues' =>  { path: '../../../footballcsv/cache.leagues' },  # or ../cache.leagues/o
+}
+
+LEAGUES =
+{
+  'br.1' => { name:     'Brasileiro Série A',  ## league name
+              basename: '1-seriea',
+              path:     'brazil',              ## repo path
+              lang:     'pt_BR',
+            },
+  'ru.1' => { name:     'Russian Premier League',
+              basename: '1-premierliga',
+              path:     'russia',
+              lang:     'en',   ## note: use english for now
+            },
+  'ru.2' => { name:     'Russian 1. Division',
+              basename: '2-division1',
+              path:     'russia',
+              lang:     'en',
+            },
+  'nl.1' => { name:     'Dutch Eredivisie',
+              basename: '1-eredivisie',
+              path:     'world/europe/netherlands',
+              lang:     'en',   ## note: use english for now
+            },
+  'pt.1' => { name:     'Portuguese Primeira Liga',
+              basename: '1-primeiraliga',
+              path:     'world/europe/portugal',
+              lang:     'pt_PT',
+            },
+  'ch.1' => { name:     'Swiss Super League',
+              basename: '1-superleague',
+              path:     'world/europe/switzerland',
+              lang:     'de_CH',
+            },
+  'ch.2' => { name:     'Swiss Challenge League',
+              basename: '2-challengeleague',
+              path:     'world/europe/switzerland',
+              lang:     'de_CH',
+            },
+  'tr.1' => { name:     'Turkish Süper Lig',
+              basename: '1-superlig',
+              path:     'world/europe/turkey',
+              lang:     'en',   ## note: use english for now
+            },
+  'tr.2' => { name:     'Turkish 1. Lig',
+              basename: '2-lig1',
+              path:     'world/europe/turkey',
+              lang:     'en',   ## note: use english for now
+            },
+  'it.1' => { name:     'Italian Serie A',
+              basename: '1-seriea',
+              path:     'italy',
+              lang:     'it',
+            },
+  'it.2' => { name:     'Italian Serie B',
+              basename: '2-serieb',
+              path:     'italy',
+              lang:     'it',
+            },
+  'fr.1' => { name:     'French Ligue 1',
+              basename: '1-ligue1',
+              path:     'france',
+              lang:     'fr',
+          },
+  'fr.2' => { name:     'French Ligue 2',
+              basename: '2-ligue2',
+              path:     'france',
+              lang:     'fr',
+            },
+  'es.1' => { name:     'Primera División de España',
+              basename: '1-liga',
+              path:     'espana',
+              lang:     'es',
+            },
+  'es.2' => { name:     'Segunda División de España',
+              basename: '2-liga2',
+              path:     'espana',
+              lang:     'es',
+            },
+  'eng.1' => { name:     'English Premier League',
+               basename: '1-premierleague',
+               path:     'england',
+               lang:     'en',
+             },
+  'eng.2' => { name:     'English Championship',
+               basename: '2-championship',
+               path:     'england',
+               lang:     'en',
+             },
+  'eng.3' => { name:     'English League One',
+               basename: '3-league1',
+               path:     'england',
+               lang:     'en',
+             },
+  'eng.4' => { name:     'English League Two',
+               basename: '4-league2',
+               path:     'england',
+               lang:     'en',
+             },
+  'de.1' => { name:     'Deutsche Bundesliga',
+              basename: '1-bundesliga',
+              path:     'deutschland',
+              lang:     'de_DE',
+            },
+  'de.2' => { name:     'Deutsche 2. Bundesliga',
+              basename: '2-bundesliga2',
+              path:     'deutschland',
+              lang:     'de_DE',
+            },
+  'de.3' => { name:     'Deutsche 3. Liga',
+              basename: '3-liga3',
+              path:     'deutschland',
+              lang:     'de_DE',
+            },
+  'at.1' => { name:     'Österr. Bundesliga',
+              basename: '1-bundesliga',
+              path:     'austria',
+              lang:     'de_AT',
+            },
+  'at.2' => { name:     ->(season) { season.start_year >= 2018 ? 'Österr. 2. Liga' : 'Österr. Erste Liga' },
+              basename: ->(season) { season.start_year >= 2018 ? '2-liga2' : '2-liga1' },
+              path:     'austria',
+              lang:     'de_AT',
+            },
+}
+
+
+LANGS =
+{
+  'en'    => { round: 'Matchday', lang: 'en' },
+  'pt_BR' => { round: 'Rodada',   lang: 'pt' },
+  'pt_PT' => { round: 'Jornada',  lang: 'pt' },
+  'de_DE' => { round: 'Spieltag', lang: 'de' },
+  'de_CH' => { round: 'Spieltag', lang: 'de' },  # note: for now 1:1 like de_DE
+  'de_AT' => { round: ->(round) { "%s. Runde" % round },
+               lang: 'de'
+             },
+  'it'    => { round: ->(round) { "%s^ Giornata" % round },
+               lang: 'it'
+             },
+  'fr'    => { round: 'Journée',  lang:  'fr' },
+  'es'    => { round: 'Jornada',  lang:  'es' },
+}
+
 
 
 # write_at( '2010-11', split: true, normalize: false )
@@ -656,7 +333,7 @@ def write_de2( season, source:, split: false )
 # write_de( '2012-13', split: true )
 
 # write_de( '2013-14', split: true )
-# write_de2( '2013-14', source: 'more', split: true)
+# write_de2( '2013-14', source: 'two', split: true )
 
 # write_de( '2014-15', split: true )
 # write_de2( '2014-15', split: true )
@@ -782,7 +459,11 @@ def write_de2( season, source:, split: false )
 # write_pt( '2018/19' )
 # write_pt( '2019/20' )
 
-write_ru( '2019/20' )
-write_ru2( '2019/20' )
+# write_ru( '2019/20' )
+# write_ru2( '2019/20' )
+
+# write_br( '2018' )
+# write_br( '2019' )
+# write_br( '2020' )
 
 puts "bye"

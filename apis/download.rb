@@ -173,9 +173,15 @@ end # module Footballdata
 # Footballdata.cl( 2018 )
 # Footballdata.cl( 2019 )
 
+
+Footballdata.br( 2020 )
+Footballdata.br( 2019 )
+Footballdata.br( 2018 )
+
+
 #############
 ## up (ongoing) 2019/20 seasons
 # Footballdata.eng( 2019 )
 
-Footballdata.nl( 2019 )
-Footballdata.pt( 2019 )
+# Footballdata.nl( 2019 )
+# Footballdata.pt( 2019 )
