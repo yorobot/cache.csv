@@ -44,15 +44,15 @@ STAGE_TO_STAGE = {
 }
 
 STAGE_TO_ROUND = {
-  'PRELIMINARY_SEMI_FINALS' => 'Preliminary Semi-finals',
+  'PRELIMINARY_SEMI_FINALS' => 'Preliminary Semifinals',
   'PRELIMINARY_FINAL'       => 'Preliminary Final',
   '1ST_QUALIFYING_ROUND'    => 'Qual. Round 1',
   '2ND_QUALIFYING_ROUND'    => 'Qual. Round 2',
   '3RD_QUALIFYING_ROUND'    => 'Qual. Round 3',
   'PLAY_OFF_ROUND'          => 'Playoff Round',
   'ROUND_OF_16'             => 'Round of 16',
-  'QUARTER_FINALS'          => 'Quarter-finals',
-  'SEMI_FINALS'             => 'Semi-finals',
+  'QUARTER_FINALS'          => 'Quarterfinals',
+  'SEMI_FINALS'             => 'Semifinals',
   'FINAL'                   => 'Final',
 }
 
@@ -185,32 +185,26 @@ matches.each do |m|
       et  = ''
       pen = ''
     when 'FINISHED'
-      ft  = "#{score['fullTime']['homeTeam']}-#{score['fullTime']['awayTeam']}"
+      ## note: if extraTime present
+      ## than fullTime is extraTime score!!
+      ##   AND   fullTime - extraTime is fullTime score!!
+      ## double check in other season too??
+      ##   - checked in cl 2018/19
+
+      if score['extraTime']['homeTeam'] && score['extraTime']['awayTeam']
+        et = "#{score['fullTime']['homeTeam']}-#{score['fullTime']['awayTeam']}"
+        ft = "#{score['fullTime']['homeTeam']-score['extraTime']['homeTeam']}-#{score['fullTime']['awayTeam']-score['extraTime']['awayTeam']}"
+      else
+        ft  = "#{score['fullTime']['homeTeam']}-#{score['fullTime']['awayTeam']}"
+      end
+
       ht  = "#{score['halfTime']['homeTeam']}-#{score['halfTime']['awayTeam']}"
-      et  = if score['extraTime']['homeTeam'] && score['extraTime']['awayTeam']
-              "#{score['extraTime']['homeTeam']}-#{score['extraTime']['awayTeam']}"
-            else
-              ''
-            end
+
       pen = if score['penalties']['homeTeam'] && score['penalties']['awayTeam']
               "#{score['penalties']['homeTeam']}-#{score['penalties']['awayTeam']}"
             else
               ''
             end
-
-    when 'AWARDED'
-      ft = "#{score['fullTime']['homeTeam']}-#{score['fullTime']['awayTeam']}"
-      ft << ' (*)'
-      ht = ''
-      comments = 'awarded'
-    when 'CANCELLED'
-      ft = '(*)'
-      ht = ''
-      comments  = 'canceled'
-    when 'POSTPONED'
-      ft = '(*)'
-      ht = ''
-      comments = 'postponed'
     else
       puts "!! ERROR: unsupported match status >#{m['status']}< - sorry:"
       pp m
@@ -321,3 +315,4 @@ end   # method convert
 
 
 convert( league: 'CL', year: 2018 )
+convert( league: 'CL', year: 2019 )
