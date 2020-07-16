@@ -8,9 +8,18 @@ module Footballdata
   BASE_URI = 'http://api.football-data.org/v2/'
 
 
-  def self.competitions
+  def self.competitions_tier_one
     get( 'competitions?plan=TIER_ONE' )
   end
+
+  def self.competitions_tier_two
+    get( 'competitions?plan=TIER_TWO' )
+  end
+
+  def self.competitions_tier_three
+    get( 'competitions?plan=TIER_THREE' )
+  end
+
 
 
   def self.competition( code, year )
@@ -174,10 +183,11 @@ end # module Footballdata
 # Footballdata.cl( 2019 )
 
 
-Footballdata.br( 2020 )
-Footballdata.br( 2019 )
-Footballdata.br( 2018 )
+# Footballdata.br( 2020 )
+# Footballdata.br( 2019 )
+# Footballdata.br( 2018 )
 
+Footballdata.competitions_tier_three
 
 #############
 ## up (ongoing) 2019/20 seasons

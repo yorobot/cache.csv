@@ -1,32 +1,15 @@
-require 'json'
-require 'date'
-require 'pp'
+require_relative 'read'
 
 
-require_relative '../csv'        ## pull in date_to_season helper
+
+require_relative '../csv'
 
 
 
 OUT_DIR = './o/cl'
 # OUT_DIR = '../../stage/cl'
 
-## todo/check: use champs and NOT cl - why? why not?
-LEAGUES = {
-  'cl' => 'CL',
-}
 
-
-
-MODS = {
-}
-
-
-def read_json( path )
-  puts "path=>#{path}<"
-  txt = File.open( path, 'r:utf-8' ) {|f| f.read }
-  data = JSON.parse( txt )
-  data
-end
 
 
 
@@ -83,17 +66,7 @@ mods = MODS[ league.downcase ] || {}
 recs = []
 
 teams = Hash.new( 0 )
-
-stat = {
-  all:     { duration: Hash.new( 0 ),
-             stage:    Hash.new( 0 ),
-             status:   Hash.new( 0 ),
-             group:    Hash.new( 0 ),
-
-             matches:  0,
-             goals:    0,
-           }
-}
+stat = Stat.new
 
 matches = data[ 'matches' ]
 
@@ -116,27 +89,13 @@ end_date   = Date.strptime( season['endDate'],   '%Y-%m-%d' )
 
 
 matches.each do |m|
+  stat.update( m )
+
   team1 = m['homeTeam']['name']
   team2 = m['awayTeam']['name']
 
-  ### mods - rename club names
-  unless mods.nil? || mods.empty?
-    team1 = mods[ team1 ]      if mods[ team1 ]
-    team2 = mods[ team2 ]      if mods[ team2 ]
-  end
-
-
 
   score = m['score']
-
-  stat[:all][:stage][ m['stage'] ]   += 1
-  stat[:all][:group][ m['group'] ]  += 1
-  stat[:all][:duration][ score['duration'] ] += 1   ## track - assert always REGULAR
-  stat[:all][:status][ m['status'] ]  += 1
-
-  stat[:all][:matches] += 1
-  stat[:all][:goals]   += score['fullTime']['homeTeam'].to_i  if score['fullTime']['homeTeam']
-  stat[:all][:goals]   += score['fullTime']['awayTeam'].to_i  if score['fullTime']['awayTeam']
 
 
 
@@ -165,6 +124,12 @@ matches.each do |m|
 
     teams[ team1 ] += 1
     teams[ team2 ] += 1
+
+    ### mods - rename club names
+    unless mods.nil? || mods.empty?
+      team1 = mods[ team1 ]      if mods[ team1 ]
+      team2 = mods[ team2 ]      if mods[ team2 ]
+    end
 
 
     ## e.g. "utcDate": "2020-05-09T00:00:00Z",
@@ -304,7 +269,8 @@ teams.each do |name, count|
     print " › #{rec['area']['name']}"
     print "  - #{rec['address']}"
   else
-    print " -- !! WARN - no team record found in teams.json"
+    print "!! ERROR - no team record found in teams.json for #{name}"
+    exit 1
   end
   print "\n"
 end
