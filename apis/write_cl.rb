@@ -1,6 +1,38 @@
 require_relative '../boot'
 
 
+
+########
+# helpers
+#   normalize team names
+
+NORM_MODS  = SportDb::Import.catalog.clubs.build_mods(
+  { 'Liverpool | Liverpool FC' => 'Liverpool FC, ENG',
+    'Arsenal  | Arsenal FC'    => 'Arsenal FC, ENG',
+    'Barcelona'                => 'FC Barcelona, ESP',
+    'Valencia'                 => 'Valencia CF, ESP'  })
+
+def normalize( matches )
+
+  ## todo/fix: cache name lookups - why? why not?
+  matches.each do |match|
+     team1 = NORM_MODS[ match.team1 ] || SportDb::Import.catalog.clubs.find!( match.team1 )
+     team2 = NORM_MODS[ match.team2 ] || SportDb::Import.catalog.clubs.find!( match.team2 )
+
+     puts "#{match.team1} => #{team1.name}"  if match.team1 != team1.name
+     puts "#{match.team2} => #{team2.name}"  if match.team2 != team2.name
+
+     match.update( team1: team1.name )
+     match.update( team2: team2.name )
+  end
+  matches
+end
+
+
+
+
+
+
 def format_score( match )
   buf = String.new('')
 
@@ -175,6 +207,8 @@ def write_cl( season )
 
   pp matches[0]
   puts "#{matches.size} matches"
+
+  matches = normalize( matches )
 
 
   ## split into three stages / files
