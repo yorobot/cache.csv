@@ -219,15 +219,16 @@ def write_cl( season )
   stages = matches.group_by { |match| match.stage }
   pp stages.keys
 
+  # out_dir = './tmp'
+  out_dir = '../../../openfootball/europe-champions-league'
+
+
   league_name = 'UEFA Champions League'
 
+  ## note: use separate "Quali" league for now for Qualifiying stage
   buf = String.new( '' )
-  buf << "= #{league_name} #{season.key}\n\n"
+  buf << "= #{league_name} - Qualification #{season.key}\n\n"
   buf <<  build_stage( stages['Qualifying'] )
-
-
-  out_dir = './tmp'
-  # out_dir = '../../../openfootball/europe-champions-league'
 
   puts buf
   write_buf( "#{out_dir}/#{season.path}/cl_quali.txt", buf )
