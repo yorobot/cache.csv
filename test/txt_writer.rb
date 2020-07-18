@@ -383,7 +383,7 @@ LANGS =
 # write_eng( '2018/19' )
 
 
-# write_eng2( '2018/19' )
+write_eng2( '2018/19' )
 
 # write_eng( '2019/20' )
 # write_eng2( '2019/20' )
@@ -419,7 +419,7 @@ LANGS =
 # write_fr( '2016/17' )
 # write_fr( '2017/18' )
 # write_fr( '2018/19' )
-# write_fr( '2019/20' )
+write_fr( '2019/20', source: 'one' )
 
 # write_fr2( '2015/16' )
 # write_fr2( '2016/17' )
