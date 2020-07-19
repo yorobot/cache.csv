@@ -7,9 +7,10 @@ require 'sportdb/formats'   ## for Season -- move to test_schedule /fetch!!!!
 require_relative '../csv'
 
 
-
-# OUT_DIR='./o'
-OUT_DIR='../../stage/two'
+OUT_DIR='./o'
+# OUT_DIR='./o/at'
+# OUT_DIR='./o/de'
+# OUT_DIR='../../stage/two'
 
 
 MODS = {
@@ -80,6 +81,19 @@ trs.each do |tr|
       exit 1
     end
     print "\n"
+  elsif tr.text.strip =~ /1\.[ ]Runde|
+                          2\.[ ]Runde|
+                          Achtelfinale|
+                          Viertelfinale|
+                          Halbfinale|
+                          Finale
+                          /x
+    puts
+    print '[%03d] ' % (i+1)
+    print tr.text.strip
+    print "\n"
+
+    last_round = tr.text.strip
   else
     tds = tr.css( 'td' )
 
@@ -94,6 +108,11 @@ trs.each do |tr|
     score_str = score_str.gsub( ':', '-' )
     ## check for 0:3 Wert.   - change Wert. to awd.  (awarded)
     score_str = score_str.sub( /Wert\./i, 'awd.' )
+
+    ## clean team name
+    team1_str = team1_str.gsub( '(old)', '' ).strip
+    team2_str = team2_str.gsub( '(old)', '' ).strip
+
 
     team1_str = MODS[ team1_str ]   if MODS[ team1_str ]
     team2_str = MODS[ team2_str ]   if MODS[ team2_str ]
@@ -116,8 +135,10 @@ trs.each do |tr|
     comments = String.new( '' )
 
     ## split score
-    ft = ''
-    ht = ''
+    ft  = ''
+    ht  = ''
+    et  = ''
+    pen = ''
     if score_str == '---'   ## in the future (no score yet)
       ft = ''
       ht = ''
@@ -133,6 +154,33 @@ trs.each do |tr|
       ft = ''
       ht = ''
       comments = 'postponed'
+    # 5-4 (0-0, 1-1, 2-2) i.E.
+    elsif score_str =~ /([0-9]+) [ ]*-[ ]* ([0-9]+)
+                            [ ]*
+                        \(([0-9]+) [ ]*-[ ]* ([0-9]+)
+                            [ ]*,[ ]*
+                          ([0-9]+) [ ]*-[ ]* ([0-9]+)
+                            [ ]*,[ ]*
+                         ([0-9]+) [ ]*-[ ]* ([0-9]+)\)
+                            [ ]*
+                         i\.E\.
+                       /x
+      pen = "#{$1}-#{$2}"
+      ht  = "#{$3}-#{$4}"
+      ft  = "#{$5}-#{$6}"
+      et  = "#{$7}-#{$8}"
+    # 2-1 (1-0, 1-1) n.V
+  elsif score_str =~ /([0-9]+) [ ]*-[ ]* ([0-9]+)
+                        [ ]*
+                      \(([0-9]+) [ ]*-[ ]* ([0-9]+)
+                         [ ]*,[ ]*
+                        ([0-9]+) [ ]*-[ ]* ([0-9]+)\)
+                         [ ]*
+                         n\.V\.
+                       /x
+      et  = "#{$1}-#{$2}"
+      ht  = "#{$3}-#{$4}"
+      ft  = "#{$5}-#{$6}"
     elsif score_str =~ /([0-9]+)
                             [ ]*-[ ]*
                         ([0-9]+)
@@ -169,6 +217,8 @@ trs.each do |tr|
              ft,
              ht,
              team2_str,
+             et,
+             pen,
              comments]
 
     last_date_str = date_str
@@ -190,13 +240,15 @@ puts "write #{out_path}..."
 
 
 headers = [
-  'Matchday',
+  'Round',
   'Date',
   'Time',
   'Team 1',
   'FT',
   'HT',
   'Team 2',
+  'ET',
+  'P',
   'Comments'    ## e.g. awarded, cancelled/canceled, etc.
 ]
 
@@ -229,6 +281,7 @@ DATAFILES = [['at.1',  %w[2010/11 2011/12 2012/13 2013/14 2014/15
             ]
 =end
 
+=begin
 DATAFILES = [
   ['it.2', %w[2013/14 2014/15 2015/16 2016/17 2017/18 2018/19]],
   ['fr.2', %w[2015/16 2016/17 2017/18 2018/19]],
@@ -243,6 +296,14 @@ DATAFILES.each do |datafile|
     convert( league: basename, season: season )
   end
 end
+=end
+
+
+# convert( league: 'at.cup', season: '2019/20' )
+# convert( league: 'at.cup', season: '2018/19' )
+
+convert( league: 'de.cup', season: '2019/20' )
+convert( league: 'de.cup', season: '2018/19' )
 
 
 # convert( league: 'eng.4', season: '2019/20' )

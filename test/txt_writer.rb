@@ -7,7 +7,7 @@ require_relative '../boot'
 def normalize( matches, league: )
     matches = matches.sort do |l,r|
       ## first by date (older first)
-      ## next by matchday (lowwer first)
+      ## next by matchday (lower first)
       res =   l.date <=> r.date
       res =   l.round <=> r.round   if res == 0
       res
@@ -152,17 +152,24 @@ def write_eng4( season, source: 'two', extra: nil )  write_worker( 'eng.4', seas
 def write_de(   season, source: 'leagues', extra: nil, split: false, normalize: true )  write_worker( 'de.1', season, source: source, extra: extra, split: split, normalize: normalize ); end
 def write_de2(  season, source: 'leagues', extra: nil, split: false, normalize: true )  write_worker( 'de.2', season, source: source, extra: extra, split: split, normalize: normalize ); end
 def write_de3(  season, source: 'leagues', extra: nil, split: false, normalize: true )  write_worker( 'de.3', season, source: source, extra: extra, split: split, normalize: normalize ); end
+def write_de_cup(  season, source: 'two', split: false, normalize: true )  write_worker( 'de.cup', season, source: source, split: split, normalize: normalize ); end
 
 def write_at(  season, source: 'two', split: false, normalize: true )  write_worker( 'at.1', season, source: source, split: split, normalize: normalize ); end
 def write_at2( season, source: 'two', split: false, normalize: true )  write_worker( 'at.2', season, source: source, split: split, normalize: normalize ); end
-
+def write_at_cup( season, source: 'two', split: false, normalize: true )  write_worker( 'at.cup', season, source: source, split: split, normalize: normalize ); end
 
 
 SOURCES = {
   'one'     =>  { path: '../../stage/one' },
+  'tmp/one'     =>  { path: '../apis/o' },  ## "tmp" debug version
+
   'two'     =>  { path: '../../stage/two' },
-  'leagues' =>  { path: '../../../footballcsv/cache.leagues' },  # or ../cache.leagues/o
+  'tmp/two'   =>  { path: '../more/o' },    ## "tmp" debug version
+
+  'leagues'   =>  { path: '../../../footballcsv/cache.leagues' },
+  'tmp/leagues' =>  { path: '../cache.leagues/o' },    ## "tmp"  debug version
 }
+
 
 LEAGUES =
 {
@@ -276,6 +283,11 @@ LEAGUES =
               path:     'deutschland',
               lang:     'de_DE',
             },
+  'de.cup' => { name:     'DFB Pokal',
+                basename: 'cup',
+                path:     'deutschland',
+                lang:     'de_DE',
+              },
   'at.1' => { name:     'Österr. Bundesliga',
               basename: '1-bundesliga',
               path:     'austria',
@@ -286,6 +298,11 @@ LEAGUES =
               path:     'austria',
               lang:     'de_AT',
             },
+  'at.cup' => { name:     'ÖFB Cup',
+                basename: 'cup',
+                path:     'austria',
+                lang:     'de_AT',
+              },
 }
 
 
@@ -308,6 +325,10 @@ LANGS =
 
 
 
+# write_at_cup( '2018/19', source: 'tmp/two' )
+# write_at_cup( '2019/20', source: 'tmp/two' )
+
+
 # write_at( '2010-11', split: true, normalize: false )
 # write_at2( '2010-11', split: true, normalize: false )
 
@@ -327,6 +348,9 @@ LANGS =
 # write_at2( '2018-19', normalize: false )
 # write_at2( '2019-20', normalize: false )
 
+
+write_de_cup( '2018/19', source: 'tmp/two' )
+write_de_cup( '2019/20', source: 'tmp/two' )
 
 # write_de( '2010-11' )
 # write_de( '2011-12' )
@@ -383,7 +407,7 @@ LANGS =
 # write_eng( '2018/19' )
 
 
-write_eng2( '2018/19' )
+# write_eng2( '2018/19' )
 
 # write_eng( '2019/20' )
 # write_eng2( '2019/20' )
@@ -419,7 +443,7 @@ write_eng2( '2018/19' )
 # write_fr( '2016/17' )
 # write_fr( '2017/18' )
 # write_fr( '2018/19' )
-write_fr( '2019/20', source: 'one' )
+# write_fr( '2019/20', source: 'one' )
 
 # write_fr2( '2015/16' )
 # write_fr2( '2016/17' )
