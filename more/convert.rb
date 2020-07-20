@@ -44,6 +44,8 @@ end
 def convert( season:, league: )
   season = Season.new( season )  if season.is_a?( String )
 
+  format = league =~ /cup/ ?  'CUP' : 'LEAGUE'
+
    # season   = '2019/20'
    # basename = 'at.2'
   basename =   league
@@ -76,12 +78,13 @@ recs = []
 trs.each do |tr|
   i += 1
 
-  if tr.text.strip =~ /Spieltag/
+  if format == 'LEAGUE' && tr.text.strip =~ /Spieltag/
     puts
     print '[%03d] ' % (i+1)
     print tr.text.strip
 
     if m = tr.text.strip.match( /([0-9]+)\. Spieltag/ )
+      ## todo/check: always use a string even if number (as a string eg. '1' etc.)
       last_round = m[1].to_i
       print " => #{last_round}"
     else
@@ -89,7 +92,7 @@ trs.each do |tr|
       exit 1
     end
     print "\n"
-  elsif tr.text.strip =~ /1\.[ ]Runde|
+  elsif format == 'CUP' && tr.text.strip =~ /1\.[ ]Runde|
                           2\.[ ]Runde|
                           Achtelfinale|
                           Viertelfinale|
@@ -218,17 +221,27 @@ trs.each do |tr|
        exit 1
     end
 
-    recs << [last_round,
-             date.strftime( '%Y-%m-%d' ),
-             time_str,
-             team1_str,
-             ft,
-             ht,
-             team2_str,
-             et,
-             pen,
-             comments]
-
+    recs << if format == 'CUP'
+             [last_round,
+              date.strftime( '%Y-%m-%d' ),
+              time_str,
+              team1_str,
+              ft,
+              ht,
+              team2_str,
+              et,              # extra: incl. extra time
+              pen,             # extra: incl. penalties
+              comments]
+            else   ## assume LEAGUE
+              [last_round,
+              date.strftime( '%Y-%m-%d' ),
+              time_str,
+              team1_str,
+              ft,
+              ht,
+              team2_str,
+              comments]
+            end
     last_date_str = date_str
   end
 end
@@ -247,18 +260,27 @@ out_path = "#{OUT_DIR}/#{season.path}/#{basename}.csv"
 puts "write #{out_path}..."
 
 
-headers = [
-  'Round',
-  'Date',
-  'Time',
-  'Team 1',
-  'FT',
-  'HT',
-  'Team 2',
-  'ET',
-  'P',
-  'Comments'    ## e.g. awarded, cancelled/canceled, etc.
-]
+headers = if format == 'CUP'
+           ['Round',
+            'Date',
+            'Time',
+            'Team 1',
+            'FT',
+            'HT',
+            'Team 2',
+            'ET',
+            'P',
+            'Comments']    ## e.g. awarded, cancelled/canceled, etc.
+          else     ## assume LEAGUE
+           ['Round',
+            'Date',
+            'Time',
+            'Team 1',
+            'FT',
+            'HT',
+            'Team 2',
+            'Comments']    ## e.g. awarded, cancelled/canceled, etc.
+          end
 
 Cache::CsvMatchWriter.write( out_path, recs, headers: headers )
 end
@@ -315,9 +337,13 @@ end
 # convert( league: 'at.cup', season: '2013/14' )
 # convert( league: 'at.cup', season: '2014/15' )
 # convert( league: 'at.cup', season: '2015/16' )
+# convert( league: 'at.cup', season: '2016/17' )
+# convert( league: 'at.cup', season: '2017/18' )
 
-convert( league: 'at.cup', season: '2016/17' )
-convert( league: 'at.cup', season: '2017/18' )
+convert( league: 'at.2', season: '2014/15' )
+convert( league: 'at.2', season: '2015/16' )
+convert( league: 'at.2', season: '2016/17' )
+convert( league: 'at.2', season: '2017/18' )
 
 
 # convert( league: 'de.cup', season: '2019/20' )

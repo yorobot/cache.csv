@@ -14,10 +14,14 @@ require 'pp'
                         /
                      }x
 
+package_dir =  '../../../openfootball/brazil'
+# package_dir =  '../../../openfootball/europe-champions-league'
+# package_dir =  '../../../openfootball/russia'
+# package_dir =  '../../../openfootball/espana'
 # package_dir =  '../../../openfootball/france'
 # package_dir =  '../../../openfootball/italy'
 # package_dir =  '../../../openfootball/england'
-package_dir =  '../../../openfootball/austria'
+# package_dir =  '../../../openfootball/austria'
 # package_dir =  '../../../openfootball/deutschland'
 datafiles = Dir.glob( "#{package_dir}/**/{*,.*}.txt" )
 
@@ -27,7 +31,9 @@ datafiles = datafiles.select do |datafile|
   if EXCLUDE_RE.match( datafile )
     false
   else
-    if datafile =~ %r{/squads/}
+    if datafile =~ %r{/squads/}    ||
+       datafile =~ %r{\.conf\.txt} ||     ## note: skip configs for now too
+       datafile =~ %r{clubs\.props\.txt}
       false
     else
       true

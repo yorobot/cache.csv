@@ -95,14 +95,16 @@ def write_worker( league, season, source:,
   if split
     matches_i, matches_ii = split_matches( matches, season: season )
 
-    out_path = "./o/#{repo_path}/#{season_path}/#{basename}-i.txt"
+    out_path = "../../../openfootball/#{repo_path}/#{season_path}/#{basename}-i.txt"
+    # out_path = "./o/#{repo_path}/#{season_path}/#{basename}-i.txt"
 
     SportDb::TxtMatchWriter.write( out_path, matches_i,
                                    name: "#{league_name} #{season.key}",
                                    round: lang_info[ :round ],
                                    lang:  lang_info[ :lang] )
 
-    out_path = "./o/#{repo_path}/#{season_path}/#{basename}-ii.txt"
+    out_path = "../../../openfootball/#{repo_path}/#{season_path}/#{basename}-ii.txt"
+    # out_path = "./o/#{repo_path}/#{season_path}/#{basename}-ii.txt"
 
     SportDb::TxtMatchWriter.write( out_path, matches_ii,
                                    name: "#{league_name} #{season.key}",
@@ -334,8 +336,13 @@ LANGS =
 # write_at_cup( '2014/15', source: 'tmp/two' )
 # write_at_cup( '2015/16', source: 'tmp/two' )
 
-write_at_cup( '2016/17', source: 'tmp/two' )
-write_at_cup( '2017/18', source: 'tmp/two' )
+# write_at_cup( '2016/17', source: 'tmp/two' )
+# write_at_cup( '2017/18', source: 'tmp/two' )
+
+write_at2( '2014/15', source: 'tmp/two', split: true )
+write_at2( '2015/16', source: 'tmp/two', split: true )
+write_at2( '2016/17', source: 'tmp/two', split: true )
+write_at2( '2017/18', source: 'tmp/two', split: true )
 
 
 # write_at( '2010-11', split: true, normalize: false )

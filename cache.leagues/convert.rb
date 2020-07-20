@@ -12,6 +12,7 @@ MODS = {
 }
 
 
+
 datafiles = Dir.glob( "./dl/fbref/**/*csv" )
 puts "#{datafiles.size} datafiles"
 
@@ -32,6 +33,7 @@ datafiles.each do |datafile|
 
     ## convert to records
     recs = []
+
     rows.each do |row|
 #    Wk,Day,Date,Time,Home,Score,Away,Attendance,Venue,Referee,Match Report,Notes
 #    1,Sat,2010-08-14,,Bolton,0–0,Fulham,,,,Match Report,
@@ -54,7 +56,27 @@ datafiles.each do |datafile|
        end
 
 
-       values << row[:wk]                  # matchday
+       if basename == 'at.1' && row.key?( :round )   ## todo/fix: check starting with season 2018/19!!!
+         case row[:round]
+         when 'Relegation round','Championship round'
+           # add 22 e.g. 1+22 => 23 matchday
+           values << (row[:round].start_with?( 'Relegation' ) ?
+                       'Finaldurchgang - Qualifikation' :
+                       'Finaldurchgang - Meister')
+           values << (row[:wk].to_i + 22).to_s
+         when 'Semi-final', 'Finals'
+           values << 'Europa League Play-off'
+           values << (row[:round].start_with?( 'Semi' ) ?
+                       'Halbfinale' :
+                       'Finale' )
+         else  ## asumme 'Regular Season'
+           values << 'Grunddurchgang'
+           values << row[:wk]
+         end
+       else  ## regular processing
+         values << row[:wk]                  # matchday
+       end
+
        values << Date.strptime( row[:date], '%Y-%m-%d' ).strftime( '%a %b %-d %Y' )   # e.g. Sat Aug 7 1993
        values <<  if row[:time].empty?     # time
                        '?'
@@ -80,15 +102,26 @@ datafiles.each do |datafile|
 
     out_path = "#{OUT_DIR}/#{dirname}/#{basename}.csv"
 
-    headers = [
-      'Matchday',
-      'Date',
-      'Time',
-      'Team 1',
-      'FT',
-      'HT',
-      'Team 2'
-    ]
+    headers = if recs[0].size == 7   ## assume "standard" league format
+                ['Matchday',
+                 'Date',
+                 'Time',
+                 'Team 1',
+                 'FT',
+                 'HT',
+                 'Team 2'
+                ]
+              else  ## assume stage & "non-regular" rounds (NOT all matchdays, that is, numbers)
+                ['Stage',
+                 'Round',
+                 'Date',
+                 'Time',
+                 'Team 1',
+                 'FT',
+                 'HT',
+                 'Team 2'
+                ]
+              end
 
     Cache::CsvMatchWriter.write( out_path, recs, headers: headers )
 end
