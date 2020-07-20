@@ -310,11 +310,14 @@ end
 # convert( league: 'at.cup', season: '2019/20' )
 # convert( league: 'at.cup', season: '2018/19' )
 
-convert( league: 'at.cup', season: '2011/12' )
-convert( league: 'at.cup', season: '2012/13' )
-convert( league: 'at.cup', season: '2013/14' )
-convert( league: 'at.cup', season: '2014/15' )
-convert( league: 'at.cup', season: '2015/16' )
+# convert( league: 'at.cup', season: '2011/12' )
+# convert( league: 'at.cup', season: '2012/13' )
+# convert( league: 'at.cup', season: '2013/14' )
+# convert( league: 'at.cup', season: '2014/15' )
+# convert( league: 'at.cup', season: '2015/16' )
+
+convert( league: 'at.cup', season: '2016/17' )
+convert( league: 'at.cup', season: '2017/18' )
 
 
 # convert( league: 'de.cup', season: '2019/20' )
