@@ -22,6 +22,14 @@ MODS = {
   ## AT 2
   'Austria Wien (A)'         => 'Young Violets',  # in 2019/20
   'FC Wacker Innsbruck (A)'  => 'FC Wacker Innsbruck II',   # in 2018/19
+  ## AT CUP
+  'Rapid Wien (A)'  => 'Rapid Wien II',  # in 2011/12
+  'Sturm Graz (A)'  => 'Sturm Graz II',
+  'Kapfenberger SV 1919 (A)' =>  'Kapfenberger SV II',
+  'SV Grödig (A)'  => 'SV Grödig II',
+  'FC Trenkwalder Admira (A)' => 'FC Admira Wacker II',
+  'RB Salzburg (A)'  => 'RB Salzburg II',
+  'SR WGFM Donaufeld' => 'SR Donaufeld Wien',
 }
 
 
@@ -302,8 +310,15 @@ end
 # convert( league: 'at.cup', season: '2019/20' )
 # convert( league: 'at.cup', season: '2018/19' )
 
-convert( league: 'de.cup', season: '2019/20' )
-convert( league: 'de.cup', season: '2018/19' )
+convert( league: 'at.cup', season: '2011/12' )
+convert( league: 'at.cup', season: '2012/13' )
+convert( league: 'at.cup', season: '2013/14' )
+convert( league: 'at.cup', season: '2014/15' )
+convert( league: 'at.cup', season: '2015/16' )
+
+
+# convert( league: 'de.cup', season: '2019/20' )
+# convert( league: 'de.cup', season: '2018/19' )
 
 
 # convert( league: 'eng.4', season: '2019/20' )

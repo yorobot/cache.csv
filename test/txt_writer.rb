@@ -109,8 +109,8 @@ def write_worker( league, season, source:,
                                    round: lang_info[ :round ],
                                    lang:  lang_info[ :lang] )
   else
-    # out_path = "../../../openfootball/#{repo_path}/#{season_path}/#{basename}.txt"
-    out_path = "./o/#{repo_path}/#{season_path}/#{basename}.txt"
+    out_path = "../../../openfootball/#{repo_path}/#{season_path}/#{basename}.txt"
+    # out_path = "./o/#{repo_path}/#{season_path}/#{basename}.txt"
 
     SportDb::TxtMatchWriter.write( out_path, matches,
                                    name: "#{league_name} #{season.key}",
@@ -328,6 +328,13 @@ LANGS =
 # write_at_cup( '2018/19', source: 'tmp/two' )
 # write_at_cup( '2019/20', source: 'tmp/two' )
 
+write_at_cup( '2011/12', source: 'tmp/two' )
+write_at_cup( '2012/13', source: 'tmp/two' )
+write_at_cup( '2013/14', source: 'tmp/two' )
+write_at_cup( '2014/15', source: 'tmp/two' )
+write_at_cup( '2015/16', source: 'tmp/two' )
+
+
 
 # write_at( '2010-11', split: true, normalize: false )
 # write_at2( '2010-11', split: true, normalize: false )
@@ -349,8 +356,8 @@ LANGS =
 # write_at2( '2019-20', normalize: false )
 
 
-write_de_cup( '2018/19', source: 'tmp/two' )
-write_de_cup( '2019/20', source: 'tmp/two' )
+# write_de_cup( '2018/19', source: 'tmp/two' )
+# write_de_cup( '2019/20', source: 'tmp/two' )
 
 # write_de( '2010-11' )
 # write_de( '2011-12' )
