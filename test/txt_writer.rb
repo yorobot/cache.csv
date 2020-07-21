@@ -150,6 +150,8 @@ def write_eng(  season, source: 'one', extra: nil )  write_worker( 'eng.1', seas
 def write_eng2( season, source: 'one', extra: nil )  write_worker( 'eng.2', season, source: source, extra: extra ); end
 def write_eng3( season, source: 'two', extra: nil )  write_worker( 'eng.3', season, source: source, extra: extra ); end
 def write_eng4( season, source: 'two', extra: nil )  write_worker( 'eng.4', season, source: source, extra: extra ); end
+def write_eng5( season, source: 'two' )  write_worker( 'eng.5', season, source: source ); end
+def write_eng_cup( season, source: 'two' )  write_worker( 'eng.cup', season, source: source ); end
 
 def write_de(   season, source: 'leagues', extra: nil, split: false, normalize: true )  write_worker( 'de.1', season, source: source, extra: extra, split: split, normalize: normalize ); end
 def write_de2(  season, source: 'leagues', extra: nil, split: false, normalize: true )  write_worker( 'de.2', season, source: source, extra: extra, split: split, normalize: normalize ); end
@@ -270,7 +272,17 @@ LEAGUES =
                path:     'england',
                lang:     'en',
              },
-  'de.1' => { name:     'Deutsche Bundesliga',
+  'eng.5' => { name:     'English National League',
+               basename: '5-nationalleague',
+               path:     'england',
+               lang:     'en',
+           },
+  'eng.cup' => { name:  'English FA Cup',
+                 basename: 'facup',
+                 path:     'england',
+                 lang:     'en',
+               },
+'de.1' => { name:     'Deutsche Bundesliga',
               basename: '1-bundesliga',
               path:     'deutschland',
               lang:     'de_DE',
@@ -368,12 +380,12 @@ LANGS =
 # write_de_cup( '2018/19', source: 'tmp/two' )
 # write_de_cup( '2019/20', source: 'tmp/two' )
 
-write_de_cup( '2012/13', source: 'tmp/two' )
-write_de_cup( '2013/14', source: 'tmp/two' )
-write_de_cup( '2014/15', source: 'tmp/two' )
-write_de_cup( '2015/16', source: 'tmp/two' )
-write_de_cup( '2016/17', source: 'tmp/two' )
-write_de_cup( '2017/18', source: 'tmp/two' )
+# write_de_cup( '2012/13', source: 'tmp/two' )
+# write_de_cup( '2013/14', source: 'tmp/two' )
+# write_de_cup( '2014/15', source: 'tmp/two' )
+# write_de_cup( '2015/16', source: 'tmp/two' )
+# write_de_cup( '2016/17', source: 'tmp/two' )
+# write_de_cup( '2017/18', source: 'tmp/two' )
 
 
 # write_de( '2010-11' )
@@ -441,6 +453,12 @@ write_de_cup( '2017/18', source: 'tmp/two' )
 
 # write_eng3( '2018/19' )
 # write_eng4( '2018/19' )
+
+# write_eng5( '2018/19', source: 'tmp/two' )
+# write_eng5( '2019/20', source: 'tmp/two' )
+
+write_eng_cup( '2018/19', source: 'tmp/two' )  ## todo/check: use _fa_cup or such - why? why not?
+write_eng_cup( '2019/20', source: 'tmp/two' )
 
 
 # write_es( '2012/13', source: 'leagues' )

@@ -32,6 +32,9 @@ module Worldfootball
 #        https://www.weltfussball.de/alle_spiele/tur-1-lig-2019-2020/
 #        https://www.weltfussball.de/alle_spiele/aut-oefb-cup-2019-2020/
 #        https://www.weltfussball.de/alle_spiele/dfb-pokal-2019-2020/
+#        https://www.weltfussball.de/alle_spiele/eng-national-league-2019-2020/
+#        https://www.weltfussball.de/alle_spiele/eng-fa-cup-2018-2019/
+#        https://www.weltfussball.de/alle_spiele/eng-league-cup-2019-2020/
 
 ## e.g. 2010-2011,
 ##      2011-2012,
@@ -52,6 +55,9 @@ module Worldfootball
 
     'eng.3' => 'eng-league-one',
     'eng.4' => 'eng-league-two',
+    'eng.5' => 'eng-national-league',
+    'eng.cup'   => 'eng-fa-cup',    ## change key to eng.cup.fa or such??
+    'eng.cup.l' => 'eng-league-cup', ## change key to ??
 
     'fr.2'  => 'fra-ligue-2',
 
@@ -108,6 +114,14 @@ end
 
 
 # Worldfootball.schedule( league: 'eng.4', season: '2017/18' )
+# Worldfootball.schedule( league: 'eng.5', season: '2018/19' )
+# Worldfootball.schedule( league: 'eng.5', season: '2019/20' )
+
+# Worldfootball.schedule( league: 'eng.cup', season: '2018/19' )
+# Worldfootball.schedule( league: 'eng.cup', season: '2019/20' )
+
+Worldfootball.schedule( league: 'eng.cup.l', season: '2019/20' )
+
 
 # Worldfootball.schedule( league: 'fr.2', season: '2019/20' )
 # Worldfootball.schedule( league: 'fr.2', season: '2015/16' )
@@ -174,4 +188,4 @@ end
 # Worldfootball.schedule( league: 'de.cup', season: '2014/15' )
 # Worldfootball.schedule( league: 'de.cup', season: '2015/16' )
 # Worldfootball.schedule( league: 'de.cup', season: '2016/17' )
-Worldfootball.schedule( league: 'de.cup', season: '2017/18' )
+# Worldfootball.schedule( league: 'de.cup', season: '2017/18' )

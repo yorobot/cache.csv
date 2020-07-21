@@ -10,6 +10,7 @@ require_relative '../csv'
 OUT_DIR='./o'
 # OUT_DIR='./o/at'
 # OUT_DIR='./o/de'
+# OUT_DIR='./o/eng'
 # OUT_DIR='../../stage/two'
 
 
@@ -41,13 +42,23 @@ def squish( str )
 end
 
 
-## fix/patch known score format errors
+## fix/patch known score format errors in at/de cups
 SCORE_ERRORS = {
     '0-1 (0-0, 0-0, 0-0) n.V.' => '0-1 (0-0, 0-0) n.V.',       # too long
     '2-1 (1-1, 1-1, 1-0) n.V.' => '2-1 (1-1, 1-1) n.V.',
     '4-2 (0-0, 0-0) i.E.'      => '4-2 (0-0, 0-0, 0-0) i.E.',  # too short
 }
 
+ROUND_TO_EN = {
+  '1. Runde'      => 'Round 1',
+  '2. Runde'      => 'Round 2',
+  '3. Runde'      => 'Round 3',
+  '4. Runde'      => 'Round 4',
+  'Achtelfinale'  => 'Round of 16',
+  'Viertelfinale' => 'Quarterfinals',
+  'Halbfinale'    => 'Semifinals',
+  'Finale'        => 'Final',
+}
 
 def convert( season:, league: )
   season = Season.new( season )  if season.is_a?( String )
@@ -100,8 +111,7 @@ trs.each do |tr|
       exit 1
     end
     print "\n"
-  elsif format == 'CUP' && tr.text.strip =~ /1\.[ ]Runde|
-                          2\.[ ]Runde|
+  elsif format == 'CUP' && tr.text.strip =~ /[1-9]\.[ ]Runde|
                           Achtelfinale|
                           Viertelfinale|
                           Halbfinale|
@@ -112,7 +122,12 @@ trs.each do |tr|
     print tr.text.strip
     print "\n"
 
-    last_round = tr.text.strip
+    ## translate rounds
+    if ['eng.cup'].include?( league )
+      last_round = ROUND_TO_EN[ tr.text.strip ]
+    else
+      last_round = tr.text.strip
+    end
   else
     tds = tr.css( 'td' )
 
@@ -363,13 +378,20 @@ end
 # convert( league: 'de.cup', season: '2019/20' )
 # convert( league: 'de.cup', season: '2018/19' )
 
-convert( league: 'de.cup', season: '2012/13' )
-convert( league: 'de.cup', season: '2013/14' )
-convert( league: 'de.cup', season: '2014/15' )
-convert( league: 'de.cup', season: '2015/16' )
-convert( league: 'de.cup', season: '2016/17' )
-convert( league: 'de.cup', season: '2017/18' )
+# convert( league: 'de.cup', season: '2012/13' )
+# convert( league: 'de.cup', season: '2013/14' )
+# convert( league: 'de.cup', season: '2014/15' )
+# convert( league: 'de.cup', season: '2015/16' )
+# convert( league: 'de.cup', season: '2016/17' )
+# convert( league: 'de.cup', season: '2017/18' )
 
+convert( league: 'eng.5', season: '2018/19' )
+convert( league: 'eng.5', season: '2019/20' )
+
+convert( league: 'eng.cup', season: '2018/19' )
+convert( league: 'eng.cup', season: '2019/20' )
+
+# convert( league: 'eng.cup.l', season: '2019/20' )
 
 
 # convert( league: 'eng.4', season: '2019/20' )
