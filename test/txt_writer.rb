@@ -339,10 +339,10 @@ LANGS =
 # write_at_cup( '2016/17', source: 'tmp/two' )
 # write_at_cup( '2017/18', source: 'tmp/two' )
 
-write_at2( '2014/15', source: 'tmp/two', split: true )
-write_at2( '2015/16', source: 'tmp/two', split: true )
-write_at2( '2016/17', source: 'tmp/two', split: true )
-write_at2( '2017/18', source: 'tmp/two', split: true )
+# write_at2( '2014/15', source: 'tmp/two', split: true )
+# write_at2( '2015/16', source: 'tmp/two', split: true )
+# write_at2( '2016/17', source: 'tmp/two', split: true )
+# write_at2( '2017/18', source: 'tmp/two', split: true )
 
 
 # write_at( '2010-11', split: true, normalize: false )
@@ -367,6 +367,14 @@ write_at2( '2017/18', source: 'tmp/two', split: true )
 
 # write_de_cup( '2018/19', source: 'tmp/two' )
 # write_de_cup( '2019/20', source: 'tmp/two' )
+
+write_de_cup( '2012/13', source: 'tmp/two' )
+write_de_cup( '2013/14', source: 'tmp/two' )
+write_de_cup( '2014/15', source: 'tmp/two' )
+write_de_cup( '2015/16', source: 'tmp/two' )
+write_de_cup( '2016/17', source: 'tmp/two' )
+write_de_cup( '2017/18', source: 'tmp/two' )
+
 
 # write_de( '2010-11' )
 # write_de( '2011-12' )

@@ -41,6 +41,14 @@ def squish( str )
 end
 
 
+## fix/patch known score format errors
+SCORE_ERRORS = {
+    '0-1 (0-0, 0-0, 0-0) n.V.' => '0-1 (0-0, 0-0) n.V.',       # too long
+    '2-1 (1-1, 1-1, 1-0) n.V.' => '2-1 (1-1, 1-1) n.V.',
+    '4-2 (0-0, 0-0) i.E.'      => '4-2 (0-0, 0-0, 0-0) i.E.',  # too short
+}
+
+
 def convert( season:, league: )
   season = Season.new( season )  if season.is_a?( String )
 
@@ -145,6 +153,11 @@ trs.each do |tr|
 
     comments = String.new( '' )
 
+
+
+    score_str = SCORE_ERRORS[ score_str ]   if SCORE_ERRORS[ score_str ]
+
+
     ## split score
     ft  = ''
     ht  = ''
@@ -185,7 +198,8 @@ trs.each do |tr|
                         [ ]*
                       \(([0-9]+) [ ]*-[ ]* ([0-9]+)
                          [ ]*,[ ]*
-                        ([0-9]+) [ ]*-[ ]* ([0-9]+)\)
+                        ([0-9]+) [ ]*-[ ]* ([0-9]+)
+                        \)
                          [ ]*
                          n\.V\.
                        /x
@@ -212,10 +226,10 @@ trs.each do |tr|
       ft = "#{$1}-#{$2} (*)"
       ht = ''
       comments = $3
-    elsif score_str =~ /[0-9]+-[0-9]+/
-      puts "!! WARN - skipping LIVE score for match"
-      ft = ''
-      ht = ''
+#    elsif score_str =~ /[0-9]+-[0-9]+/
+#      puts "!! WARN - skipping LIVE score for match"
+#      ft = ''
+#      ht = ''
     else
        puts "!! ERROR - unsupported score format >#{score_str}< - sorry"
        exit 1
@@ -340,14 +354,22 @@ end
 # convert( league: 'at.cup', season: '2016/17' )
 # convert( league: 'at.cup', season: '2017/18' )
 
-convert( league: 'at.2', season: '2014/15' )
-convert( league: 'at.2', season: '2015/16' )
-convert( league: 'at.2', season: '2016/17' )
-convert( league: 'at.2', season: '2017/18' )
+# convert( league: 'at.2', season: '2014/15' )
+# convert( league: 'at.2', season: '2015/16' )
+# convert( league: 'at.2', season: '2016/17' )
+# convert( league: 'at.2', season: '2017/18' )
 
 
 # convert( league: 'de.cup', season: '2019/20' )
 # convert( league: 'de.cup', season: '2018/19' )
+
+convert( league: 'de.cup', season: '2012/13' )
+convert( league: 'de.cup', season: '2013/14' )
+convert( league: 'de.cup', season: '2014/15' )
+convert( league: 'de.cup', season: '2015/16' )
+convert( league: 'de.cup', season: '2016/17' )
+convert( league: 'de.cup', season: '2017/18' )
+
 
 
 # convert( league: 'eng.4', season: '2019/20' )

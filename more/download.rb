@@ -161,10 +161,17 @@ end
 # sleep(1)
 # Worldfootball.schedule( league: 'at.2', season: '2015/16' )
 
-Worldfootball.schedule( league: 'at.2', season: '2016/17' )
-sleep(1)
-Worldfootball.schedule( league: 'at.2', season: '2017/18' )
+# Worldfootball.schedule( league: 'at.2', season: '2016/17' )
+# sleep(1)
+# Worldfootball.schedule( league: 'at.2', season: '2017/18' )
 
 # Worldfootball.schedule( league: 'de.cup', season: '2019/20' )
 # sleep(1)
 # Worldfootball.schedule( league: 'de.cup', season: '2018/19' )
+
+# Worldfootball.schedule( league: 'de.cup', season: '2012/13' )
+# Worldfootball.schedule( league: 'de.cup', season: '2013/14' )
+# Worldfootball.schedule( league: 'de.cup', season: '2014/15' )
+# Worldfootball.schedule( league: 'de.cup', season: '2015/16' )
+# Worldfootball.schedule( league: 'de.cup', season: '2016/17' )
+Worldfootball.schedule( league: 'de.cup', season: '2017/18' )
