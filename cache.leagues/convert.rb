@@ -8,7 +8,10 @@ OUT_DIR = './o'
 MODS = {
   'es.2' => {
          'Extremadura' => 'Extremadura UD'  # in season 2019/20
-            }
+            },
+  'ar.1' => {
+          'San Martin' => 'San Martín T.'  # in season 2018/19
+           },
 }
 
 
@@ -71,6 +74,18 @@ datafiles.each do |datafile|
                        'Finale' )
          else  ## asumme 'Regular Season'
            values << 'Grunddurchgang'
+           values << row[:wk]
+         end
+       elsif basename == 'au.1' && row.key?( :round )
+         ## todo/fix: how to handle et/pen score in finals e.g. (1) 0–0 (4) !!!!
+         ##    check if same in champions league?
+         ##   check for extra time in notes
+         case row[:round]
+         when 'Elimination finals', 'Semi-finals', 'Grand Final'
+           values << 'Finals'
+           values << row[:round]
+         else  ## asumme 'Regular Season'
+           values << 'Regular Season'
            values << row[:wk]
          end
        else  ## regular processing

@@ -122,11 +122,14 @@ def write_worker( league, season, source:,
 end
 
 
-def write_br( season, source: 'one' )   write_worker( 'br.1', season, source: source ); end
+def write_br( season, source: 'one' )     write_worker( 'br.1', season, source: source ); end
+def write_ar( season, source: 'leagues' ) write_worker( 'ar.1', season, source: source ); end
 
 def write_nl( season, source: 'one' )   write_worker( 'nl.1', season, source: source ); end
 
 def write_pt( season, source: 'one' )   write_worker( 'pt.1', season, source: source ); end
+
+def write_cn( season, source: 'leagues' )  write_worker( 'cn.1', season, source: source ); end
 
 def write_ru(  season, source: 'two' )  write_worker( 'ru.1', season, source: source ); end
 def write_ru2( season, source: 'two' )  write_worker( 'ru.2', season, source: source ); end
@@ -181,6 +184,16 @@ LEAGUES =
               basename: '1-seriea',
               path:     'brazil',              ## repo path
               lang:     'pt_BR',
+            },
+  'ar.1' => { name:     'Argentina Primera Division',
+              basename: '1-primeradivision',
+              path:     'world/south-america/argentina',
+              lang:     'es_AR',
+            },
+'cn.1' => { name:     'Chinese Super League',
+              basename: '1-superleague',
+              path:     'world/asia/china',
+              lang:     'en',   ## note: use english for now
             },
   'ru.1' => { name:     'Russian Premier League',
               basename: '1-premierliga',
@@ -335,6 +348,7 @@ LANGS =
              },
   'fr'    => { round: 'Journée',  lang:  'fr' },
   'es'    => { round: 'Jornada',  lang:  'es' },
+  'es_AR' => { round: 'Jornada',  lang:  'es' },  # note: for now 1:1 like es
 }
 
 
@@ -457,8 +471,8 @@ LANGS =
 # write_eng5( '2018/19', source: 'tmp/two' )
 # write_eng5( '2019/20', source: 'tmp/two' )
 
-write_eng_cup( '2018/19', source: 'tmp/two' )  ## todo/check: use _fa_cup or such - why? why not?
-write_eng_cup( '2019/20', source: 'tmp/two' )
+# write_eng_cup( '2018/19', source: 'tmp/two' )  ## todo/check: use _fa_cup or such - why? why not?
+# write_eng_cup( '2019/20', source: 'tmp/two' )
 
 
 # write_es( '2012/13', source: 'leagues' )
@@ -531,5 +545,12 @@ write_eng_cup( '2019/20', source: 'tmp/two' )
 # write_br( '2018' )
 # write_br( '2019' )
 # write_br( '2020' )
+
+# write_cn( '2018', source: 'tmp/leagues' )
+# write_cn( '2019', source: 'tmp/leagues' )
+# write_cn( '2020', source: 'tmp/leagues' )
+
+write_ar( '2018/19', source: 'tmp/leagues' )
+write_ar( '2019/20', source: 'tmp/leagues' )
 
 puts "bye"
