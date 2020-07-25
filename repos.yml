@@ -29,6 +29,8 @@ openfootball:
 - russia
 - brazil
 - world
+####
+- spec     ## incl. football.txt tests
 
 
 #####################

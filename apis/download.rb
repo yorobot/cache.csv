@@ -27,6 +27,22 @@ module Footballdata
     get( "competitions/#{code}/teams?season=#{year}" )
   end
 
+
+=begin
+  def self.matches
+    # note: Specified period must not exceed 10 days.
+
+    ## try query (football) week by week - tuesday to monday!!
+    ##  note: TIER_ONE does NOT include goals!!!
+    code       = 'FL1'
+    start_date = '2019-08-09'
+    end_date   = '2019-08-16'
+
+    get( "matches?competitions=#{code}&dateFrom=#{start_date}&dateTo=#{end_date}" )
+  end
+=end
+
+
   def self.fr( year )
     # FL1 - Ligue 1, France
     #   9 seasons | 2019-08-09 - 2020-05-31 / matchday 38
@@ -187,7 +203,7 @@ end # module Footballdata
 # Footballdata.br( 2019 )
 # Footballdata.br( 2018 )
 
-Footballdata.competitions_tier_three
+# Footballdata.competitions_tier_three
 
 #############
 ## up (ongoing) 2019/20 seasons
@@ -195,3 +211,4 @@ Footballdata.competitions_tier_three
 
 # Footballdata.nl( 2019 )
 # Footballdata.pt( 2019 )
+
