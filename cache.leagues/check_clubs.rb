@@ -115,7 +115,12 @@ end
 DATAFILES = {
   ## cn: %w[2018/cn.1 2019/cn.1 2020/cn.1],
   ## ar: %w[2018-19/ar.1 2019-20/ar.1],
-  au: %w[2018-19/au.1],
+  ## au: %w[2018-19/au.1],
+  ## be: %w[2018-19/be.1],
+  ## cz: %w[2018-19/cz.1],
+  ## hu: %w[2018-19/hu.1],
+  ## gr: %w[2018-19/gr.1],
+  jp: %w[2019/jp.1],
 }
 
 DATAFILES.each do |key, datafiles|

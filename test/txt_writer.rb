@@ -127,9 +127,13 @@ def write_ar( season, source: 'leagues' ) write_worker( 'ar.1', season, source: 
 
 def write_nl( season, source: 'one' )   write_worker( 'nl.1', season, source: source ); end
 
+def write_hu( season, source: 'leagues' )   write_worker( 'hu.1', season, source: source ); end
+def write_gr( season, source: 'leagues' )   write_worker( 'gr.1', season, source: source ); end
+
 def write_pt( season, source: 'one' )   write_worker( 'pt.1', season, source: source ); end
 
 def write_cn( season, source: 'leagues' )  write_worker( 'cn.1', season, source: source ); end
+def write_jp( season, source: 'leagues' )  write_worker( 'jp.1', season, source: source ); end
 
 def write_ru(  season, source: 'two' )  write_worker( 'ru.1', season, source: source ); end
 def write_ru2( season, source: 'two' )  write_worker( 'ru.2', season, source: source ); end
@@ -186,16 +190,21 @@ LEAGUES =
               lang:     'pt_BR',
             },
   'ar.1' => { name:     'Argentina Primera Division',
-              basename: '1-primeradivision',
+              basename: '1-primera_division',
               path:     'world/south-america/argentina',
               lang:     'es_AR',
             },
 'cn.1' => { name:     'Chinese Super League',
-              basename: '1-superleague',
+              basename: '1-super_league',
               path:     'world/asia/china',
               lang:     'en',   ## note: use english for now
             },
-  'ru.1' => { name:     'Russian Premier League',
+ 'jp.1' => { name:     'Japan J1 League',
+            basename: '1-j1_league',
+            path:     'world/asia/japan',
+            lang:     'en',   ## note: use english for now
+          },
+'ru.1' => { name:     'Russian Premier League',
               basename: '1-premierliga',
               path:     'russia',
               lang:     'en',   ## note: use english for now
@@ -208,6 +217,16 @@ LEAGUES =
   'nl.1' => { name:     'Dutch Eredivisie',
               basename: '1-eredivisie',
               path:     'world/europe/netherlands',
+              lang:     'en',   ## note: use english for now
+            },
+  'hu.1' => { name:     'Hungarian NB I',
+              basename: '1-nbi',
+              path:     'world/europe/hungary',
+              lang:     'en',   ## note: use english for now
+            },
+  'gr.1' => { name:     'Super League Greece',
+              basename: '1-superleague',
+              path:     'world/europe/greece',
               lang:     'en',   ## note: use english for now
             },
   'pt.1' => { name:     'Portuguese Primeira Liga',
@@ -550,7 +569,9 @@ LANGS =
 # write_cn( '2019', source: 'tmp/leagues' )
 # write_cn( '2020', source: 'tmp/leagues' )
 
-write_ar( '2018/19', source: 'tmp/leagues' )
-write_ar( '2019/20', source: 'tmp/leagues' )
+# write_ar( '2018/19', source: 'tmp/leagues' )
+# write_ar( '2019/20', source: 'tmp/leagues' )
+
+write_jp( '2019', source: 'tmp/leagues' )
 
 puts "bye"
