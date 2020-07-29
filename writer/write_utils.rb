@@ -3,6 +3,7 @@ require_relative '../boot'
 
 require_relative './leagues'
 
+
 SOURCES = {
   'one'     =>  { path: '../../stage/one' },
   'tmp/one'     =>  { path: '../apis/o' },  ## "tmp" debug version
@@ -12,6 +13,10 @@ SOURCES = {
 
   'leagues'   =>  { path: '../../../footballcsv/cache.leagues' },
   'tmp/leagues' =>  { path: '../cache.leagues/o' },    ## "tmp"  debug version
+
+  'soccerdata' => { path:   '../../../footballcsv/cache.soccerdata',
+                    format: 'century', # e.g. 1800s/1888-89
+                  }
 }
 
 
@@ -19,7 +24,7 @@ SOURCES = {
 ########
 # helpers
 #   normalize team names
-def normalize( matches, league: )
+def normalize( matches, league:, season: )
     league = SportDb::Import.catalog.leagues.find!( league )
     country = league.country
 
@@ -30,11 +35,19 @@ def normalize( matches, league: )
        team2 = SportDb::Import.catalog.clubs.find_by!( name: match.team2,
                                                        country: country )
 
-       puts "#{match.team1} => #{team1.name}"  if match.team1 != team1.name
-       puts "#{match.team2} => #{team2.name}"  if match.team2 != team2.name
+       if season
+         team1_name = team1.name_by_season( season )
+         team2_name = team2.name_by_season( season )
+       else
+         team1_name = team1.name
+         team2_name = team2.name
+       end
 
-       match.update( team1: team1.name )
-       match.update( team2: team2.name )
+       puts "#{match.team1} => #{team1_name}"  if match.team1 != team1_name
+       puts "#{match.team2} => #{team2_name}"  if match.team2 != team2_name
+
+       match.update( team1: team1_name )
+       match.update( team2: team2_name )
     end
     matches
 end
@@ -74,35 +87,53 @@ def write_buf( path, buf )  ## write buffer helper
 end
 
 
-
 def write_worker( league, season, source:,
                                   extra: nil,
                                   split: false,
-                                  normalize: true )
+                                  normalize: true,
+                                  rounds: true )
   season = SportDb::Import::Season.new( season )  ## normalize season
 
   league_info = LEAGUES[ league ]
+  if league_info.nil?
+    puts "!! ERROR - no league found for >#{league}<; sorry"
+    exit 1
+  end
+
 
   source_info = SOURCES[ source ]
+  if source_info.nil?
+    puts "!! ERROR - no source found for >#{source}<; sorry"
+    exit 1
+  end
+
   source_path = source_info[:path]
 
-  in_path = "#{source_path}/#{season.path}/#{league}.csv"   # e.g. ../stage/one/2020/br.1.csv
+  ## format lets you specify directory layout
+  ##   default   = 1888-89
+  ##   century   = 1800s/1888-89
+  ##   ...
+  season_path = season.to_path( (source_info[:format] || 'default').to_sym )
+  in_path = "#{source_path}/#{season_path}/#{league}.csv"   # e.g. ../stage/one/2020/br.1.csv
+
+
 
   matches = SportDb::CsvMatchParser.read( in_path )
 
   pp matches[0]
   puts "#{matches.size} matches"
 
+
   ## always (auto-) sort for now - why? why not?
   matches = matches.sort do |l,r|
     ## first by date (older first)
     ## next by matchday (lower first)
     res =   l.date <=> r.date
-    res =   l.round <=> r.round   if res == 0
+    res =   l.round <=> r.round   if rounds && res == 0
     res
   end
 
-  matches = normalize( matches, league: league )   if normalize
+  matches = normalize( matches, league: league, season: season )   if normalize
 
   league_name  = league_info[ :name ]      # e.g. Brasileiro Série A
   basename     = league_info[ :basename]   #.e.g  1-seriea
@@ -125,21 +156,24 @@ def write_worker( league, season, source:,
 
     SportDb::TxtMatchWriter.write( out_path, matches_i,
                                    name: "#{league_name} #{season.key}",
-                                   lang:  league_info[ :lang ] )
+                                   lang:  league_info[ :lang ],
+                                   rounds: rounds )
 
     # out_path = "../../../openfootball/#{repo_path}/#{season_path}/#{basename}-ii.txt"
     out_path = "./o/#{repo_path}/#{season_path}/#{basename}-ii.txt"
 
     SportDb::TxtMatchWriter.write( out_path, matches_ii,
                                    name: "#{league_name} #{season.key}",
-                                   lang:  league_info[ :lang ] )
+                                   lang:  league_info[ :lang ],
+                                   rounds: rounds )
   else
     # out_path = "../../../openfootball/#{repo_path}/#{season_path}/#{basename}.txt"
     out_path = "./o/#{repo_path}/#{season_path}/#{basename}.txt"
 
     SportDb::TxtMatchWriter.write( out_path, matches,
                                    name: "#{league_name} #{season.key}",
-                                   lang:  league_info[ :lang] )
+                                   lang:  league_info[ :lang],
+                                   rounds: rounds )
   end
 end
 

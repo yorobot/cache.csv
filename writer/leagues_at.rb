@@ -1,7 +1,7 @@
 ########################
 # Austria
 
-LEAGUES.merge(
+LEAGUES.merge!(
   'at.1' => { name:     'Österr. Bundesliga',
               basename: '1-bundesliga',
               path:     'austria',

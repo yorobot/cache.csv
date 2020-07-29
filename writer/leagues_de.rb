@@ -1,7 +1,7 @@
 ############################
 # Germany / Deutschland
 
-LEAGUES.merge(
+LEAGUES.merge!(
   'de.1' => { name:     'Deutsche Bundesliga',
               basename: '1-bundesliga',
               path:     'deutschland',

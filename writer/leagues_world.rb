@@ -1,5 +1,5 @@
 
-LEAGUES.merge(
+LEAGUES.merge!(
   'ar.1' => { name:     'Argentina Primera Division',
               basename: '1-primeradivision',
               path:     'world/south-america/argentina',
