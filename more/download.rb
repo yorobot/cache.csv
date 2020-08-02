@@ -59,6 +59,7 @@ module Worldfootball
     'eng.cup'   => 'eng-fa-cup',    ## change key to eng.cup.fa or such??
     'eng.cup.l' => 'eng-league-cup', ## change key to ??
 
+    'fr.1'  => 'fra-ligue-1',
     'fr.2'  => 'fra-ligue-2',
 
     'it.2'  => 'ita-serie-b',
@@ -120,7 +121,10 @@ end
 # Worldfootball.schedule( league: 'eng.cup', season: '2018/19' )
 # Worldfootball.schedule( league: 'eng.cup', season: '2019/20' )
 
-Worldfootball.schedule( league: 'eng.cup.l', season: '2019/20' )
+# Worldfootball.schedule( league: 'eng.cup.l', season: '2019/20' )
+
+Worldfootball.schedule( league: 'fr.1', season: '2020/21' )
+Worldfootball.schedule( league: 'fr.2', season: '2020/21' )
 
 
 # Worldfootball.schedule( league: 'fr.2', season: '2019/20' )

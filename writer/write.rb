@@ -114,6 +114,9 @@ require_relative './write_utils'
 # write_fr2( '2018/19' )
 # write_fr2( '2019/20' )
 
+write_fr(  '2020/21', source: 'tmp/two' )
+write_fr2( '2020/21', source: 'tmp/two' )
+
 
 # write_it( '2019/20' )
 

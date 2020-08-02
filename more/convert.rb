@@ -7,7 +7,8 @@ require 'sportdb/formats'   ## for Season -- move to test_schedule /fetch!!!!
 require_relative '../csv'
 
 
-OUT_DIR='./o'
+# OUT_DIR='./o'
+OUT_DIR='./o/fr'
 # OUT_DIR='./o/at'
 # OUT_DIR='./o/de'
 # OUT_DIR='./o/eng'
@@ -385,11 +386,11 @@ end
 # convert( league: 'de.cup', season: '2016/17' )
 # convert( league: 'de.cup', season: '2017/18' )
 
-convert( league: 'eng.5', season: '2018/19' )
-convert( league: 'eng.5', season: '2019/20' )
+# convert( league: 'eng.5', season: '2018/19' )
+# convert( league: 'eng.5', season: '2019/20' )
 
-convert( league: 'eng.cup', season: '2018/19' )
-convert( league: 'eng.cup', season: '2019/20' )
+# convert( league: 'eng.cup', season: '2018/19' )
+# convert( league: 'eng.cup', season: '2019/20' )
 
 # convert( league: 'eng.cup.l', season: '2019/20' )
 
@@ -398,3 +399,6 @@ convert( league: 'eng.cup', season: '2019/20' )
 # convert( league: 'eng.4', season: '2018/19' )
 # convert( league: 'eng.4', season: '2017/18' )
 
+
+convert( league: 'fr.1', season: '2020/21' )
+convert( league: 'fr.2', season: '2020/21' )
