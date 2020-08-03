@@ -193,6 +193,7 @@ end
 # convert( league: 'fr.2', season: '2020/21' )
 
 
+=begin
 stages = { regular:      'Regular Season',
            championship: 'Playoffs - Championship',
            relegation:   'Playoffs - Relegation' }
@@ -200,5 +201,14 @@ stages = { regular:      'Regular Season',
 convert_with_stages( league: 'sco.1', season: '2020/21', stages:  stages )
 convert_with_stages( league: 'sco.1', season: '2019/20', stages:  stages )
 convert_with_stages( league: 'sco.1', season: '2018/19', stages:  stages )
+=end
 
 
+stages = { regular:       'Regular Season',
+           championship:  'Playoffs - Championship',
+           europa:        'Playoffs - Europa League',
+           europa_finals: 'Playoffs - Europa League - Finals' }
+
+convert_with_stages( league: 'be.1', season: '2020/21', stages:  stages )
+convert_with_stages( league: 'be.1', season: '2019/20', stages:  stages )
+convert_with_stages( league: 'be.1', season: '2018/19', stages:  stages )

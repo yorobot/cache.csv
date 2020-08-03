@@ -4,6 +4,9 @@ $LOAD_PATH.unshift( File.expand_path( '../../../sportdb/sport.db/sportdb-formats
 require 'sportdb/formats'
 
 
+require_relative './config'
+
+
 
 module Worldfootball
 
@@ -18,8 +21,6 @@ module Worldfootball
 ##   does NOT return 404 page not found errors; always redirects (301) to home page
 ##    on missing pages:
 ##      301 Moved Permanently location=https://www.weltfussball.de/
-
-
 
 ## note: use aut-2-liga !!! starting 2019-2018 !!!
 ##       use aut-erste-liga !!! before e.g. 2010-2011 etc.
@@ -47,61 +48,6 @@ module Worldfootball
 ## e.g. 2010-2011,
 ##      2011-2012,
 ##      2012-2013, 2013-2014, 2014-2015, 2015-2016, 2016-2017, 2017-2018
-
-
-  LEAGUES = {
-    'de.2'   => '2-bundesliga',
-    'de.cup' => 'dfb-pokal',
-
-    'at.1' => 'aut-bundesliga',
-    'at.2' =>  ->(season) { season.start_year >= 2019 ?
-                               'aut-2-liga' : 'aut-erste-liga' },
-    'at.cup' => 'aut-oefb-cup',
-
-    'ch.1' => 'sui-super-league',
-    'ch.2' => 'sui-challenge-league',
-
-    'eng.3' => 'eng-league-one',
-    'eng.4' => 'eng-league-two',
-    'eng.5' => 'eng-national-league',
-    'eng.cup'   => 'eng-fa-cup',    ## change key to eng.cup.fa or such??
-    'eng.cup.l' => 'eng-league-cup', ## change key to ??
-
-    'fr.1'  => 'fra-ligue-1',
-    'fr.2'  => 'fra-ligue-2',
-
-    'it.2'  => 'ita-serie-b',
-
-    'es.2'  => 'esp-segunda-division',
-
-    'ru.1'  => 'rus-premier-liga',
-    'ru.2'  => 'rus-1-division',
-
-    'tr.1'  => 'tur-sueperlig',
-    'tr.2'  => 'tur-1-lig',
-
-    'sco.1'              => 'sco-premiership',
-     # -or -
-    'sco.1.regular'      => 'sco-premiership-{season}',
-    'sco.1.championship' => 'sco-premiership-{end_year}-playoff',   # sco-premiership-2019-playoff
-    'sco.1.relegation'   => 'sco-premiership-{end_year}-abstieg',   # sco-premiership-2019-abstieg
-  }
-
-
-  def self.sco1( season )
-    case season
-    when Season.new('2020/21')
-      %w[regular]     # just getting started
-    when Season.new('2019/20')
-      %w[regular]     # covid-19 - no championship & relegation
-    when Season.new('2018/19')
-      %w[regular championship relegation]
-    else
-      puts "!! ERROR - no configuration found for season >#{season}< for SCO1 found; sorry"
-      exit 1
-    end
-  end
-
 
 
   def self.league_slug( league:, season: )
@@ -134,7 +80,8 @@ module Worldfootball
   def self.schedule_with_stages( league:, season: )
     season = Season.new( season )  if season.is_a?( String )
 
-    stages = sco1( season )
+    ## stages = sco1( season )
+    stages = be1( season )
 
     stages.each do |stage|
       sleep( 1 )   ## slow down - sleep 1sec before each http request
@@ -187,8 +134,12 @@ end
 
 
 # Worldfootball.schedule_with_stages( league: 'sco.1', season: '2020/21' )
-Worldfootball.schedule_with_stages( league: 'sco.1', season: '2019/20' )
-Worldfootball.schedule_with_stages( league: 'sco.1', season: '2018/19' )
+# Worldfootball.schedule_with_stages( league: 'sco.1', season: '2019/20' )
+# Worldfootball.schedule_with_stages( league: 'sco.1', season: '2018/19' )
+
+Worldfootball.schedule_with_stages( league: 'be.1', season: '2020/21' )
+Worldfootball.schedule_with_stages( league: 'be.1', season: '2019/20' )
+Worldfootball.schedule_with_stages( league: 'be.1', season: '2018/19' )
 
 
 # Worldfootball.schedule( league: 'eng.4', season: '2017/18' )

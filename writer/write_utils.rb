@@ -5,14 +5,15 @@ require_relative './leagues'
 
 
 SOURCES = {
-  'one'     =>  { path: '../../stage/one' },
-  'tmp/one'     =>  { path: '../apis/o' },  ## "tmp" debug version
+  'one'      =>  { path: '../../stage/one' },
+  'one/o'    =>  { path: '../apis/o' },     ## "o" debug version
 
   'two'     =>  { path: '../../stage/two' },
-  'tmp/two'   =>  { path: '../more/o' },    ## "tmp" debug version
+  'two/o'   =>  { path: '../more/o' },      ## "o"   debug version
+  'two/tmp' =>  { path: '../more/tmp' },    ## "tmp" debug version
 
   'leagues'   =>  { path: '../../../footballcsv/cache.leagues' },
-  'tmp/leagues' =>  { path: '../cache.leagues/o' },    ## "tmp"  debug version
+  'leagues/o' =>  { path: '../cache.leagues/o' },    ## "o"  debug version
 
   'soccerdata' => { path:   '../../../footballcsv/cache.soccerdata',
                     format: 'century', # e.g. 1800s/1888-89
@@ -24,7 +25,7 @@ SOURCES = {
 ########
 # helpers
 #   normalize team names
-def normalize( matches, league:, season: )
+def normalize( matches, league:, season: nil )
     league = SportDb::Import.catalog.leagues.find!( league )
     country = league.country
 
@@ -201,6 +202,8 @@ def build_stage( matches_by_stage, stages:, name:, lang: )
   stages.each_with_index do |(stage_in, stage_out),i|
     matches = matches_by_stage[ stage_in ]   ## todo/fix: report error if no matches found!!!
 
+    next if matches.nil? || matches.empty?
+
     ## (auto-)sort matches by
     ##  1) date
     matches = matches.sort do |l,r|
@@ -280,7 +283,9 @@ def write_worker_with_stages( league, season, stages:, source:, normalize: true 
     buf = build_stage( matches_by_stage, stages: stages[1],
                                          name: "#{league_name} #{season.key}",
                                          lang: lang )
-    write_buf( "#{out_dir}/#{season.path}/#{basename}-ii.txt", buf )
+
+    ## note: might be empty!!! if no matches skip (do NOT write)
+    write_buf( "#{out_dir}/#{season.path}/#{basename}-ii.txt", buf )   unless buf.empty?
   else
     puts "!!! ERROR - too many (#{stages.size}) stage pages - for now only one or two possible; sorry:"
     pp stages

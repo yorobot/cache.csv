@@ -114,15 +114,13 @@ end
 def build( rows, season:, league:, stage: '' )   ## rename to fixup or such - why? why not?
   season = Season.new( season )  if season.is_a?( String )
 
-  format = league =~ /cup/ ?  'CUP' : 'LEAGUE'
-
    i = 0
    recs = []
    rows.each do |row|
      i += 1
 
 
-  if format == 'LEAGUE' && row[:round] =~ /Spieltag/
+  if row[:round] =~ /Spieltag/
     puts
     print '[%03d] ' % (i+1)
     print row[:round]
@@ -136,7 +134,7 @@ def build( rows, season:, league:, stage: '' )   ## rename to fixup or such - wh
       exit 1
     end
     print "\n"
-  elsif format == 'CUP' && row[:round] =~ /[1-9]\.[ ]Runde|
+  elsif row[:round] =~ /[1-9]\.[ ]Runde|
                           Achtelfinale|
                           Viertelfinale|
                           Halbfinale|
@@ -146,13 +144,14 @@ def build( rows, season:, league:, stage: '' )   ## rename to fixup or such - wh
     print '[%03d] ' % (i+1)
     print row[:round]
 
-    ## translate rounds
-    if ['eng.cup'].include?( league )
+
+    ## do NOT translate rounds
+    if ['at.cup', 'de.cup'].include?( league )
+      round = row[:round]
+    else
       round = ROUND_TO_EN[ row[:round] ]
       ## todo/fix: report error if no match / mapping found!!!
       print " => #{round}"
-    else
-      round = row[:round]
     end
     print "\n"
   else

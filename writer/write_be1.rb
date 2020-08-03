@@ -10,8 +10,12 @@ LEAGUES['be.1'] = {
 
 
 stages = [['Regular Season'],
-          ['Championship play-off']]
+          ['Playoffs - Championship',
+           'Playoffs - Europa League',
+           'Playoffs - Europa League - Finals' ]]
 
-write_worker_with_stages( 'be.1', '2018/19', source: 'tmp/leagues', stages: stages )
+write_worker_with_stages( 'be.1', '2018/19', source: 'two/tmp', stages: stages )
+write_worker_with_stages( 'be.1', '2019/20', source: 'two/tmp', stages: stages )
+write_worker_with_stages( 'be.1', '2020/21', source: 'two/tmp', stages: stages )
 
 puts "bye"
