@@ -7,64 +7,22 @@ require 'sportdb/formats'   ## for Season -- move to test_schedule /fetch!!!!
 require_relative '../csv'
 
 
+require_relative './parse'
+require_relative './build'
+
+
 # OUT_DIR='./o'
-OUT_DIR='./o/fr'
+# OUT_DIR='./o/fr'
 # OUT_DIR='./o/at'
 # OUT_DIR='./o/de'
 # OUT_DIR='./o/eng'
 # OUT_DIR='../../stage/two'
+OUT_DIR='./tmp'
 
 
-MODS = {
-  ## AT 1
-  'SC Magna Wiener Neustadt' => 'SC Wiener Neustadt', # in 2010/11
-  'KSV Superfund'            => 'Kapfenberger SV',    # in 2010/11
-  'Kapfenberger SV 1919'     => 'Kapfenberger SV',    # in 2011/12
-  'FC Trenkwalder Admira'    => 'FC Admira Wacker',    # in 2011/12
-  ## AT 2
-  'Austria Wien (A)'         => 'Young Violets',  # in 2019/20
-  'FC Wacker Innsbruck (A)'  => 'FC Wacker Innsbruck II',   # in 2018/19
-  ## AT CUP
-  'Rapid Wien (A)'  => 'Rapid Wien II',  # in 2011/12
-  'Sturm Graz (A)'  => 'Sturm Graz II',
-  'Kapfenberger SV 1919 (A)' =>  'Kapfenberger SV II',
-  'SV Grödig (A)'  => 'SV Grödig II',
-  'FC Trenkwalder Admira (A)' => 'FC Admira Wacker II',
-  'RB Salzburg (A)'  => 'RB Salzburg II',
-  'SR WGFM Donaufeld' => 'SR Donaufeld Wien',
-}
-
-
-
-def squish( str )
-  str = str.strip
-  str = str.gsub( /[ \t\n]+/, ' ' )  ## fold whitespace to one max.
-  str
-end
-
-
-## fix/patch known score format errors in at/de cups
-SCORE_ERRORS = {
-    '0-1 (0-0, 0-0, 0-0) n.V.' => '0-1 (0-0, 0-0) n.V.',       # too long
-    '2-1 (1-1, 1-1, 1-0) n.V.' => '2-1 (1-1, 1-1) n.V.',
-    '4-2 (0-0, 0-0) i.E.'      => '4-2 (0-0, 0-0, 0-0) i.E.',  # too short
-}
-
-ROUND_TO_EN = {
-  '1. Runde'      => 'Round 1',
-  '2. Runde'      => 'Round 2',
-  '3. Runde'      => 'Round 3',
-  '4. Runde'      => 'Round 4',
-  'Achtelfinale'  => 'Round of 16',
-  'Viertelfinale' => 'Quarterfinals',
-  'Halbfinale'    => 'Semifinals',
-  'Finale'        => 'Final',
-}
 
 def convert( season:, league: )
   season = Season.new( season )  if season.is_a?( String )
-
-  format = league =~ /cup/ ?  'CUP' : 'LEAGUE'
 
    # season   = '2019/20'
    # basename = 'at.2'
@@ -73,246 +31,77 @@ def convert( season:, league: )
 
   path = "./dl/weltfussball-#{basename}-#{season_path}.html"
 
-
    html =  File.open( path, 'r:utf-8' ) { |f| f.read }
 
-   doc = Nokogiri::HTML.fragment( html )   ## note: use a fragment NOT a document
+   rows = parse( html )
+   recs = build( rows, season: season, league: league )
 
-
-# <div class="data">
-# <table class="standard_tabelle" cellpadding="3" cellspacing="1">
-
-table = doc.css( 'div.data table.standard_tabelle' ).first    ## get table
-puts table.class.name
-# puts table.text
-
-trs   = table.css( 'tr' )
-# puts trs.size
-i = 0
-
-last_date_str = nil
-last_round    = nil
-
-recs = []
-
-trs.each do |tr|
-  i += 1
-
-  if format == 'LEAGUE' && tr.text.strip =~ /Spieltag/
-    puts
-    print '[%03d] ' % (i+1)
-    print tr.text.strip
-
-    if m = tr.text.strip.match( /([0-9]+)\. Spieltag/ )
-      ## todo/check: always use a string even if number (as a string eg. '1' etc.)
-      last_round = m[1].to_i
-      print " => #{last_round}"
-    else
-      puts "!! ERROR: cannot find matchday number"
-      exit 1
-    end
-    print "\n"
-  elsif format == 'CUP' && tr.text.strip =~ /[1-9]\.[ ]Runde|
-                          Achtelfinale|
-                          Viertelfinale|
-                          Halbfinale|
-                          Finale
-                          /x
-    puts
-    print '[%03d] ' % (i+1)
-    print tr.text.strip
-    print "\n"
-
-    ## translate rounds
-    if ['eng.cup'].include?( league )
-      last_round = ROUND_TO_EN[ tr.text.strip ]
-    else
-      last_round = tr.text.strip
-    end
-  else
-    tds = tr.css( 'td' )
-
-    date_str  = squish( tds[0].text )
-    time_str  = squish( tds[1].text )
-    team1_str = squish( tds[2].text )
-    ## skip vs (-)
-    team2_str = squish( tds[4].text )
-    score_str = squish( tds[5].text )
-
-    ## change  2:1 (1:1)  to 2-1 (1-1)
-    score_str = score_str.gsub( ':', '-' )
-    ## check for 0:3 Wert.   - change Wert. to awd.  (awarded)
-    score_str = score_str.sub( /Wert\./i, 'awd.' )
-
-    ## clean team name
-    team1_str = team1_str.gsub( '(old)', '' ).strip
-    team2_str = team2_str.gsub( '(old)', '' ).strip
-
-
-    team1_str = MODS[ team1_str ]   if MODS[ team1_str ]
-    team2_str = MODS[ team2_str ]   if MODS[ team2_str ]
-
-    date_str = last_date_str    if date_str.empty?
-
-    print '[%03d]    ' % (i+1)
-    print "%-10s | " % date_str
-    print "%-5s | " % time_str
-    print "%-22s | " % team1_str
-    print "%-22s | " % team2_str
-    print score_str
-    print "\n"
-
-
-
-    ## convert date from 25.10.2019 to 2019-25-10
-    date = Date.strptime( date_str, '%d.%m.%Y' )
-
-    comments = String.new( '' )
-
-
-
-    score_str = SCORE_ERRORS[ score_str ]   if SCORE_ERRORS[ score_str ]
-
-
-    ## split score
-    ft  = ''
-    ht  = ''
-    et  = ''
-    pen = ''
-    if score_str == '---'   ## in the future (no score yet)
-      ft = ''
-      ht = ''
-    elsif score_str == 'n.gesp.'   ## cancelled (british) / canceled (us)
-      ft = '(*)'
-      ht = ''
-      comments = 'cancelled'
-    elsif score_str == 'abgebr.'  ## abandoned  -- waiting for replay?
-      ft = '(*)'
-      ht = ''
-      comments = 'abandoned'
-    elsif score_str == 'verl.'   ## postponed
-      ft = ''
-      ht = ''
-      comments = 'postponed'
-    # 5-4 (0-0, 1-1, 2-2) i.E.
-    elsif score_str =~ /([0-9]+) [ ]*-[ ]* ([0-9]+)
-                            [ ]*
-                        \(([0-9]+) [ ]*-[ ]* ([0-9]+)
-                            [ ]*,[ ]*
-                          ([0-9]+) [ ]*-[ ]* ([0-9]+)
-                            [ ]*,[ ]*
-                         ([0-9]+) [ ]*-[ ]* ([0-9]+)\)
-                            [ ]*
-                         i\.E\.
-                       /x
-      pen = "#{$1}-#{$2}"
-      ht  = "#{$3}-#{$4}"
-      ft  = "#{$5}-#{$6}"
-      et  = "#{$7}-#{$8}"
-    # 2-1 (1-0, 1-1) n.V
-  elsif score_str =~ /([0-9]+) [ ]*-[ ]* ([0-9]+)
-                        [ ]*
-                      \(([0-9]+) [ ]*-[ ]* ([0-9]+)
-                         [ ]*,[ ]*
-                        ([0-9]+) [ ]*-[ ]* ([0-9]+)
-                        \)
-                         [ ]*
-                         n\.V\.
-                       /x
-      et  = "#{$1}-#{$2}"
-      ht  = "#{$3}-#{$4}"
-      ft  = "#{$5}-#{$6}"
-    elsif score_str =~ /([0-9]+)
-                            [ ]*-[ ]*
-                        ([0-9]+)
-                            [ ]*
-                        \(([0-9]+)
-                            [ ]*-[ ]*
-                          ([0-9]+)
-                        \)
-                       /x
-      ft = "#{$1}-#{$2}"
-      ht = "#{$3}-#{$4}"
-    elsif  score_str =~ /([0-9]+)
-                           [ ]*-[ ]*
-                         ([0-9]+)
-                           [ ]*
-                          ([a-z.]+)
-                         /x
-      ft = "#{$1}-#{$2} (*)"
-      ht = ''
-      comments = $3
-#    elsif score_str =~ /[0-9]+-[0-9]+/
-#      puts "!! WARN - skipping LIVE score for match"
-#      ft = ''
-#      ht = ''
-    else
-       puts "!! ERROR - unsupported score format >#{score_str}< - sorry"
-       exit 1
-    end
-
-    recs << if format == 'CUP'
-             [last_round,
-              date.strftime( '%Y-%m-%d' ),
-              time_str,
-              team1_str,
-              ft,
-              ht,
-              team2_str,
-              et,              # extra: incl. extra time
-              pen,             # extra: incl. penalties
-              comments]
-            else   ## assume LEAGUE
-              [last_round,
-              date.strftime( '%Y-%m-%d' ),
-              time_str,
-              team1_str,
-              ft,
-              ht,
-              team2_str,
-              comments]
-            end
-    last_date_str = date_str
-  end
-end
-
+   pp recs[0]   ## check first record
 
 ##   note:  sort matches by date before saving/writing!!!!
 ##     note: for now assume date in string in 1999-11-30 format (allows sort by "simple" a-z)
-## note: assume date is first column!!!
-recs = recs.sort { |l,r| l[1] <=> r[1] }
+## note: assume date is third column!!! (stage/round/date/...)
+recs = recs.sort { |l,r| l[2] <=> r[2] }
 ## reformat date / beautify e.g. Sat Aug 7 1993
-recs.each { |rec| rec[1] = Date.strptime( rec[1], '%Y-%m-%d' ).strftime( '%a %b %-d %Y' ) }
+recs.each { |rec| rec[2] = Date.strptime( rec[2], '%Y-%m-%d' ).strftime( '%a %b %-d %Y' ) }
+
+   ## remove unused columns (e.g. stage, et, p, etc.)
+   recs, headers = vacuum( recs )
+
+   puts headers
+   pp recs[0]   ## check first record
+
+   out_path = "#{OUT_DIR}/#{season.path}/#{basename}.csv"
+
+   puts "write #{out_path}..."
+   Cache::CsvMatchWriter.write( out_path, recs, headers: headers )
+end
 
 
-out_path = "#{OUT_DIR}/#{season.path}/#{basename}.csv"
 
-puts "write #{out_path}..."
+def convert_with_stages( season:, league:, stages: )
+  season = Season.new( season )  if season.is_a?( String )
 
+   # season   = '2019/20'
+   # basename = 'at.2'
+  basename =   league
+  season_path = season.to_path( :long )  # e.g. 2010-2011  etc.
 
-headers = if format == 'CUP'
-           ['Round',
-            'Date',
-            'Time',
-            'Team 1',
-            'FT',
-            'HT',
-            'Team 2',
-            'ET',
-            'P',
-            'Comments']    ## e.g. awarded, cancelled/canceled, etc.
-          else     ## assume LEAGUE
-           ['Round',
-            'Date',
-            'Time',
-            'Team 1',
-            'FT',
-            'HT',
-            'Team 2',
-            'Comments']    ## e.g. awarded, cancelled/canceled, etc.
-          end
+  recs = []
+  stages.each do |stage_key, stage_name|
+    path = "./dl/weltfussball-#{basename}-#{season_path}-#{stage_key}.html"
 
-Cache::CsvMatchWriter.write( out_path, recs, headers: headers )
+    unless File.exist?( path )
+      puts "!! WARN - missing stage >#{stage_name}< source - >#{path}<"
+      next
+    end
+
+    html =  File.open( path, 'r:utf-8' ) { |f| f.read }
+
+    rows = parse( html )
+    stage_recs = build( rows, season: season, league: league, stage: stage_name )
+
+    pp stage_recs[0]   ## check first record
+    recs += stage_recs
+  end
+
+  ##   note:  sort matches by date before saving/writing!!!!
+  ##     note: for now assume date in string in 1999-11-30 format (allows sort by "simple" a-z)
+  ## note: assume date is third column!!! (stage/round/date/...)
+  recs = recs.sort { |l,r| l[2] <=> r[2] }
+  ## reformat date / beautify e.g. Sat Aug 7 1993
+  recs.each { |rec| rec[2] = Date.strptime( rec[2], '%Y-%m-%d' ).strftime( '%a %b %-d %Y' ) }
+
+   ## remove unused columns (e.g. stage, et, p, etc.)
+   recs, headers = vacuum( recs )
+
+   puts headers
+   pp recs[0]   ## check first record
+
+   out_path = "#{OUT_DIR}/#{season.path}/#{basename}.csv"
+
+   puts "write #{out_path}..."
+   Cache::CsvMatchWriter.write( out_path, recs, headers: headers )
 end
 
 
@@ -400,5 +189,16 @@ end
 # convert( league: 'eng.4', season: '2017/18' )
 
 
-convert( league: 'fr.1', season: '2020/21' )
-convert( league: 'fr.2', season: '2020/21' )
+# convert( league: 'fr.1', season: '2020/21' )
+# convert( league: 'fr.2', season: '2020/21' )
+
+
+stages = { regular:      'Regular Season',
+           championship: 'Playoffs - Championship',
+           relegation:   'Playoffs - Relegation' }
+
+convert_with_stages( league: 'sco.1', season: '2020/21', stages:  stages )
+convert_with_stages( league: 'sco.1', season: '2019/20', stages:  stages )
+convert_with_stages( league: 'sco.1', season: '2018/19', stages:  stages )
+
+
