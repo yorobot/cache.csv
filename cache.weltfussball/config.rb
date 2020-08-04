@@ -93,4 +93,38 @@ LEAGUES.merge!(
 )
 
 
+
+def self.mx1( season )
+  case season
+  when Season.new('2020/21')
+    %w[apertura]     # just getting started
+  when Season.new('2019/20')
+    %w[apertura apertura_finals clausura]     # covid-19 - no liguilla
+  when Season.new('2018/19')
+    %w[apertura apertura_finals clausura clausura_finals]
+  else
+    puts "!! ERROR - no configuration found for season >#{season}< for MX1 found; sorry"
+    exit 1
+  end
+end
+
+
+# todo/fix: adjust date/time by -7 hours!!!
+##  e.g. 25.07.2020	02:30  => 24.07.2020 19.30
+#        11.01.2020	04:00  => 10.01.2020 21.00
+# https://www.weltfussball.de/alle_spiele/mex-primera-division-2020-2021-apertura/
+# https://www.weltfussball.de/alle_spiele/mex-primera-division-2019-2020-clausura/
+# https://www.weltfussball.de/alle_spiele/mex-primera-division-2019-2020-apertura-playoffs/
+#  - Viertelfinale
+#  - Halbfinale
+#  - Finale
+# https://www.weltfussball.de/alle_spiele/mex-primera-division-2018-2019-clausura-playoffs/
+LEAGUES.merge!(
+  'mx.1.apertura'        => 'mex-primera-division-{season}-apertura',
+  'mx.1.apertura_finals' => 'mex-primera-division-{season}-apertura-playoffs',
+  'mx.1.clausura'        => 'mex-primera-division-{season}-clausura',
+  'mx.1.clausura_finals' => 'mex-primera-division-{season}-clausura-playoffs',
+)
+
+
 end # module Worldfootball

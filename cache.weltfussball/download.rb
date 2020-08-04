@@ -81,7 +81,8 @@ module Worldfootball
     season = Season.new( season )  if season.is_a?( String )
 
     ## stages = sco1( season )
-    stages = be1( season )
+    ## stages = be1( season )
+    stages = mx1( season )
 
     stages.each do |stage|
       sleep( 1 )   ## slow down - sleep 1sec before each http request
@@ -137,9 +138,14 @@ end
 # Worldfootball.schedule_with_stages( league: 'sco.1', season: '2019/20' )
 # Worldfootball.schedule_with_stages( league: 'sco.1', season: '2018/19' )
 
-Worldfootball.schedule_with_stages( league: 'be.1', season: '2020/21' )
-Worldfootball.schedule_with_stages( league: 'be.1', season: '2019/20' )
-Worldfootball.schedule_with_stages( league: 'be.1', season: '2018/19' )
+# Worldfootball.schedule_with_stages( league: 'be.1', season: '2020/21' )
+# Worldfootball.schedule_with_stages( league: 'be.1', season: '2019/20' )
+# Worldfootball.schedule_with_stages( league: 'be.1', season: '2018/19' )
+
+Worldfootball.schedule_with_stages( league: 'mx.1', season: '2020/21' )
+Worldfootball.schedule_with_stages( league: 'mx.1', season: '2019/20' )
+Worldfootball.schedule_with_stages( league: 'mx.1', season: '2018/19' )
+
 
 
 # Worldfootball.schedule( league: 'eng.4', season: '2017/18' )

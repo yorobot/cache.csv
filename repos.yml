@@ -3,6 +3,7 @@
 yorobot:
 - cache.csv      ## incl. self
 - sport.db.more
+- football.db
 - football.csv
 - stage
 
@@ -28,6 +29,7 @@ openfootball:
 - austria
 - russia
 - brazil
+- mexico
 - world
 ####
 - spec     ## incl. football.txt tests

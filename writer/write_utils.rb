@@ -9,8 +9,8 @@ SOURCES = {
   'one/o'    =>  { path: '../apis/o' },     ## "o" debug version
 
   'two'     =>  { path: '../../stage/two' },
-  'two/o'   =>  { path: '../more/o' },      ## "o"   debug version
-  'two/tmp' =>  { path: '../more/tmp' },    ## "tmp" debug version
+  'two/o'   =>  { path: '../cache.weltfussball/o' },      ## "o"   debug version
+  'two/tmp' =>  { path: '../cache.weltfussball/tmp' },    ## "tmp" debug version
 
   'leagues'   =>  { path: '../../../footballcsv/cache.leagues' },
   'leagues/o' =>  { path: '../cache.leagues/o' },    ## "o"  debug version
@@ -179,6 +179,7 @@ def write_worker( league, season, source:,
 end
 
 
+=begin
 def prepare_stages( stages )
   if stages.is_a?( Array )
      if stages[0].is_a?( Array )  ## is array of array
@@ -195,9 +196,15 @@ def prepare_stages( stages )
     [stages] ## always return array of hashes
   end
 end
+=end
+
+
 
 def build_stage( matches_by_stage, stages:, name:, lang: )
   buf = String.new('')
+
+  ## note: allow convenience shortcut - assume stage_in is stage_out - auto-convert
+  stages = stages.reduce({}) {|h,stage| h[stage]=stage; h }   if stages.is_a?( Array )
 
   stages.each_with_index do |(stage_in, stage_out),i|
     matches = matches_by_stage[ stage_in ]   ## todo/fix: report error if no matches found!!!
@@ -211,7 +218,7 @@ def build_stage( matches_by_stage, stages:, name:, lang: )
       result
     end
 
-    buf << "\n\n"   if i > 0
+    buf << "\n\n"   if i > 0 && buf.size > 0
 
     buf << "= #{name}, #{stage_out}\n"
     buf << SportDb::TxtMatchWriter.build( matches, lang: lang )
@@ -265,31 +272,36 @@ def write_worker_with_stages( league, season, stages:, source:, normalize: true 
   out_dir = "./o/#{repo_path}"
 
 
-  stages = prepare_stages( stages )
+  ## stages = prepare_stages( stages )
   pp stages
 
 
-  if stages.size == 1
-    buf = build_stage( matches_by_stage, stages: stages[0],
-                                         name: "#{league_name} #{season.key}",
-                                         lang: lang )
-    write_buf( "#{out_dir}/#{season.path}/#{basename}.txt", buf )
-  elsif stages.size == 2
-    buf = build_stage( matches_by_stage, stages: stages[0],
-                                         name: "#{league_name} #{season.key}",
-                                         lang: lang )
-    write_buf( "#{out_dir}/#{season.path}/#{basename}-i.txt", buf )
+  romans = %w[I II III IIII V VI VII VIII VIIII X XI]  ## note: use "simple" romans without -1 rule e.g. iv or ix
 
-    buf = build_stage( matches_by_stage, stages: stages[1],
+
+  stages.each_with_index do |stage, i|
+
+    ## assume "extended" style / syntax
+    if stage.is_a?( Hash ) && stage.has_key?( :names )
+      stage_names    = stage[ :names ]
+      stage_basename = stage[ :basename ]
+      ## add search/replace {basename} - why? why not?
+      stage_basename = stage_basename.sub( '{basename}', basename )
+    else  ## assume simple style (array of strings OR hash mapping of string => string)
+      stage_names    = stage
+      stage_basename =  if stages.size == 1
+                            "#{basename}"  ## use basename as is 1:1
+                         else
+                            "#{basename}-#{romans[i].downcase}"  ## append i,ii,etc.
+                         end
+    end
+
+    buf = build_stage( matches_by_stage, stages: stage_names,
                                          name: "#{league_name} #{season.key}",
                                          lang: lang )
 
     ## note: might be empty!!! if no matches skip (do NOT write)
-    write_buf( "#{out_dir}/#{season.path}/#{basename}-ii.txt", buf )   unless buf.empty?
-  else
-    puts "!!! ERROR - too many (#{stages.size}) stage pages - for now only one or two possible; sorry:"
-    pp stages
-    exit 1
+    write_buf( "#{out_dir}/#{season.path}/#{stage_basename}.txt", buf )   unless buf.empty?
   end
 end
 

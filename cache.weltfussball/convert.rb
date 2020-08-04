@@ -59,7 +59,7 @@ end
 
 
 
-def convert_with_stages( season:, league:, stages: )
+def convert_with_stages( season:, league:, stages:, offset: nil )  ## check: rename (optional) offset to time_offset or such?
   season = Season.new( season )  if season.is_a?( String )
 
    # season   = '2019/20'
@@ -88,6 +88,11 @@ def convert_with_stages( season:, league:, stages: )
   ##   note:  sort matches by date before saving/writing!!!!
   ##     note: for now assume date in string in 1999-11-30 format (allows sort by "simple" a-z)
   ## note: assume date is third column!!! (stage/round/date/...)
+
+
+  recs = recs.map { |rec| fix_date( rec, offset ) }    if offset
+
+
   recs = recs.sort { |l,r| l[2] <=> r[2] }
   ## reformat date / beautify e.g. Sat Aug 7 1993
   recs.each { |rec| rec[2] = Date.strptime( rec[2], '%Y-%m-%d' ).strftime( '%a %b %-d %Y' ) }
@@ -104,6 +109,28 @@ def convert_with_stages( season:, league:, stages: )
    Cache::CsvMatchWriter.write( out_path, recs, headers: headers )
 end
 
+
+## helper to fix dates to use local timezone (and not utc/london time)
+def fix_date( row, offset )
+  return row    if row[3].nil? || row[3].empty?   ## note: time (column) required for fix
+
+  col = row[2]
+  if col =~ /^\d{4}-\d{2}-\d{2}$/
+    date_fmt = '%Y-%m-%d'   # e.g. 2002-08-17
+  else
+    puts "!!! ERROR - wrong (unknown) date format >>#{col}<<; cannot continue; fix it; sorry"
+    ## todo/fix: add to errors/warns list - why? why not?
+    exit 1
+  end
+
+  date = DateTime.strptime( "#{row[2]} #{row[3]}", "#{date_fmt} %H:%M" )
+  ## NOTE - MUST be -7/24.0!!!! or such to work
+  date = date + (offset/24.0)
+
+  row[2] = date.strftime( date_fmt )  ## overwrite "old"
+  row[3] = date.strftime( '%H:%M' )
+  row   ## return row for possible pipelining - why? why not?
+end
 
 
 =begin
@@ -198,10 +225,9 @@ stages = { regular:      'Regular Season',
            championship: 'Playoffs - Championship',
            relegation:   'Playoffs - Relegation' }
 
-convert_with_stages( league: 'sco.1', season: '2020/21', stages:  stages )
-convert_with_stages( league: 'sco.1', season: '2019/20', stages:  stages )
-convert_with_stages( league: 'sco.1', season: '2018/19', stages:  stages )
-=end
+convert_with_stages( league: 'sco.1', season: '2020/21', stages: stages )
+convert_with_stages( league: 'sco.1', season: '2019/20', stages: stages )
+convert_with_stages( league: 'sco.1', season: '2018/19', stages: stages )
 
 
 stages = { regular:       'Regular Season',
@@ -209,6 +235,19 @@ stages = { regular:       'Regular Season',
            europa:        'Playoffs - Europa League',
            europa_finals: 'Playoffs - Europa League - Finals' }
 
-convert_with_stages( league: 'be.1', season: '2020/21', stages:  stages )
-convert_with_stages( league: 'be.1', season: '2019/20', stages:  stages )
-convert_with_stages( league: 'be.1', season: '2018/19', stages:  stages )
+convert_with_stages( league: 'be.1', season: '2020/21', stages: stages )
+convert_with_stages( league: 'be.1', season: '2019/20', stages: stages )
+convert_with_stages( league: 'be.1', season: '2018/19', stages: stages )
+=end
+
+
+stages = { apertura:        'Apertura',
+           apertura_finals: 'Apertura - Liguilla',
+           clausura:        'Clausura',
+           clausura_finals: 'Clausura - Liguilla' }
+
+
+## note: adjust date/time by -7 offset
+convert_with_stages( league: 'mx.1', season: '2020/21', stages: stages, offset: -7 )
+convert_with_stages( league: 'mx.1', season: '2019/20', stages: stages, offset: -7 )
+convert_with_stages( league: 'mx.1', season: '2018/19', stages: stages, offset: -7 )
