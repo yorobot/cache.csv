@@ -6,7 +6,10 @@ require_relative '../boot'
 # DATAFILES_DIR = './o/at'
 # DATAFILES_DIR = './o/de'
 # DATAFILES_DIR = './o/fr'
-DATAFILES_DIR = './tmp'
+DATAFILES_DIR = './o/aug7'
+
+# DATAFILES_DIR = './tmp'
+
 
 team_buf,   team_errors   = SportDb::TeamSummary.build( DATAFILES_DIR )
 

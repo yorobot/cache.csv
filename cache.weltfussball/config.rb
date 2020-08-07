@@ -35,6 +35,14 @@ LEAGUES = {
 
   'tr.1'  => 'tur-sueperlig',
   'tr.2'  => 'tur-1-lig',
+
+  # https://www.weltfussball.de/alle_spiele/swe-allsvenskan-2020/
+  # https://www.weltfussball.de/alle_spiele/swe-superettan-2020/
+  'se.1'  => 'swe-allsvenskan',
+  'se.2'  => 'swe-superettan',
+
+  # https://www.weltfussball.de/alle_spiele/nor-eliteserien-2020/
+  'no.1'  => 'nor-eliteserien',
 }
 
 
@@ -59,6 +67,37 @@ LEAGUES.merge!(
   'sco.1.championship' => 'sco-premiership-{end_year}-playoff',   # sco-premiership-2019-playoff
   'sco.1.relegation'   => 'sco-premiership-{end_year}-abstieg'   # sco-premiership-2019-abstieg
 )
+
+
+
+def self.fi1( season )
+  case season
+  when Season.new('2020')
+    %w[regular]     # just getting started
+  when Season.new('2019')
+    %w[regular championship challenger europa_finals]
+  else
+    puts "!! ERROR - no configuration found for season >#{season}< for FI1 found; sorry"
+    exit 1
+  end
+end
+
+# https://www.weltfussball.de/alle_spiele/fin-veikkausliiga-2019/
+# https://www.weltfussball.de/alle_spiele/fin-veikkausliiga-2019-meisterschaft/
+# https://www.weltfussball.de/alle_spiele/fin-veikkausliiga-2019-abstieg/
+# https://www.weltfussball.de/alle_spiele/fin-veikkausliiga-2019-playoff-el/
+
+LEAGUES.merge!(
+  'fi.1.regular'       => 'fin-veikkausliiga-{season}',
+  'fi.1.championship'  => 'fin-veikkausliiga-{season}-meisterschaft',
+  'fi.1.challenger'    => 'fin-veikkausliiga-{season}-abstieg',
+  'fi.1.europa_finals' => 'fin-veikkausliiga-{season}-playoff-el',
+)
+
+
+
+
+
 
 
 # Championship play-offs

@@ -17,7 +17,9 @@ require_relative './build'
 # OUT_DIR='./o/de'
 # OUT_DIR='./o/eng'
 # OUT_DIR='../../stage/two'
-OUT_DIR='./tmp'
+
+OUT_DIR='./o/aug7'
+# OUT_DIR='./tmp'
 
 
 
@@ -220,6 +222,17 @@ end
 # convert( league: 'fr.2', season: '2020/21' )
 
 
+# convert( league: 'se.1', season: '2020' )
+# convert( league: 'se.1', season: '2019' )
+
+# convert( league: 'se.2', season: '2020' )
+# convert( league: 'se.2', season: '2019' )
+
+convert( league: 'no.1', season: '2020' )
+convert( league: 'no.1', season: '2019' )
+
+
+
 =begin
 stages = { regular:      'Regular Season',
            championship: 'Playoffs - Championship',
@@ -240,7 +253,23 @@ convert_with_stages( league: 'be.1', season: '2019/20', stages: stages )
 convert_with_stages( league: 'be.1', season: '2018/19', stages: stages )
 =end
 
+# https://www.weltfussball.de/alle_spiele/fin-veikkausliiga-2019/
+# https://www.weltfussball.de/alle_spiele/fin-veikkausliiga-2019-meisterschaft/
+# https://www.weltfussball.de/alle_spiele/fin-veikkausliiga-2019-abstieg/
+# https://www.weltfussball.de/alle_spiele/fin-veikkausliiga-2019-playoff-el/
 
+
+=begin
+stages = { regular:       'Regular Season',
+           championship:  'Playoffs - Championship',
+           challenger:    'Playoffs - Challenger',
+           europa_finals: 'Europa League Finals' }
+
+convert_with_stages( league: 'fi.1', season: '2020', stages: stages )
+convert_with_stages( league: 'fi.1', season: '2019', stages: stages )
+=end
+
+=begin
 stages = { apertura:        'Apertura',
            apertura_finals: 'Apertura - Liguilla',
            clausura:        'Clausura',
@@ -251,3 +280,4 @@ stages = { apertura:        'Apertura',
 convert_with_stages( league: 'mx.1', season: '2020/21', stages: stages, offset: -7 )
 convert_with_stages( league: 'mx.1', season: '2019/20', stages: stages, offset: -7 )
 convert_with_stages( league: 'mx.1', season: '2018/19', stages: stages, offset: -7 )
+=end

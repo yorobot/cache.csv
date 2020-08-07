@@ -17,10 +17,13 @@ module Worldfootball
   end
 
 ##
-## note:
+## note/fix!!!!
+##   do NOT allow redirects for now - report error!!!
 ##   does NOT return 404 page not found errors; always redirects (301) to home page
 ##    on missing pages:
 ##      301 Moved Permanently location=https://www.weltfussball.de/
+##      301 Moved Permanently location=https://www.weltfussball.de/
+
 
 ## note: use aut-2-liga !!! starting 2019-2018 !!!
 ##       use aut-erste-liga !!! before e.g. 2010-2011 etc.
@@ -82,7 +85,8 @@ module Worldfootball
 
     ## stages = sco1( season )
     ## stages = be1( season )
-    stages = mx1( season )
+    ## stages = mx1( season )
+    stages = fi1( season )
 
     stages.each do |stage|
       sleep( 1 )   ## slow down - sleep 1sec before each http request
@@ -115,8 +119,7 @@ module Worldfootball
 
     slug = league_slug( league: league, season: season )
 
-    season_path = season.to_path( :long )  # e.g. 2010-2011  etc.
-    url = "#{BASE_URL}#{slug}-#{season_path}/"
+    url = "#{BASE_URL}#{slug}/"
 
     response = worker.get( url )
 
@@ -124,7 +127,8 @@ module Worldfootball
       html = response.body.to_s
       html = html.force_encoding( Encoding::UTF_8 )
 
-      File.open( "./dl/weltfussball-#{league}-#{season_path}.html", 'w:utf-8' ) {|f| f.write( html ) }
+      basename = "#{league}-#{season.to_path(:long)}"
+      File.open( "./dl/weltfussball-#{basename}.html", 'w:utf-8' ) {|f| f.write( html ) }
     else
       puts "!! ERROR - #{response.code}:"
       pp response
@@ -142,9 +146,13 @@ end
 # Worldfootball.schedule_with_stages( league: 'be.1', season: '2019/20' )
 # Worldfootball.schedule_with_stages( league: 'be.1', season: '2018/19' )
 
-Worldfootball.schedule_with_stages( league: 'mx.1', season: '2020/21' )
-Worldfootball.schedule_with_stages( league: 'mx.1', season: '2019/20' )
-Worldfootball.schedule_with_stages( league: 'mx.1', season: '2018/19' )
+# Worldfootball.schedule_with_stages( league: 'fi.1', season: '2020' )
+# Worldfootball.schedule_with_stages( league: 'fi.1', season: '2019' )
+
+
+# Worldfootball.schedule_with_stages( league: 'mx.1', season: '2020/21' )
+# Worldfootball.schedule_with_stages( league: 'mx.1', season: '2019/20' )
+# Worldfootball.schedule_with_stages( league: 'mx.1', season: '2018/19' )
 
 
 
@@ -227,3 +235,13 @@ Worldfootball.schedule_with_stages( league: 'mx.1', season: '2018/19' )
 # Worldfootball.schedule( league: 'de.cup', season: '2015/16' )
 # Worldfootball.schedule( league: 'de.cup', season: '2016/17' )
 # Worldfootball.schedule( league: 'de.cup', season: '2017/18' )
+
+
+# Worldfootball.schedule( league: 'se.1', season: '2020' ); sleep( 1 )
+# Worldfootball.schedule( league: 'se.1', season: '2019' ); sleep( 1 )
+
+# Worldfootball.schedule( league: 'se.2', season: '2020' ); sleep( 1 )
+# Worldfootball.schedule( league: 'se.2', season: '2019' )
+
+Worldfootball.schedule( league: 'no.1', season: '2020' ); sleep( 1 )
+Worldfootball.schedule( league: 'no.1', season: '2019' )
