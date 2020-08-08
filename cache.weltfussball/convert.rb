@@ -100,54 +100,37 @@ end
 # convert( league: 'fr.2', season: '2020/21' )
 
 
-# convert( league: 'se.1', season: '2020' )
-# convert( league: 'se.1', season: '2019' )
+convert( league: 'se.1', season: '2020' )
+convert( league: 'se.1', season: '2019' )
 
-# convert( league: 'se.2', season: '2020' )
-# convert( league: 'se.2', season: '2019' )
-
-
-convert( league: 'fi.1', season: '2020' )
-convert( league: 'fi.1', season: '2019' )
-
-convert( league: 'no.1', season: '2020' )
-convert( league: 'no.1', season: '2019' )
+convert( league: 'se.2', season: '2020' )
+convert( league: 'se.2', season: '2019' )
 
 
+# convert( league: 'fi.1', season: '2020' )
+# convert( league: 'fi.1', season: '2019' )
 
-=begin
-stages = { regular:      'Regular Season',
-           championship: 'Playoffs - Championship',
-           relegation:   'Playoffs - Relegation' }
+# convert( league: 'no.1', season: '2020' )
+# convert( league: 'no.1', season: '2019' )
 
-convert_with_stages( league: 'sco.1', season: '2020/21', stages: stages )
-convert_with_stages( league: 'sco.1', season: '2019/20', stages: stages )
-convert_with_stages( league: 'sco.1', season: '2018/19', stages: stages )
+# convert( league: 'is.1', season: '2020' )
+# convert( league: 'is.1', season: '2019' )
 
+# convert( league: 'ie.1', season: '2020' )
+# convert( league: 'ie.1', season: '2019' )
 
-stages = { regular:       'Regular Season',
-           championship:  'Playoffs - Championship',
-           europa:        'Playoffs - Europa League',
-           europa_finals: 'Playoffs - Europa League - Finals' }
-
-convert_with_stages( league: 'be.1', season: '2020/21', stages: stages )
-convert_with_stages( league: 'be.1', season: '2019/20', stages: stages )
-convert_with_stages( league: 'be.1', season: '2018/19', stages: stages )
-=end
+# convert( league: 'sco.1', season: '2020/21' )
+# convert( league: 'sco.1', season: '2019/20' )
+# convert( league: 'sco.1', season: '2018/19' )
 
 
-=begin
-stages = { apertura:        'Apertura',
-           apertura_finals: 'Apertura - Liguilla',
-           clausura:        'Clausura',
-           clausura_finals: 'Clausura - Liguilla' }
+# convert( league: 'be.1', season: '2020/21' )
+# convert( league: 'be.1', season: '2019/20' )
+# convert( league: 'be.1', season: '2018/19' )
 
 
 ## note: adjust date/time by -7 offset
-convert_with_stages( league: 'mx.1', season: '2020/21', stages: stages, offset: -7 )
-convert_with_stages( league: 'mx.1', season: '2019/20', stages: stages, offset: -7 )
-convert_with_stages( league: 'mx.1', season: '2018/19', stages: stages, offset: -7 )
-=end
-
-
+# convert( league: 'mx.1', season: '2020/21', offset: -7 )
+# convert( league: 'mx.1', season: '2019/20', offset: -7 )
+# convert( league: 'mx.1', season: '2018/19', offset: -7 )
 

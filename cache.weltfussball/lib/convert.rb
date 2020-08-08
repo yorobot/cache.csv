@@ -20,26 +20,20 @@ require_relative 'build'
 def convert( league:, season:, offset: nil )  ## check: rename (optional) offset to time_offset or such?
   season = Season.new( season )  if season.is_a?( String )
 
+  league  = Worldfootball.find_league( league )
+
   # season   = '2019/20'
   # basename = 'at.2'
-  basename =   league
+  basename =   league.key
 
-  ## check for league format / stages
-  ##   return array (of strings) or nil (for no stages - "simple" format)
-  league_format = Worldfootball::LEAGUE_FORMATS[ league ]
-  stages = if league_format
-             league_format.call( season )
-           else
-             nil ## not found; assume always "simple/regular" format w/o stages
-           end
+  stages = league.stages( season: season )
 
   if stages
     recs = []
-    stages.each do |stage_key|
-      stage_hash = Worldfootball::LEAGUES[ "#{league}.#{stage_key}" ]
-      stage_name = stage_hash[:name]
-      ## todo/fix: report error/check if stage_hash
-      ##               or sage_hash[:name] is nil!!!
+    stages.each do |stage|
+      stage_key  = stage.key
+      stage_name = stage.name
+      ## todo/fix: report error/check if stage.name is nil!!!
 
       path = "./dl/#{basename}-#{season.path}-#{stage_key}.html"
 

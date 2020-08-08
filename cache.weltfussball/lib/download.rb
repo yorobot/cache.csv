@@ -53,68 +53,31 @@ module Worldfootball
 ##      2012-2013, 2013-2014, 2014-2015, 2015-2016, 2016-2017, 2017-2018
 
 
-  def self.league_slug( league:, season: )
-    val = LEAGUES[ league ]
-
-    val = val[:slug]           if val.is_a?( Hash )
-    val = val.call( season )   if val.is_a?( Proc )
-
-    if val.nil?
-      puts "!! ERROR - no league found for >#{league}<; add to leagues tables"
-      exit 1
-    end
-
-    ## note: fill-in/check for place holders too
-    val = if val.index( '{season}' )
-             val.sub( '{season}', season.to_path( :long ) )  ## e.g. 2010-2011
-          elsif val.index( '{end_year}' )
-             val.sub( '{end_year}', season.end_year.to_s )   ## e.g. 2011
-          else
-             ## assume convenience fallback - append regular season
-             "#{val}-#{season.to_path( :long )}"
-          end
-
-    puts "  slug=>#{val}<"
-
-    val
-  end
-
-  def self.league_stages( league:, season: )
-    ## check for league format / stages
-    league_format = LEAGUE_FORMATS[ league ]
-    stages = if league_format
-               league_format.call( season )
-             else
-               nil ## not found; assume always "simple/regular" format w/o stages
-             end
-    stages
-  end
-
 
   def self.schedule( league:, season: )
     season = Season.new( season )  if season.is_a?( String )
 
-    ## check for league format / stages
-    ##   return array (of strings) or nil (for no stages - "simple" format)
-    stages = league_stages( league: league, season: season )
+    league  = find_league( league )
+
+    stages =  league.stages( season: season )
 
     if stages
       stages.each do |stage|
         # append stage to league for lookup e.g. sco.1.regular
-        slug = league_slug( league: "#{league}.#{stage}", season: season )
+        slug = stage.slug( season: season )
 
         url  = "#{BASE_URL}#{slug}/"
 
-        basename = "#{league}-#{season.to_path}-#{stage}"  # e.g. sco.1-2020-21-regular
+        basename = "#{league.key}-#{season.to_path}-#{stage.key}"  # e.g. sco.1-2020-21-regular
 
         copy( url, "./dl/#{basename}.html" )
       end # each stage
     else
-      slug = league_slug( league: league, season: season )
+      slug = league.slug( season: season )
 
       url = "#{BASE_URL}#{slug}/"
 
-      basename = "#{league}-#{season.to_path}"
+      basename = "#{league.key}-#{season.to_path}"
 
       copy( url, "./dl/#{basename}.html" )
     end

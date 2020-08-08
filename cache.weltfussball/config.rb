@@ -4,171 +4,266 @@
 
 module Worldfootball
 
-LEAGUE_FORMATS = {}
 
-## todo/check: change to LEAGUE_SLUGS or such - why? why not?
 LEAGUES = {
-  'de.2'   => '2-bundesliga',
-  'de.cup' => 'dfb-pokal',
+  'de.2'   => { slug: '2-bundesliga' },
+  'de.cup' => { slug: 'dfb-pokal' },
 
-  'at.1' => 'aut-bundesliga',
-  'at.2' =>  ->(season) { season.start_year >= 2019 ?
-                             'aut-2-liga' : 'aut-erste-liga' },
-  'at.cup' => 'aut-oefb-cup',
+  'at.1'   => { slug: 'aut-bundesliga' },
+  'at.2'   => { slug: ->(season) {
+                          season.start_year >= 2019 ? 'aut-2-liga' : 'aut-erste-liga' } },
+  'at.cup' => { slug: 'aut-oefb-cup' },
 
-  'ch.1' => 'sui-super-league',
-  'ch.2' => 'sui-challenge-league',
+  'ch.1'   => { slug: 'sui-super-league' },
+  'ch.2'   => { slug: 'sui-challenge-league' },
 
-  'eng.3' => 'eng-league-one',
-  'eng.4' => 'eng-league-two',
-  'eng.5' => 'eng-national-league',
-  'eng.cup'   => 'eng-fa-cup',    ## change key to eng.cup.fa or such??
-  'eng.cup.l' => 'eng-league-cup', ## change key to ??
+  'eng.3'  => { slug: 'eng-league-one' },
+  'eng.4'  => { slug: 'eng-league-two' },
+  'eng.5'  => { slug: 'eng-national-league' },
+  'eng.cup'   => { slug: 'eng-fa-cup' },    ## change key to eng.cup.fa or such??
+  'eng.cup.l' => { slug: 'eng-league-cup' }, ## change key to ??
 
-  'fr.1'  => 'fra-ligue-1',
-  'fr.2'  => 'fra-ligue-2',
+  'fr.1'  => { slug: 'fra-ligue-1' },
+  'fr.2'  => { slug: 'fra-ligue-2' },
 
-  'it.2'  => 'ita-serie-b',
+  'it.2'  => { slug: 'ita-serie-b' },
 
-  'es.2'  => 'esp-segunda-division',
+  'es.2'  => { slug: 'esp-segunda-division' },
 
-  'ru.1'  => 'rus-premier-liga',
-  'ru.2'  => 'rus-1-division',
+  'ru.1'  => { slug: 'rus-premier-liga' },
+  'ru.2'  => { slug: 'rus-1-division' },
 
-  'tr.1'  => 'tur-sueperlig',
-  'tr.2'  => 'tur-1-lig',
+  'tr.1'  => { slug: 'tur-sueperlig' },
+  'tr.2'  => { slug: 'tur-1-lig' },
 
-  # https://www.weltfussball.de/alle_spiele/swe-allsvenskan-2020/
-  # https://www.weltfussball.de/alle_spiele/swe-superettan-2020/
-  'se.1'  => 'swe-allsvenskan',
-  'se.2'  => 'swe-superettan',
+  # e.g. /swe-allsvenskan-2020/
+  #      /swe-superettan-2020/
+  'se.1'  => { slug: 'swe-allsvenskan' },
+  'se.2'  => { slug: 'swe-superettan' },
 
-  # https://www.weltfussball.de/alle_spiele/nor-eliteserien-2020/
-  'no.1'  => 'nor-eliteserien',
-}
+  # e.g. /nor-eliteserien-2020/
+  'no.1'  => { slug: 'nor-eliteserien' },
 
+  # e.g. /isl-urvalsdeild-2020/
+  'is.1'  => { slug: 'isl-urvalsdeild' },
 
-
-
-LEAGUE_FORMATS[ 'sco.1' ] = ->( season ) {
-  case season
-  when Season.new('2020/21')
-    %w[regular]     # just getting started
-  when Season.new('2019/20')
-    %w[regular]     # covid-19 - no championship & relegation
-  when Season.new('2018/19')
-    %w[regular championship relegation]
-  else
-    puts "!! ERROR - no configuration found for season >#{season}< for SCO1 found; sorry"
-    exit 1
-  end
-}
-
-LEAGUES.merge!(
-  'sco.1.regular'      =>  { slug: 'sco-premiership-{season}',
-                             name: 'Regular Season' },
-  'sco.1.championship' =>  { slug: 'sco-premiership-{end_year}-playoff',  # note: only uses season.end_year!
-                             name: 'Playoffs - Championship' },
-  'sco.1.relegation'   =>  { slug: 'sco-premiership-{end_year}-abstieg',  # note: only uses season.end_year!
-                             name: 'Playoffs - Relegation' },
-)
+  # e.g. /irl-premier-division-2019/
+  'ie.1'  => { slug: 'irl-premier-division' },
 
 
-
-LEAGUE_FORMATS[ 'fi.1' ] = -> ( season ) {
-  case season
-  when Season.new('2020')
-    %w[regular]     # just getting started
-  when Season.new('2019')
-    %w[regular championship challenger europa_finals]
-  else
-    puts "!! ERROR - no configuration found for season >#{season}< for FI1 found; sorry"
-    exit 1
-  end
-}
-
-# https://www.weltfussball.de/alle_spiele/fin-veikkausliiga-2019/
-# https://www.weltfussball.de/alle_spiele/fin-veikkausliiga-2019-meisterschaft/
-# https://www.weltfussball.de/alle_spiele/fin-veikkausliiga-2019-abstieg/
-# https://www.weltfussball.de/alle_spiele/fin-veikkausliiga-2019-playoff-el/
-
-LEAGUES.merge!(
-  'fi.1.regular'       => { slug: 'fin-veikkausliiga-{season}',
-                            name: 'Regular Season' },
-  'fi.1.championship'  => { slug: 'fin-veikkausliiga-{season}-meisterschaft',
-                            name: 'Playoffs - Championship' },
-  'fi.1.challenger'    => { slug: 'fin-veikkausliiga-{season}-abstieg',
-                            name: 'Playoffs - Challenger' },
-  'fi.1.europa_finals' => { slug: 'fin-veikkausliiga-{season}-playoff-el',
-                            name: 'Europa League Finals' },
-)
+  'sco.1' => {
+    stages: {
+     'regular'      => { name: 'Regular Season',          slug: 'sco-premiership-{season}' },
+     'championship' => { name: 'Playoffs - Championship', slug: 'sco-premiership-{end_year}-playoff' },  # note: only uses season.end_year!
+     'relegation'   => { name: 'Playoffs - Relegation',   slug: 'sco-premiership-{end_year}-abstieg' },  # note: only uses season.end_year!
+   },
+   format: ->( season ) {
+    case season
+    when Season.new('2020/21')
+      %w[regular]     # just getting started
+    when Season.new('2019/20')
+      %w[regular]     # covid-19 - no championship & relegation
+    when Season.new('2018/19')
+      %w[regular championship relegation]
+    else
+      puts "!! ERROR - no configuration found for season >#{season}< for SCO1 found; sorry"
+      exit 1
+    end
+   }
+  },
 
 
+  # e.g. /fin-veikkausliiga-2019/
+  #      /fin-veikkausliiga-2019-meisterschaft/
+  #      /fin-veikkausliiga-2019-abstieg/
+  #      /fin-veikkausliiga-2019-playoff-el/
+  'fi.1' => {
+    stages: {
+     'regular'       => { name: 'Regular Season',          slug: 'fin-veikkausliiga-{season}' },
+     'championship'  => { name: 'Playoffs - Championship', slug: 'fin-veikkausliiga-{season}-meisterschaft' },
+     'challenger'    => { name: 'Playoffs - Challenger',   slug: 'fin-veikkausliiga-{season}-abstieg' },
+     'europa_finals' => { name: 'Europa League Finals',    slug: 'fin-veikkausliiga-{season}-playoff-el' },
+    },
+    format: ->( season ) {
+     case season
+     when Season.new('2020')
+       %w[regular]     # just getting started
+     when Season.new('2019')
+       %w[regular championship challenger europa_finals]
+     else
+       puts "!! ERROR - no configuration found for season >#{season}< for FI1 found; sorry"
+       exit 1
+     end
+    }
+  },
 
 
+  # Championship play-offs
+  # Europa League play-offs (Group A + Group B / Finals )
 
-
-
-# Championship play-offs
-# Europa League play-offs (Group A + Group B / Finals )
-
-LEAGUE_FORMATS[ 'be.1' ] = -> ( season ) {
-  case season
-  when Season.new('2020/21')
-    %w[regular]     # just getting started
-  when Season.new('2019/20')
-    %w[regular]     # covid-19 - no championship & europa
-  when Season.new('2018/19')
-    %w[regular championship europa europa_finals]
-  else
-    puts "!! ERROR - no configuration found for season >#{season}< for BE1 found; sorry"
-    exit 1
-  end
-}
-
-# https://www.weltfussball.de/alle_spiele/bel-eerste-klasse-a-2020-2021/
-# https://www.weltfussball.de/alle_spiele/bel-europa-league-playoffs-2018-2019-playoff/
-#   - Halbfinale
-#   - Finale
-LEAGUES.merge!(
-  'be.1.regular'       => 'bel-eerste-klasse-a-{season}',
-  'be.1.championship'  => 'bel-eerste-klasse-a-{season}-playoff-i',
-  'be.1.europa'        => 'bel-europa-league-playoffs-{season}',  ## note: missing groups (A & B)
-  'be.1.europa_finals' => 'bel-europa-league-playoffs-{season}-playoff',
-)
-
-
-LEAGUE_FORMATS[ 'mx.1' ] = -> ( season ) {
-  case season
-  when Season.new('2020/21')
-    %w[apertura]     # just getting started
-  when Season.new('2019/20')
-    %w[apertura apertura_finals clausura]     # covid-19 - no liguilla
-  when Season.new('2018/19')
-    %w[apertura apertura_finals clausura clausura_finals]
-  else
-    puts "!! ERROR - no configuration found for season >#{season}< for MX1 found; sorry"
-    exit 1
-  end
-}
+  # e.g. /bel-eerste-klasse-a-2020-2021/
+  #      /bel-europa-league-playoffs-2018-2019-playoff/
+  #       - Halbfinale
+  #       - Finale
+  'be.1' => {
+    stages: {
+     'regular'       => { name: 'Regular Season',                    slug: 'bel-eerste-klasse-a-{season}' },
+     'championship'  => { name: 'Playoffs - Championship',           slug: 'bel-eerste-klasse-a-{season}-playoff-i' },
+     'europa'        => { name: 'Playoffs - Europa League',          slug: 'bel-europa-league-playoffs-{season}' },  ## note: missing groups (A & B)
+     'europa_finals' => { name: 'Playoffs - Europa League - Finals', slug: 'bel-europa-league-playoffs-{season}-playoff' },
+    },
+    format: ->( season ) {
+      case season
+      when Season.new('2020/21')
+        %w[regular]     # just getting started
+      when Season.new('2019/20')
+        %w[regular]     # covid-19 - no championship & europa
+      when Season.new('2018/19')
+        %w[regular championship europa europa_finals]
+      else
+        puts "!! ERROR - no configuration found for season >#{season}< for BE1 found; sorry"
+        exit 1
+      end
+    }
+  },
 
 
 # todo/fix: adjust date/time by -7 hours!!!
 ##  e.g. 25.07.2020	02:30  => 24.07.2020 19.30
 #        11.01.2020	04:00  => 10.01.2020 21.00
-# https://www.weltfussball.de/alle_spiele/mex-primera-division-2020-2021-apertura/
-# https://www.weltfussball.de/alle_spiele/mex-primera-division-2019-2020-clausura/
-# https://www.weltfussball.de/alle_spiele/mex-primera-division-2019-2020-apertura-playoffs/
-#  - Viertelfinale
-#  - Halbfinale
-#  - Finale
-# https://www.weltfussball.de/alle_spiele/mex-primera-division-2018-2019-clausura-playoffs/
-LEAGUES.merge!(
-  'mx.1.apertura'        => 'mex-primera-division-{season}-apertura',
-  'mx.1.apertura_finals' => 'mex-primera-division-{season}-apertura-playoffs',
-  'mx.1.clausura'        => 'mex-primera-division-{season}-clausura',
-  'mx.1.clausura_finals' => 'mex-primera-division-{season}-clausura-playoffs',
-)
+#
+# e.g. /mex-primera-division-2020-2021-apertura/
+#      /mex-primera-division-2019-2020-clausura/
+#      /mex-primera-division-2019-2020-apertura-playoffs/
+#        - Viertelfinale
+#        - Halbfinale
+#        - Finale
+#      /mex-primera-division-2018-2019-clausura-playoffs/
+  'mx.1' => {
+    stages: {
+     'apertura'        => { name: 'Apertura',            slug: 'mex-primera-division-{season}-apertura' },
+    'apertura_finals' => { name: 'Apertura - Liguilla', slug: 'mex-primera-division-{season}-apertura-playoffs' },
+    'clausura'        => { name: 'Clausura',            slug: 'mex-primera-division-{season}-clausura' },
+    'clausura_finals' => { name: 'Clausura - Liguilla', slug: 'mex-primera-division-{season}-clausura-playoffs' },
+   },
+   format: ->( season ) {
+    case season
+    when Season.new('2020/21')
+      %w[apertura]     # just getting started
+    when Season.new('2019/20')
+      %w[apertura apertura_finals clausura]     # covid-19 - no liguilla
+    when Season.new('2018/19')
+      %w[apertura apertura_finals clausura clausura_finals]
+    else
+      puts "!! ERROR - no configuration found for season >#{season}< for MX1 found; sorry"
+      exit 1
+    end
+   }
+  },
 
+}
+
+
+
+
+  class League
+    ## inner (helper) class Stage
+    class Stage
+      def initialize( league, key, data )
+        @league = league
+        @key    = key
+        @data   = data
+      end
+
+      def league() @league; end
+      def key()    @key; end
+      def name()   @data[:name]; end
+
+      def slug( season: )
+        slug = @data[ :slug ]
+        slug = slug.call( season )  if slug.is_a?( Proc )
+
+        if slug.nil?
+          puts "!! ERROR - no slug found for stage >#{@key}< for league >#{@league.key}<; add to leagues tables"
+          exit 1
+        end
+
+        ## note: fill-in/check for place holders too
+        slug = if slug.index( '{season}' )
+                 slug.sub( '{season}', season.to_path( :long ) )  ## e.g. 2010-2011
+               elsif slug.index( '{end_year}' )
+                 slug.sub( '{end_year}', season.end_year.to_s )   ## e.g. 2011
+               else
+                 ## assume convenience fallback - append regular season
+                 "#{slug}-#{season.to_path( :long )}"
+              end
+
+        puts "  slug=>#{slug}<"
+
+        slug
+      end
+    end # inner class Stage
+
+
+    ### start class League
+    def initialize( key, data )
+      @key  = key
+      @data = data
+    end
+
+    def key()   @key; end
+
+    def stages( season: )
+      ## check for league format / stages
+      ##   return array (of strings) or nil (for no stages - "simple" format)
+      league_format = @data[:format]
+      stages = if league_format
+                 league_format.call( season )
+               else
+                 nil ## not found; assume always "simple/regular" format w/o stages
+               end
+
+      ## map to key to Stage class/struct
+      stages = stages.map{ |key| Stage.new( self, key, @data[:stages][key] )  }  if stages
+
+      stages
+    end
+
+
+    def slug( season: )
+      slug =  @data[ :slug ]
+      slug =  slug.call( season )  if slug.is_a?( Proc )
+
+      if slug.nil?
+        puts "!! ERROR - no slug found for league >#{@key}<; add to leagues tables"
+        exit 1
+      end
+
+      ## note: fill-in/check for place holders too
+      slug = if slug.index( '{season}' )
+               slug.sub( '{season}', season.to_path( :long ) )  ## e.g. 2010-2011
+             elsif slug.index( '{end_year}' )
+               slug.sub( '{end_year}', season.end_year.to_s )   ## e.g. 2011
+             else
+               ## assume convenience fallback - append regular season
+               "#{slug}-#{season.to_path( :long )}"
+            end
+
+      puts "  slug=>#{slug}<"
+
+      slug
+    end
+  end # class League
+
+
+
+  def self.find_league( key )  ## league info lookup
+    data = LEAGUES[ key ]
+    if data.nil?
+      puts "!! ERROR - no league found for >#{key}<; add to leagues tables"
+      exit 1
+    end
+    League.new( key, data )   ## use a convenience wrapper for now
+  end
 
 end # module Worldfootball
