@@ -93,8 +93,8 @@ require 'pp'
 require 'date'
 require 'nokogiri'
 
-path = './dl/weltfussball-sco.1-2018-2019-championship.html'
-# path = './dl/weltfussball-de.cup-2012-2013.html'
+path = './dl/sco.1-2018-2019-championship.html'
+# path = './dl/de.cup-2012-2013.html'
 
 html =  File.open( path, 'r:utf-8' ) { |f| f.read }
 

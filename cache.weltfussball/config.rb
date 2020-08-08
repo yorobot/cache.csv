@@ -4,7 +4,9 @@
 
 module Worldfootball
 
+LEAGUE_FORMATS = {}
 
+## todo/check: change to LEAGUE_SLUGS or such - why? why not?
 LEAGUES = {
   'de.2'   => '2-bundesliga',
   'de.cup' => 'dfb-pokal',
@@ -46,7 +48,9 @@ LEAGUES = {
 }
 
 
-def self.sco1( season )
+
+
+LEAGUE_FORMATS[ 'sco.1' ] = ->( season ) {
   case season
   when Season.new('2020/21')
     %w[regular]     # just getting started
@@ -58,19 +62,20 @@ def self.sco1( season )
     puts "!! ERROR - no configuration found for season >#{season}< for SCO1 found; sorry"
     exit 1
   end
-end
+}
 
 LEAGUES.merge!(
-  'sco.1'              => 'sco-premiership',
-   # -or -
-  'sco.1.regular'      => 'sco-premiership-{season}',
-  'sco.1.championship' => 'sco-premiership-{end_year}-playoff',   # sco-premiership-2019-playoff
-  'sco.1.relegation'   => 'sco-premiership-{end_year}-abstieg'   # sco-premiership-2019-abstieg
+  'sco.1.regular'      =>  { slug: 'sco-premiership-{season}',
+                             name: 'Regular Season' },
+  'sco.1.championship' =>  { slug: 'sco-premiership-{end_year}-playoff',  # note: only uses season.end_year!
+                             name: 'Playoffs - Championship' },
+  'sco.1.relegation'   =>  { slug: 'sco-premiership-{end_year}-abstieg',  # note: only uses season.end_year!
+                             name: 'Playoffs - Relegation' },
 )
 
 
 
-def self.fi1( season )
+LEAGUE_FORMATS[ 'fi.1' ] = -> ( season ) {
   case season
   when Season.new('2020')
     %w[regular]     # just getting started
@@ -80,7 +85,7 @@ def self.fi1( season )
     puts "!! ERROR - no configuration found for season >#{season}< for FI1 found; sorry"
     exit 1
   end
-end
+}
 
 # https://www.weltfussball.de/alle_spiele/fin-veikkausliiga-2019/
 # https://www.weltfussball.de/alle_spiele/fin-veikkausliiga-2019-meisterschaft/
@@ -88,10 +93,14 @@ end
 # https://www.weltfussball.de/alle_spiele/fin-veikkausliiga-2019-playoff-el/
 
 LEAGUES.merge!(
-  'fi.1.regular'       => 'fin-veikkausliiga-{season}',
-  'fi.1.championship'  => 'fin-veikkausliiga-{season}-meisterschaft',
-  'fi.1.challenger'    => 'fin-veikkausliiga-{season}-abstieg',
-  'fi.1.europa_finals' => 'fin-veikkausliiga-{season}-playoff-el',
+  'fi.1.regular'       => { slug: 'fin-veikkausliiga-{season}',
+                            name: 'Regular Season' },
+  'fi.1.championship'  => { slug: 'fin-veikkausliiga-{season}-meisterschaft',
+                            name: 'Playoffs - Championship' },
+  'fi.1.challenger'    => { slug: 'fin-veikkausliiga-{season}-abstieg',
+                            name: 'Playoffs - Challenger' },
+  'fi.1.europa_finals' => { slug: 'fin-veikkausliiga-{season}-playoff-el',
+                            name: 'Europa League Finals' },
 )
 
 
@@ -103,8 +112,7 @@ LEAGUES.merge!(
 # Championship play-offs
 # Europa League play-offs (Group A + Group B / Finals )
 
-
-def self.be1( season )
+LEAGUE_FORMATS[ 'be.1' ] = -> ( season ) {
   case season
   when Season.new('2020/21')
     %w[regular]     # just getting started
@@ -116,15 +124,13 @@ def self.be1( season )
     puts "!! ERROR - no configuration found for season >#{season}< for BE1 found; sorry"
     exit 1
   end
-end
+}
 
 # https://www.weltfussball.de/alle_spiele/bel-eerste-klasse-a-2020-2021/
 # https://www.weltfussball.de/alle_spiele/bel-europa-league-playoffs-2018-2019-playoff/
 #   - Halbfinale
 #   - Finale
 LEAGUES.merge!(
-  'be.1'               => 'bel-eerste-klasse-a',
-   # -or -
   'be.1.regular'       => 'bel-eerste-klasse-a-{season}',
   'be.1.championship'  => 'bel-eerste-klasse-a-{season}-playoff-i',
   'be.1.europa'        => 'bel-europa-league-playoffs-{season}',  ## note: missing groups (A & B)
@@ -132,8 +138,7 @@ LEAGUES.merge!(
 )
 
 
-
-def self.mx1( season )
+LEAGUE_FORMATS[ 'mx.1' ] = -> ( season ) {
   case season
   when Season.new('2020/21')
     %w[apertura]     # just getting started
@@ -145,7 +150,7 @@ def self.mx1( season )
     puts "!! ERROR - no configuration found for season >#{season}< for MX1 found; sorry"
     exit 1
   end
-end
+}
 
 
 # todo/fix: adjust date/time by -7 hours!!!
