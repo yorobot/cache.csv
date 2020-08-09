@@ -111,6 +111,14 @@ require_relative 'lib/download'
 # Worldfootball.schedule( league: 'is.1', season: '2020' )
 # Worldfootball.schedule( league: 'is.1', season: '2019' )
 
-Worldfootball.schedule( league: 'ie.1', season: '2020' )
-Worldfootball.schedule( league: 'ie.1', season: '2019' )
+# Worldfootball.schedule( league: 'ie.1', season: '2020' )
+# Worldfootball.schedule( league: 'ie.1', season: '2019' )
 
+
+# Worldfootball.schedule( league: 'dk.1', season: '2020/21' )
+# Worldfootball.schedule( league: 'dk.1', season: '2019/20' )
+# Worldfootball.schedule( league: 'dk.1', season: '2018/19' )
+
+# Worldfootball.schedule( league: 'lu.1', season: '2020/21' )
+# Worldfootball.schedule( league: 'lu.1', season: '2019/20' )
+# Worldfootball.schedule( league: 'lu.1', season: '2018/19' )

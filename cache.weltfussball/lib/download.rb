@@ -85,7 +85,7 @@ module Worldfootball
 
 
   def self.copy( url, path )  ## copy (save) to file
-    sleep( 1 )   ## slow down - sleep 1sec before each http request
+    sleep( 2 )   ## slow down - sleep 2secs before each http request
 
     response = worker.get( url )
 

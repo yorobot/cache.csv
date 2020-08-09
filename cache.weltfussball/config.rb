@@ -50,6 +50,36 @@ LEAGUES = {
   # e.g. /irl-premier-division-2019/
   'ie.1'  => { slug: 'irl-premier-division' },
 
+  # e.g. /lux-nationaldivision-2020-2021/
+  'lu.1' => { slug: 'lux-nationaldivision' },
+
+
+  # /den-superliga-2020-2021/
+  # /den-superliga-2019-2020-meisterschaft/
+  # /den-superliga-2019-2020-abstieg/
+  # /den-superliga-2019-2020-europa-league/
+  'dk.1'  => {
+    stages: {
+    'regular'       => { name: 'Regular Season',          slug: 'den-superliga-{season}' },
+    'championship'  => { name: 'Playoffs - Championship', slug: 'den-superliga-{season}-meisterschaft' },
+    'relegation'    => { name: 'Playoffs - Relegation',   slug: 'den-superliga-{season}-abstieg' },
+    'europa_finals' => { name: 'Europa League Finals',    slug: 'den-superliga-{season}-europa-league' },
+   },
+   format: ->( season ) {
+    case season
+    when Season.new('2020/21')
+      %w[regular]     # just getting started
+    when Season.new('2019/20')
+      %w[regular championship relegation europa_finals]
+    when Season.new('2018/19')
+      %w[regular championship relegation europa_finals]
+    else
+      puts "!! ERROR - no configuration found for season >#{season}< for DK1 found; sorry"
+      exit 1
+    end
+   }
+  },
+
 
   'sco.1' => {
     stages: {
