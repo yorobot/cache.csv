@@ -9,8 +9,10 @@ require_relative 'lib/convert'
 # OUT_DIR='./o/eng'
 # OUT_DIR='../../stage/two'
 
-OUT_DIR='./o/aug8'
+# OUT_DIR='./o/aug8'
 # OUT_DIR='./tmp'
+
+OUT_DIR='./o/test'
 
 
 =begin
@@ -55,7 +57,7 @@ end
 =end
 
 
-# convert( league: 'at.cup', season: '2019/20' )
+convert( league: 'at.cup', season: '2019/20' )
 # convert( league: 'at.cup', season: '2018/19' )
 
 # convert( league: 'at.cup', season: '2011/12' )
@@ -100,11 +102,11 @@ end
 # convert( league: 'fr.2', season: '2020/21' )
 
 
-convert( league: 'se.1', season: '2020' )
-convert( league: 'se.1', season: '2019' )
+# convert( league: 'se.1', season: '2020' )
+# convert( league: 'se.1', season: '2019' )
 
-convert( league: 'se.2', season: '2020' )
-convert( league: 'se.2', season: '2019' )
+# convert( league: 'se.2', season: '2020' )
+# convert( league: 'se.2', season: '2019' )
 
 
 # convert( league: 'fi.1', season: '2020' )

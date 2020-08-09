@@ -114,6 +114,13 @@ end
 def build( rows, season:, league:, stage: '' )   ## rename to fixup or such - why? why not?
   season = Season.new( season )  if season.is_a?( String )
 
+   raise ArgumentError, "league key as string expepected"  unless league.is_a?(String)  ## note: do NOT pass in league struct! pass in key (string)
+
+   print "  #{rows.size} rows - build #{league} #{season}"
+   print " - #{stage}" unless stage.empty?
+   print "\n"
+
+
    i = 0
    recs = []
    rows.each do |row|

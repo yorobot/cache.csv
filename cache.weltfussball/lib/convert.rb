@@ -45,7 +45,7 @@ def convert( league:, season:, offset: nil )  ## check: rename (optional) offset
       html =  File.open( path, 'r:utf-8' ) { |f| f.read }
 
       rows = parse( html )
-      stage_recs = build( rows, season: season, league: league, stage: stage_name )
+      stage_recs = build( rows, season: season, league: league.key, stage: stage_name )
 
       pp stage_recs[0]   ## check first record
       recs += stage_recs
@@ -56,7 +56,7 @@ def convert( league:, season:, offset: nil )  ## check: rename (optional) offset
     html =  File.open( path, 'r:utf-8' ) { |f| f.read }
 
     rows = parse( html )
-    recs = build( rows, season: season, league: league )
+    recs = build( rows, season: season, league: league.key )
 
     pp recs[0]   ## check first record
   end
