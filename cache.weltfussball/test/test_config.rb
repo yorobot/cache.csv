@@ -13,8 +13,8 @@ puts "eng.3:"
 pp Worldfootball::LEAGUES['eng.3']
 
 
-# puts "---"
-# pp Worldfootball::LEAGUES
+puts "---"
+pp Worldfootball::LEAGUES
 
 
 puts "mx.1:"

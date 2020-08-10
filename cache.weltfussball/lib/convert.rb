@@ -36,6 +36,7 @@ def convert( league:, season:, offset: nil )  ## check: rename (optional) offset
       ## todo/fix: report error/check if stage.name is nil!!!
 
       path = "./dl/#{basename}-#{season.path}-#{stage_key}.html"
+      puts "  parsing #{path}..."
 
       # unless File.exist?( path )
       #  puts "!! WARN - missing stage >#{stage_name}< source - >#{path}<"
@@ -52,6 +53,7 @@ def convert( league:, season:, offset: nil )  ## check: rename (optional) offset
     end
   else
     path = "./dl/#{basename}-#{season.path}.html"
+    puts "  parsing #{path}..."
 
     html =  File.open( path, 'r:utf-8' ) { |f| f.read }
 

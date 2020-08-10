@@ -9,7 +9,7 @@ require_relative 'lib/convert'
 # OUT_DIR='./o/eng'
 # OUT_DIR='../../stage/two'
 
-OUT_DIR='./o/aug9'
+OUT_DIR='./o/aug10'
 # OUT_DIR='./tmp'
 
 # OUT_DIR='./o/test'
@@ -144,3 +144,27 @@ convert( league: 'dk.1', season: '2018/19' )
 convert( league: 'lu.1', season: '2020/21' )
 convert( league: 'lu.1', season: '2019/20' )
 convert( league: 'lu.1', season: '2018/19' )
+
+convert( league: 'ua.1', season: '2019/20' )
+convert( league: 'ua.1', season: '2018/19' )
+
+convert( league: 'pl.1', season: '2020/21' )
+convert( league: 'pl.1', season: '2019/20' )
+convert( league: 'pl.1', season: '2018/19' )
+
+convert( league: 'sk.1', season: '2020/21' )
+convert( league: 'sk.1', season: '2019/20' )
+convert( league: 'sk.1', season: '2018/19' )
+
+convert( league: 'hr.1', season: '2020/21' )
+convert( league: 'hr.1', season: '2019/20' )
+convert( league: 'hr.1', season: '2018/19' )
+
+
+### todo/fix: add new zealand timezone offset!!!!
+convert( league: 'nz.1', season: '2019/20' )
+convert( league: 'nz.1', season: '2018/19' )
+
+### todo/fix: add south korea timezone offset!!!!
+convert( league: 'kr.1', season: '2020' )
+convert( league: 'kr.1', season: '2019' )

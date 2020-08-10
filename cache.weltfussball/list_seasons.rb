@@ -34,3 +34,5 @@ list_seasons( "./dl/be.1-2018-19-championship.html" )
 puts
 list_seasons( "./dl/be.1-2018-19-europa.html" )
 puts
+list_seasons( "./dl/kr.1-2020-regular.html" )
+puts

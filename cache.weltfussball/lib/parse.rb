@@ -53,6 +53,18 @@ trs.each do |tr|
     team2_str = squish( tds[4].text )
     score_str = squish( tds[5].text )
 
+    ##  todo - find a better way to check for live match
+    ## check for live badge image
+    ## <td class="dunkel" align="center">
+    ##   <img src="https://s.hs-data.com/bilder/shared/live/2.png" /></a>
+    ## </td>
+    img = tds[6].css( 'img' ).first
+    if img && img[:src].index( '/live/')
+      puts "!! WARN: live match, resetting score from #{score_str} to -:-"
+      score_str = '-:-'  # note: -:- gets replaced to ---
+    end
+
+
     ## change  2:1 (1:1)  to 2-1 (1-1)
     score_str = score_str.gsub( ':', '-' )
 
@@ -93,8 +105,10 @@ require 'pp'
 require 'date'
 require 'nokogiri'
 
-path = './dl/sco.1-2018-2019-championship.html'
-# path = './dl/de.cup-2012-2013.html'
+# path = './dl/kr.1-2018-regular.html'
+# path = './dl/sco.1-2018-19-championship.html'
+# path = './dl/de.cup-2012-13.html'
+path = './dl/ie.1-2020.html'
 
 html =  File.open( path, 'r:utf-8' ) { |f| f.read }
 

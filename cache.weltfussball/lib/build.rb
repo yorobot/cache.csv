@@ -17,6 +17,10 @@ MODS = {
   'FC Trenkwalder Admira (A)' => 'FC Admira Wacker II',
   'RB Salzburg (A)'  => 'RB Salzburg II',
   'SR WGFM Donaufeld' => 'SR Donaufeld Wien',
+
+
+  ## NZ 1
+  'Wellington Phoenix (R)' => 'Wellington Phoenix II',
 }
 
 
@@ -291,10 +295,9 @@ def parse_score( score_str )
     ft = "#{$1}-#{$2} (*)"
     ht = ''
     comments = $3
-  elsif score_str =~ /^[0-9]+-[0-9]+$/
-     puts "!! WARN - skipping LIVE score for match"
-      ft = ''
-      ht = ''
+  elsif score_str =~ /^([0-9]+)-([0-9]+)$/
+     ft = "#{$1}-#{$2}"     ## e.g. see luxemburg and others
+     ht = ''
   else
      puts "!! ERROR - unsupported score format >#{score_str}< - sorry"
      exit 1
