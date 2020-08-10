@@ -1,6 +1,3 @@
-require 'pp'
-require 'nokogiri'
-
 $LOAD_PATH.unshift( File.expand_path( '../../../../sportdb/sport.db/sportdb-formats/lib') )
 require 'sportdb/formats'   ## for Season -- move to test_schedule /fetch!!!!
 
@@ -10,7 +7,7 @@ require_relative '../../csv'
 
 require_relative '../config'
 
-require_relative 'parse'
+require_relative 'page'
 require_relative 'build'
 
 
@@ -36,16 +33,18 @@ def convert( league:, season:, offset: nil )  ## check: rename (optional) offset
       ## todo/fix: report error/check if stage.name is nil!!!
 
       path = "./dl/#{basename}-#{season.path}-#{stage_key}.html"
-      puts "  parsing #{path}..."
+      print "  parsing #{path}..."
 
       # unless File.exist?( path )
       #  puts "!! WARN - missing stage >#{stage_name}< source - >#{path}<"
       #  next
       # end
 
-      html =  File.open( path, 'r:utf-8' ) { |f| f.read }
+      page = Worldfootball::Page.from_file( path )
+      print "  title=>#{page.title}<..."
+      print "\n"
 
-      rows = parse( html )
+      rows = page.matches
       stage_recs = build( rows, season: season, league: league.key, stage: stage_name )
 
       pp stage_recs[0]   ## check first record
@@ -53,11 +52,13 @@ def convert( league:, season:, offset: nil )  ## check: rename (optional) offset
     end
   else
     path = "./dl/#{basename}-#{season.path}.html"
-    puts "  parsing #{path}..."
+    print "  parsing #{path}..."
 
-    html =  File.open( path, 'r:utf-8' ) { |f| f.read }
+    page = Worldfootball::Page.from_file( path )
+    print "  title=>#{page.title}<..."
+    print "\n"
 
-    rows = parse( html )
+    rows = page.matches
     recs = build( rows, season: season, league: league.key )
 
     pp recs[0]   ## check first record

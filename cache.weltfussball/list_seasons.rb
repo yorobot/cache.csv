@@ -1,26 +1,14 @@
-require 'pp'
-require 'date'
-require 'nokogiri'
-
-def squish( str )
-  str = str.strip
-  str = str.gsub( /[ \t\n]+/, ' ' )  ## fold whitespace to one max.
-  str
-end
+require_relative  'lib/page'
 
 
 def list_seasons( path )
-  html = File.open( path, 'r:utf-8' ) {|f| f.read }
-  doc = Nokogiri::HTML( html )   ## note: use a fragment NOT a document
+  page = Worldfootball::Page.from_file( path )
 
-  # <select name="saison" ...
-  season = doc.css( 'select[name="saison"]').first
-  options = season.css( 'option' )
-
-  puts "  #{options.size} options:"
-  options.each do |option|
-    print "%-30s" % squish(option.text)
-    print " -- >#{option[:value]}<"
+  seasons = page.seasons
+  puts "  #{seasons.size} seasons - in >#{page.title}< page"
+  seasons.each do |season|
+    print "%-30s" % season[:name]
+    print " -- >#{season[:slug]}<"
     print "\n"
   end
 end

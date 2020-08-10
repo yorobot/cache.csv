@@ -168,3 +168,6 @@ convert( league: 'nz.1', season: '2018/19' )
 ### todo/fix: add south korea timezone offset!!!!
 convert( league: 'kr.1', season: '2020' )
 convert( league: 'kr.1', season: '2019' )
+
+
+puts "bye"
