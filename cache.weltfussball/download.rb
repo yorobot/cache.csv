@@ -142,5 +142,42 @@ require_relative 'lib/download'
 # Worldfootball.schedule( league: 'hr.1', season: '2019/20' )
 # Worldfootball.schedule( league: 'hr.1', season: '2018/19' )
 
-Worldfootball.schedule( league: 'kr.1', season: '2020' )
-Worldfootball.schedule( league: 'kr.1', season: '2019' )
+# Worldfootball.schedule( league: 'kr.1', season: '2020' )
+# Worldfootball.schedule( league: 'kr.1', season: '2019' )
+
+=begin
+Worldfootball.schedule( league: 'de.1', season: '2020/21' )
+Worldfootball.schedule( league: 'de.1', season: '2019/20' )
+
+Worldfootball.schedule( league: 'de.2', season: '2020/21' )
+Worldfootball.schedule( league: 'de.2', season: '2019/20' )
+
+Worldfootball.schedule( league: 'de.3', season: '2019/20' )
+
+Worldfootball.schedule( league: 'de.cup', season: '2020/21' )
+=end
+
+
+Worldfootball.schedule( league: 'at.2', season: '2019/20' )
+
+Worldfootball.schedule( league: 'ch.1', season: '2019/20' )
+Worldfootball.schedule( league: 'ch.2', season: '2019/20' )
+
+Worldfootball.schedule( league: 'ru.1', season: '2019/20' )
+Worldfootball.schedule( league: 'ru.2', season: '2019/20' )
+
+Worldfootball.schedule( league: 'tr.1', season: '2019/20' )
+Worldfootball.schedule( league: 'tr.2', season: '2019/20' )
+
+Worldfootball.schedule( league: 'eng.cup', season: '2019/20' )
+
+Worldfootball.schedule( league: 'es.2', season: '2019/20' )
+
+Worldfootball.schedule( league: 'it.2', season: '2019/20' )
+
+
+
+## ongoing
+Worldfootball.schedule( league: 'mx.1', season: '2020/21' )
+Worldfootball.schedule( league: 'be.1', season: '2020/21' )
+Worldfootball.schedule( league: 'sco.1', season: '2020/21' )

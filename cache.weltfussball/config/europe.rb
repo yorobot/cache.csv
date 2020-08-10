@@ -2,7 +2,9 @@ module Worldfootball
 
 LEAGUES_EUROPE = {
 
+  'de.1'   => { slug: 'bundesliga' },
   'de.2'   => { slug: '2-bundesliga' },
+  'de.3'   => { slug: '3-liga' },
   'de.cup' => { slug: 'dfb-pokal' },
 
   'at.1'   => { slug: 'aut-bundesliga' },

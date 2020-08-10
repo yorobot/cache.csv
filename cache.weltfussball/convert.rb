@@ -137,6 +137,7 @@ end
 # convert( league: 'mx.1', season: '2018/19', offset: -7 )
 
 
+=begin
 convert( league: 'dk.1', season: '2020/21' )
 convert( league: 'dk.1', season: '2019/20' )
 convert( league: 'dk.1', season: '2018/19' )
@@ -168,6 +169,19 @@ convert( league: 'nz.1', season: '2018/19' )
 ### todo/fix: add south korea timezone offset!!!!
 convert( league: 'kr.1', season: '2020' )
 convert( league: 'kr.1', season: '2019' )
+=end
+
+
+
+convert( league: 'de.1', season: '2020/21' )
+convert( league: 'de.1', season: '2019/20' )
+
+convert( league: 'de.2', season: '2020/21' )
+convert( league: 'de.2', season: '2019/20' )
+
+convert( league: 'de.3', season: '2019/20' )
+
+convert( league: 'de.cup', season: '2020/21' )
 
 
 puts "bye"

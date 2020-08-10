@@ -1,16 +1,18 @@
 require_relative 'lib/convert'
 
 
-# OUT_DIR='./o'
+OUT_DIR='./o'
 # OUT_DIR='./o/fr'
 # OUT_DIR='./o/at'
 # OUT_DIR='./o/de'
 # OUT_DIR='./o/eng'
 # OUT_DIR='../../stage/two'
 
-OUT_DIR='./o/test'
+# OUT_DIR='./o/test'
 # OUT_DIR='./tmp'
 
+
+start_time = Time.now   ## todo: use Timer? t = Timer.start / stop / diff etc. - why? why not?
 
 
 BASENAME_RE = %r{^
@@ -94,4 +96,10 @@ puts "#{leagues.size} leagues:"
 leagues.each do |key,seasons_hash|
   puts "  #{key} - #{seasons_hash.size} seasons (#{seasons_hash.keys.join(' ')}):"
 end
+
+
+end_time = Time.now
+diff_time = end_time - start_time
+puts "convert_all: done in #{diff_time} sec(s)"
+
 puts "bye"

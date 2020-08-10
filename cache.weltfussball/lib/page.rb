@@ -113,15 +113,18 @@ GENERATED_RE = %r{
  trs.each do |tr|
    i += 1
 
-   ## todo/fix:
-   ##  add  1. Quali Runde, 2. Quali Runde  (see  ???)
 
    if tr.text.strip =~ /Spieltag/ ||
       tr.text.strip =~ /[1-9]\.[ ]Runde|
+                           Qual\.[ ][1-9]\.[ ]Runde|  # see EL or CL Quali
+                           Qualifikation|     # see CA Championship
+                           Sechzehntelfinale|   # see EL
                            Achtelfinale|
                            Viertelfinale|
                            Halbfinale|
-                           Finale
+                           Finale|
+                           Gruppe[ ][A-Z]|    # see CL
+                           Playoffs           # see EL Quali
                            /x
      puts
      print '[%03d] ' % (i+1)
