@@ -56,5 +56,23 @@ LEAGUES.merge!(
               basename: '2-lig1',
               path:     'world/europe/turkey',
               lang:     'en',   ## note: use english for now
-            }
+            },
+
+
+  'is.1' => { name:     'Iceland Urvalsdeild',
+              basename: '1-urvalsdeild',
+              path:     'world/europe/iceland',
+              lang:     'en',   ## note: use english for now
+            },
+  'fi.1' => { name:     'Finland Veikkausliiga',
+              basename: '1-veikkausliiga',
+              path:     'world/europe/finland',
+              lang:     'en',   ## note: use english for now
+            },
+  'ie.1' => { name:     'Irish Premier Division',
+              basename: '1-premierdivision',
+              path:     'world/europe/ireland',
+              lang:     'en',   ## note: use english for now
+            },
+
 )

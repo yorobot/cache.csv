@@ -4,6 +4,12 @@ require_relative '../boot'
 require_relative './leagues'
 
 
+
+# OUT_DIR='./o'
+OUT_DIR='../../../openfootball'
+
+
+
 SOURCES = {
   'one'      =>  { path: '../../stage/one' },
   'one/o'    =>  { path: '../apis/o' },     ## "o" debug version
@@ -152,24 +158,21 @@ def write_worker( league, season, source:,
   if split
     matches_i, matches_ii = split_matches( matches, season: season )
 
-    # out_path = "../../../openfootball/#{repo_path}/#{season_path}/#{basename}-i.txt"
-    out_path = "./o/#{repo_path}/#{season_path}/#{basename}-i.txt"
+    out_path = "#{OUT_DIR}/#{repo_path}/#{season_path}/#{basename}-i.txt"
 
     SportDb::TxtMatchWriter.write( out_path, matches_i,
                                    name: "#{league_name} #{season.key}",
                                    lang:  league_info[ :lang ],
                                    rounds: rounds )
 
-    # out_path = "../../../openfootball/#{repo_path}/#{season_path}/#{basename}-ii.txt"
-    out_path = "./o/#{repo_path}/#{season_path}/#{basename}-ii.txt"
+    out_path = "#{OUT_DIR}/#{repo_path}/#{season_path}/#{basename}-ii.txt"
 
     SportDb::TxtMatchWriter.write( out_path, matches_ii,
                                    name: "#{league_name} #{season.key}",
                                    lang:  league_info[ :lang ],
                                    rounds: rounds )
   else
-    # out_path = "../../../openfootball/#{repo_path}/#{season_path}/#{basename}.txt"
-    out_path = "./o/#{repo_path}/#{season_path}/#{basename}.txt"
+    out_path = "#{OUT_DIR}/#{repo_path}/#{season_path}/#{basename}.txt"
 
     SportDb::TxtMatchWriter.write( out_path, matches,
                                    name: "#{league_name} #{season.key}",
@@ -267,9 +270,7 @@ def write_worker_with_stages( league, season, stages:, source:, normalize: true 
   pp matches_by_stage.keys
 
 
-  # out_dir = './tmp'
-  # out_dir = "../../../openfootball/#{repo_path}"
-  out_dir = "./o/#{repo_path}"
+  out_dir = "#{OUT_DIR}/#{repo_path}"
 
 
   ## stages = prepare_stages( stages )
