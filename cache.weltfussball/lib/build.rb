@@ -20,7 +20,7 @@ MODS = {
 
 
   ## NZ 1
-  'Wellington Phoenix (R)' => 'Wellington Phoenix II',
+  'Wellington Phoenix (R)' => 'Wellington Phoenix Reserves',
 }
 
 
@@ -181,9 +181,11 @@ def build( rows, season:, league:, stage: '' )   ## rename to fixup or such - wh
     ## check for 0:3 Wert.   - change Wert. to awd.  (awarded)
     score_str = score_str.sub( /Wert\./i, 'awd.' )
 
-    ## clean team name
+    ## clean team name and asciify (e.g. ’->' )
     team1_str = team1_str.gsub( '(old)', '' ).strip
     team2_str = team2_str.gsub( '(old)', '' ).strip
+    team1_str = team1_str.gsub( '’', "'" )  ## e.g. Hawke’s Bay United FC
+    team2_str = team2_str.gsub( '’', "'" )
 
 
     team1_str = MODS[ team1_str ]   if MODS[ team1_str ]
