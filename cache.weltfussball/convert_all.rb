@@ -2,10 +2,6 @@ require_relative 'lib/convert'
 
 
 OUT_DIR='./o'
-# OUT_DIR='./o/fr'
-# OUT_DIR='./o/at'
-# OUT_DIR='./o/de'
-# OUT_DIR='./o/eng'
 # OUT_DIR='../../stage/two'
 
 # OUT_DIR='./o/test'

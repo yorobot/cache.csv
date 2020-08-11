@@ -51,6 +51,9 @@ LEAGUES_EUROPE = {
   # e.g. /lux-nationaldivision-2020-2021/
   'lu.1' => { slug: 'lux-nationaldivision' },
 
+  # e.g. /ned-eredivisie-2020-2021/
+  'nl.1' => { slug: 'ned-eredivisie' },
+
   # e.g. /cro-1-hnl-2020-2021/
   'hr.1' => { slug: 'cro-1-hnl' },
 

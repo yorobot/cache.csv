@@ -6,7 +6,8 @@ require_relative '../boot'
 # DATAFILES_DIR = './o/at'
 # DATAFILES_DIR = './o/de'
 # DATAFILES_DIR = './o/fr'
-DATAFILES_DIR = './o/aug10'
+# DATAFILES_DIR = './o/aug10'
+DATAFILES_DIR = './o'
 
 # DATAFILES_DIR = './tmp'
 
