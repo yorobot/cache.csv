@@ -101,8 +101,6 @@ write_fr2( '2020/21', source: 'tmp/two' )
 # write_tr( '2019/20' )
 # write_tr2( '2019/20' )
 
-# write_nl( '2018/19' )
-# write_nl( '2019/20' )
 
 # write_pt( '2018/19' )
 # write_pt( '2019/20' )

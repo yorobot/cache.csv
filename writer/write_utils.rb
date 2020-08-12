@@ -311,7 +311,6 @@ end
 def write_br( season, source: 'one' )     write_worker( 'br.1', season, source: source ); end
 def write_ar( season, source: 'leagues' ) write_worker( 'ar.1', season, source: source ); end
 
-def write_nl( season, source: 'one' )   write_worker( 'nl.1', season, source: source ); end
 
 def write_hu( season, source: 'leagues' )   write_worker( 'hu.1', season, source: source ); end
 def write_gr( season, source: 'leagues' )   write_worker( 'gr.1', season, source: source ); end

@@ -8,38 +8,77 @@ boot_time = Time.now
 
 
 
-def write_is( season, source: )
-  write_worker( 'is.1', season, source: source )
-end
-
-def write_ie( season, source: )
-  write_worker( 'ie.1', season, source: source )
-end
-
-
-STAGES_FI = [['Regular Season'],
-             ['Playoffs - Championship',
-              'Playoffs - Challenger',
-              'Europa League Finals' ]]
-
-def write_fi( season, source: )
-  write_worker_with_stages( 'fi.1', season, source: source, stages: STAGES_FI )
-end
-
-
-
 # is.1 - 2 seasons (2019 2020)
-write_is( '2019',  source: 'two/o' )
-write_is( '2020',  source: 'two/o' )
+write_is( '2019', source: 'two/o' )
+write_is( '2020', source: 'two/o' )
+
+# sco.1 - 3 seasons (2018-19 2019-20 2020-21)
+write_sco( '2018/19', source: 'two/tmp' )
+write_sco( '2019/20', source: 'two/tmp' )
+write_sco( '2020/21', source: 'two/tmp' )
 
 # ie.1 - 2 seasons (2019 2020)
-write_ie( '2019',  source: 'two/o' )
-write_ie( '2020',  source: 'two/o' )
+write_ie( '2019', source: 'two/o' )
+write_ie( '2020', source: 'two/o' )
 
 
 # fi.1 - 2 seasons (2019 2020)
-write_fi( '2019',  source: 'two/o' )
-write_fi( '2020',  source: 'two/o' )
+write_fi( '2019', source: 'two/o' )
+write_fi( '2020', source: 'two/o' )
+
+# se.1 - 2 seasons (2019 2020):
+# se.2 - 2 seasons (2019 2020):
+write_se(  '2019', source: 'two/o' )
+write_se(  '2020', source: 'two/o' )
+
+write_se2( '2019', source: 'two/o' )
+write_se2( '2020', source: 'two/o' )
+
+# no.1 - 2 seasons (2019 2020)
+write_no(  '2019', source: 'two/o' )
+write_no(  '2020', source: 'two/o' )
+
+
+# dk.1 - 3 seasons (2018-19 2019-20 2020-21)
+write_dk(  '2018/19', source: 'two/o' )
+write_dk(  '2019/20', source: 'two/o' )
+write_dk(  '2020/21', source: 'two/o' )
+
+
+# sk.1 - 3 seasons (2018-19 2019-20 2020-21)
+write_sk(  '2018/19', source: 'two/o' )
+write_sk(  '2019/20', source: 'two/o' )
+write_sk(  '2020/21', source: 'two/o' )
+
+# pl.1 - 3 seasons (2018-19 2019-20 2020-21)
+write_pl(  '2018/19', source: 'two/o' )
+write_pl(  '2019/20', source: 'two/o' )
+write_pl(  '2020/21', source: 'two/o' )
+
+# hr.1 - 3 seasons (2018-19 2019-20 2020-21)
+write_hr(  '2018/19', source: 'two/o' )
+write_hr(  '2019/20', source: 'two/o' )
+write_hr(  '2020/21', source: 'two/o' )
+
+
+
+# be.1 - 3 seasons (2018-19 2019-20 2020-21)
+write_be( '2018/19', source: 'two/o' )
+write_be( '2019/20', source: 'two/o' )
+write_be( '2020/21', source: 'two/o' )
+
+# nl.1
+write_nl( '2020/21', source: 'two/o' )
+
+# lu.1 - 3 seasons (2018-19 2019-20 2020-21)
+write_lu( '2018/19', source: 'two/o' )
+write_lu( '2019/20', source: 'two/o' )
+write_lu( '2020/21', source: 'two/o' )
+
+
+# ua.1 - 2 seasons (2018-19 2019-20)
+write_ua( '2018/19', source: 'two/o' )
+write_ua( '2019/20', source: 'two/o' )
 
 
 
