@@ -45,7 +45,7 @@ ALIGN_RE  = %r{ \balign="
 
 
 
-pages = Dir.glob( './dl/*' )
+pages = Dir.glob( './dl2/*' )
 
 puts "#{pages.size} pages"
 puts

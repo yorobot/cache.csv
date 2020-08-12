@@ -29,12 +29,14 @@ def strip_scripts( html )
 end
 
 
-path = './dl/at.1-2010-11.html'
+# path = './dl/at.1-2010-11.html'
+path = './dl2/bundesliga-2019-2020-rapid-wien-rb-salzburg.html'
+
 html =  File.open( path, 'r:utf-8' ) { |f| f.read }
 
 html, scripts = strip_scripts( html )
 
-File.open( './tmp/page.html', 'w:utf-8' ) { |f| f.write( html ) }
-File.open( './tmp/scripts.html', 'w:utf-8' ) { |f| f.write( scripts ) }
+File.open( './tmp/page2.html', 'w:utf-8' ) { |f| f.write( html ) }
+File.open( './tmp/scripts2.html', 'w:utf-8' ) { |f| f.write( scripts ) }
 
 puts "bye"

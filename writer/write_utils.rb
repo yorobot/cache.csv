@@ -5,8 +5,8 @@ require_relative './leagues'
 
 
 
-# OUT_DIR='./o'
-OUT_DIR='../../../openfootball'
+OUT_DIR='./o'
+# OUT_DIR='../../../openfootball'
 
 
 
@@ -94,6 +94,7 @@ def write_buf( path, buf )  ## write buffer helper
 end
 
 
+
 def write_worker( league, season, source:,
                                   extra: nil,
                                   split: false,
@@ -131,16 +132,9 @@ def write_worker( league, season, source:,
   puts "#{matches.size} matches"
 
 
-  ## always (auto-) sort for now - why? why not?
-  matches = matches.sort do |l,r|
-    ## first by date (older first)
-    ## next by matchday (lower first)
-    res =   l.date <=> r.date
-    res =   l.round <=> r.round   if rounds && res == 0
-    res
-  end
-
   matches = normalize( matches, league: league, season: season )   if normalize
+
+
 
   league_name  = league_info[ :name ]      # e.g. Brasileiro Série A
   basename     = league_info[ :basename]   #.e.g  1-seriea
@@ -148,12 +142,69 @@ def write_worker( league, season, source:,
   league_name =  league_name.call( season )   if league_name.is_a?( Proc )  ## is proc/func - name depends on season
   basename    =  basename.call( season )      if basename.is_a?( Proc )  ## is proc/func - name depends on season
 
+  lang         = league_info[ :lang ] || 'en_AU'  ## default / fallback to en_AU (always use rounds NOT matchday for now)
   repo_path    = league_info[ :path ]      # e.g. brazil or world/europe/portugal etc.
+
 
   season_path = String.new('')    ## note: allow extra path for output!!!! e.g. archive/2000s etc.
   season_path << "#{extra}/"   if extra
   season_path << season.path
 
+
+  ## check for stages
+  stages = league_info[ :stages ]
+  if stages
+
+  ## split into four stages / two files
+  ## - Grunddurchgang
+  ## - Finaldurchgang - Meister
+  ## - Finaldurchgang - Qualifikation
+  ## - Europa League Play-off
+
+  matches_by_stage = matches.group_by { |match| match.stage }
+  pp matches_by_stage.keys
+
+
+  ## stages = prepare_stages( stages )
+  pp stages
+
+
+  romans = %w[I II III IIII V VI VII VIII VIIII X XI]  ## note: use "simple" romans without -1 rule e.g. iv or ix
+
+  stages.each_with_index do |stage, i|
+
+    ## assume "extended" style / syntax
+    if stage.is_a?( Hash ) && stage.has_key?( :names )
+      stage_names    = stage[ :names ]
+      stage_basename = stage[ :basename ]
+      ## add search/replace {basename} - why? why not?
+      stage_basename = stage_basename.sub( '{basename}', basename )
+    else  ## assume simple style (array of strings OR hash mapping of string => string)
+      stage_names    = stage
+      stage_basename =  if stages.size == 1
+                            "#{basename}"  ## use basename as is 1:1
+                         else
+                            "#{basename}-#{romans[i].downcase}"  ## append i,ii,etc.
+                         end
+    end
+
+    buf = build_stage( matches_by_stage, stages: stage_names,
+                                         name: "#{league_name} #{season.key}",
+                                         lang: lang )
+
+    ## note: might be empty!!! if no matches skip (do NOT write)
+    write_buf( "#{OUT_DIR}/#{repo_path}/#{season_path}/#{stage_basename}.txt", buf )   unless buf.empty?
+  end
+  else  ## no stages - assume "regular" plain vanilla season
+
+## always (auto-) sort for now - why? why not?
+matches = matches.sort do |l,r|
+  ## first by date (older first)
+  ## next by matchday (lower first)
+  res =   l.date <=> r.date
+  res =   l.round <=> r.round   if rounds && res == 0
+  res
+end
 
   if split
     matches_i, matches_ii = split_matches( matches, season: season )
@@ -162,22 +213,23 @@ def write_worker( league, season, source:,
 
     SportDb::TxtMatchWriter.write( out_path, matches_i,
                                    name: "#{league_name} #{season.key}",
-                                   lang:  league_info[ :lang ],
+                                   lang:  lang,
                                    rounds: rounds )
 
     out_path = "#{OUT_DIR}/#{repo_path}/#{season_path}/#{basename}-ii.txt"
 
     SportDb::TxtMatchWriter.write( out_path, matches_ii,
                                    name: "#{league_name} #{season.key}",
-                                   lang:  league_info[ :lang ],
+                                   lang:  lang,
                                    rounds: rounds )
   else
     out_path = "#{OUT_DIR}/#{repo_path}/#{season_path}/#{basename}.txt"
 
     SportDb::TxtMatchWriter.write( out_path, matches,
                                    name: "#{league_name} #{season.key}",
-                                   lang:  league_info[ :lang],
+                                   lang:  lang,
                                    rounds: rounds )
+  end
   end
 end
 
@@ -233,101 +285,13 @@ def build_stage( matches_by_stage, stages:, name:, lang: )
 end
 
 
-def write_worker_with_stages( league, season, stages:, source:, normalize: true )
-  season = SportDb::Import::Season.new( season )  ## normalize season
-
-  league_info = LEAGUES[ league ]
-
-  source_info = SOURCES[ source ]
-  source_path = source_info[:path]
-
-  in_path = "#{source_path}/#{season.path}/#{league}.csv"
-
-  matches = SportDb::CsvMatchParser.read( in_path )
-
-  pp matches[0]
-  puts "#{matches.size} matches"
-
-
-  matches = normalize( matches, league: league )   if normalize
-
-  league_name  = league_info[ :name ]      # e.g. Brasileiro Série A
-  basename     = league_info[ :basename]   #.e.g  1-seriea
-  lang         = league_info[ :lang ]
-  repo_path    = league_info[ :path ]      # e.g. brazil or world/europe/portugal etc.
-
-  league_name =  league_name.call( season )   if league_name.is_a?( Proc )  ## is proc/func - name depends on season
-  basename    =  basename.call( season )      if basename.is_a?( Proc )  ## is proc/func - name depends on season
-
-
-  ## split into four stages / two files
-  ## - Grunddurchgang
-  ## - Finaldurchgang - Meister
-  ## - Finaldurchgang - Qualifikation
-  ## - Europa League Play-off
-
-  matches_by_stage = matches.group_by { |match| match.stage }
-  pp matches_by_stage.keys
-
-
-  out_dir = "#{OUT_DIR}/#{repo_path}"
-
-
-  ## stages = prepare_stages( stages )
-  pp stages
-
-
-  romans = %w[I II III IIII V VI VII VIII VIIII X XI]  ## note: use "simple" romans without -1 rule e.g. iv or ix
-
-
-  stages.each_with_index do |stage, i|
-
-    ## assume "extended" style / syntax
-    if stage.is_a?( Hash ) && stage.has_key?( :names )
-      stage_names    = stage[ :names ]
-      stage_basename = stage[ :basename ]
-      ## add search/replace {basename} - why? why not?
-      stage_basename = stage_basename.sub( '{basename}', basename )
-    else  ## assume simple style (array of strings OR hash mapping of string => string)
-      stage_names    = stage
-      stage_basename =  if stages.size == 1
-                            "#{basename}"  ## use basename as is 1:1
-                         else
-                            "#{basename}-#{romans[i].downcase}"  ## append i,ii,etc.
-                         end
-    end
-
-    buf = build_stage( matches_by_stage, stages: stage_names,
-                                         name: "#{league_name} #{season.key}",
-                                         lang: lang )
-
-    ## note: might be empty!!! if no matches skip (do NOT write)
-    write_buf( "#{out_dir}/#{season.path}/#{stage_basename}.txt", buf )   unless buf.empty?
-  end
-end
-
-
 
 def write_br( season, source: 'one' )     write_worker( 'br.1', season, source: source ); end
-def write_ar( season, source: 'leagues' ) write_worker( 'ar.1', season, source: source ); end
 
-
-def write_hu( season, source: 'leagues' )   write_worker( 'hu.1', season, source: source ); end
-def write_gr( season, source: 'leagues' )   write_worker( 'gr.1', season, source: source ); end
-
-def write_pt( season, source: 'one' )   write_worker( 'pt.1', season, source: source ); end
-
-def write_cn( season, source: 'leagues' )  write_worker( 'cn.1', season, source: source ); end
-def write_jp( season, source: 'leagues' )  write_worker( 'jp.1', season, source: source ); end
 
 def write_ru(  season, source: 'two' )  write_worker( 'ru.1', season, source: source ); end
 def write_ru2( season, source: 'two' )  write_worker( 'ru.2', season, source: source ); end
 
-def write_ch(  season, source: 'two' )  write_worker( 'ch.1', season, source: source ); end
-def write_ch2( season, source: 'two' )  write_worker( 'ch.2', season, source: source ); end
-
-def write_tr(  season, source: 'two' )  write_worker( 'tr.1', season, source: source ); end
-def write_tr2( season, source: 'two' )  write_worker( 'tr.2', season, source: source ); end
 
 def write_it(  season, source: 'one' )  write_worker( 'it.1', season, source: source ); end
 def write_it2( season, source: 'two' )  write_worker( 'it.2', season, source: source ); end
