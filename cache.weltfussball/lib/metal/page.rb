@@ -71,6 +71,7 @@ GENERATED_RE = %r{
 
 def squish( str )
   str = str.strip
+  str = str.gsub( "\u{00A0}", ' ' )  # Unicode Character 'NO-BREAK SPACE' (U+00A0)
   str = str.gsub( /[ \t\n]+/, ' ' )  ## fold whitespace to one max.
   str
 end

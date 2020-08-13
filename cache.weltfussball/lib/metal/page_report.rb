@@ -54,6 +54,8 @@ class Report < Page  ## note: use nested class for now - why? why not?
 
    next if i==0   # skip Tore headline row
 
+   break if i==1 && tr.text.strip == 'keine'  ## assume 0:0 - no goals
+
 # <tr>
 #  <td class="hell" align="center" width="20%">
 #   <b>0 : 1</b>
@@ -97,29 +99,57 @@ class Report < Page  ## note: use nested class for now - why? why not?
      last_score2 = score2
 
 
-     parts = player_str.split('/')
-     # pp parts
 
-     ## split in player name and min
-     if  parts[0].strip =~ /^(.+?)[ ]+([0-9]+)\.$/
-        player_name = $1
-        goal_minute = $2
-        # puts " >#{player_name}< | >#{goal_minute}<"
-     else
-       puts "!! ERROR - unknown goal format:"
-       pp parts
-       exit 1
-     end
+     if player_str.index('/')
+       parts = player_str.split('/')
+       # pp parts
+       notes = parts[1].strip
+
+       if parts[0].strip =~ /^([^0-9]+)[ ]+([0-9]+)\.$/
+         player_name = $1
+         goal_minute = $2
+          # puts " >#{player_name}< | >#{goal_minute}<"
+       else
+         puts "!! ERROR - unknown goal format (in part i):"
+         puts player_str
+         pp parts
+         exit 1
+       end
+      else  # (simple line with no divider (/)
+        #  Andrés Andrade 88.  (Nicolas Meister)
+        if m = %r{^([^0-9]+)
+                  [ ]+
+                 ([0-9]+)\.
+                  (?:
+                    [ ]+
+                    (\([^)]+\))
+                  )?
+                $}x.match( player_str )
+            player_name = m[1]
+            goal_minute = m[2]
+            notes       = m[3] ? m[3] : ''
+        else
+          puts "!! ERROR - unknown goal format:"
+          puts player_str
+          exit 1
+        end
+      end
+
 
      ## check for "flags" e.g. own goal or penalty
      ##   if found - remove from notes (use its own flag)
      owngoal = false
      penalty = false
 
-    notes = parts[1].strip
     if notes.index( 'Eigentor' )
        owngoal = true
        notes = notes.sub('Eigentor', '' ).strip
+    elsif notes.index( 'Elfmeter' )
+      ## e.g.  Elfmeter  (Marco Hausjell)
+       penalty = true
+       notes = notes.sub('Elfmeter', '' ).strip
+    else
+      ## nothing - keep going
     end
 
      rec = { score:  score_str,
