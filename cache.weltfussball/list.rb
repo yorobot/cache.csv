@@ -1,4 +1,4 @@
-require_relative 'lib/page'
+require_relative 'lib/metal'
 
 
 

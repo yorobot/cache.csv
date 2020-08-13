@@ -1,20 +1,6 @@
-require 'fetcher'
-
-$LOAD_PATH.unshift( File.expand_path( '../../../../sportdb/sport.db/sportdb-formats/lib') )
-require 'sportdb/formats'
-
-
-require_relative '../config'
-
 
 
 module Worldfootball
-
-  BASE_URL = 'https://www.weltfussball.de/alle_spiele/'
-
-  def self.worker
-    @worker ||= Fetcher::Worker.new
-  end
 
 ##
 ## note/fix!!!!
@@ -66,7 +52,7 @@ module Worldfootball
         # append stage to league for lookup e.g. sco.1.regular
         slug = stage.slug( season: season )
 
-        url  = "#{BASE_URL}#{slug}/"
+        url  = "#{BASE_URL}/alle_spiele/#{slug}/"
 
         basename = "#{league.key}-#{season.to_path}-#{stage.key}"  # e.g. sco.1-2020-21-regular
 
@@ -75,29 +61,11 @@ module Worldfootball
     else
       slug = league.slug( season: season )
 
-      url = "#{BASE_URL}#{slug}/"
+      url = "#{BASE_URL}/alle_spiele/#{slug}/"
 
       basename = "#{league.key}-#{season.to_path}"
 
       copy( url, "./dl/#{basename}.html" )
-    end
-  end
-
-
-  def self.copy( url, path )  ## copy (save) to file
-    sleep( 2 )   ## slow down - sleep 2secs before each http request
-
-    response = worker.get( url )
-
-    if response.code == '200'
-      html = response.body.to_s
-      html = html.force_encoding( Encoding::UTF_8 )
-
-      File.open( path, 'w:utf-8' ) {|f| f.write( html ) }
-    else
-      puts "!! ERROR - #{response.code}:"
-      pp response
-      exit 1
     end
   end
 
