@@ -3,24 +3,22 @@
 ### todo/ move convert into Worldfootball module!!!
 
 def convert( league:, season:, offset: nil )  ## check: rename (optional) offset to time_offset or such?
-  season = Season.new( season )  if season.is_a?( String )
+  season = Season( season )  ## cast (ensure) season class (NOT string, integer, etc.)
 
   league  = Worldfootball.find_league( league )
 
-  # season   = '2019/20'
-  # basename = 'at.2'
-  basename =   league.key
+  pages = league.pages( season: season )
 
-  stages = league.stages( season: season )
-
-  if stages
+  # note: assume stages if pages is an array (of hash table/records)
+  #         (and NOT a single hash table/record)
+  if pages.is_a?(Array)
     recs = []
-    stages.each do |stage|
-      stage_key  = stage.key
-      stage_name = stage.name
+    pages.each do |page|
+      slug       = page[:slug]
+      stage_name = page[:stage]
       ## todo/fix: report error/check if stage.name is nil!!!
 
-      path = "./dl/#{basename}-#{season.path}-#{stage_key}.html"
+      path = "./dl/#{slug}.html"
       print "  parsing #{path}..."
 
       # unless File.exist?( path )
@@ -28,7 +26,7 @@ def convert( league:, season:, offset: nil )  ## check: rename (optional) offset
       #  next
       # end
 
-      page = Worldfootball::Page.from_file( path )
+      page = Worldfootball::Page::Schedule.from_file( path )
       print "  title=>#{page.title}<..."
       print "\n"
 
@@ -39,10 +37,13 @@ def convert( league:, season:, offset: nil )  ## check: rename (optional) offset
       recs += stage_recs
     end
   else
-    path = "./dl/#{basename}-#{season.path}.html"
+    page = pages
+    slug = page[:slug]
+
+    path = "./dl/#{slug}.html"
     print "  parsing #{path}..."
 
-    page = Worldfootball::Page.from_file( path )
+    page = Worldfootball::Page::Schedule.from_file( path )
     print "  title=>#{page.title}<..."
     print "\n"
 
@@ -67,11 +68,12 @@ recs.each { |rec| rec[2] = Date.strptime( rec[2], '%Y-%m-%d' ).strftime( '%a %b 
    puts headers
    pp recs[0]   ## check first record
 
-   out_path = "#{OUT_DIR}/#{season.path}/#{basename}.csv"
+   out_path = "#{OUT_DIR}/#{season.path}/#{league.key}.csv"
 
    puts "write #{out_path}..."
    Cache::CsvMatchWriter.write( out_path, recs, headers: headers )
 end
+
 
 
 ## helper to fix dates to use local timezone (and not utc/london time)

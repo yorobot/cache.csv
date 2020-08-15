@@ -26,20 +26,15 @@ LEAGUES_ASIA = {
   # /kor-k-league-1-2019-meisterschaft/
   # /kor-k-league-1-2019-abstieg/
  'kr.1' => {
-  stages: {
-    'regular'       => { name: 'Regular Season',          slug: 'kor-k-league-1-{season}' },
-    'championship'  => { name: 'Playoffs - Championship', slug: 'kor-k-league-1-{season}-meisterschaft' },
-    'relegation'    => { name: 'Playoffs - Relegation',   slug: 'kor-k-league-1-{season}-abstieg' },
+   pages: {
+    'kor-k-league-1-{season}'               => 'Regular Season',          # 1
+    'kor-k-league-1-{season}-meisterschaft' => 'Playoffs - Championship', # 2
+    'kor-k-league-1-{season}-abstieg'       => 'Playoffs - Relegation',   # 3
    },
-   format: ->( season ) {
+   season: ->( season ) {
     case season
-    when Season.new('2020')
-      %w[regular]     # just getting started
-    when Season.new('2019')
-      %w[regular championship relegation]
-    else
-      puts "!! ERROR - no configuration found for season >#{season}< for KR1 found; sorry"
-      exit 1
+    when Season('2020') then [1]     # just getting started
+    when Season('2019') then [1,2,3]
     end
    }
   },

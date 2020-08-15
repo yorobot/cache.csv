@@ -5,7 +5,8 @@ require_relative '../lib/metal'
 ## get all reports for a (schedule) page
 # path = './dl/at.2-2019-20.html'
 # path = './dl/at.1-2014-15.html'
-path = './dl/at.1-2016-17.html'
+# path = './dl/at.1-2016-17.html'
+path = './dl/eng.1-2019-20.html'
 
 page = Worldfootball::Page::Schedule.from_file( path )
 rows = page.matches

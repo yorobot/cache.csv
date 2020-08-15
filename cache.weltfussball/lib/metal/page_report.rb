@@ -154,7 +154,7 @@ class Report < Page  ## note: use nested class for now - why? why not?
 
      rec = { score:  score_str,
                team:   team,
-               name:   player_name,
+               name:   player_name,  ## fix: change to player: too!!!
                minute: goal_minute
              }
       rec[:owngoal] = true   if owngoal

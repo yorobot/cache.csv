@@ -11,7 +11,19 @@ OUT_DIR='./o'
 start_time = Time.now   ## todo: use Timer? t = Timer.start / stop / diff etc. - why? why not?
 
 
-# pages = Dir.glob( './dl/at*' )
+BASENAME_RE = %r{^
+  (?<key1>[a-z]+)
+  (?<key2>
+     (?:\.[a-z_0-9]+)+
+  )
+    -
+  (?<season>\d{4} (?:-\d{2})?)
+  (?:
+    -
+    (?<stage>[a-z_]+)
+  )?
+  $}x
+
 pages = Dir.glob( './dl/*' )
 
 puts "#{pages.size} pages"
@@ -20,25 +32,34 @@ puts
 
 leagues = {}
 
-pages.each do |path|
-   basename = File.basename( path, File.extname( path ) )
-   print "%-40s" % basename
-   print " => "
-
-   page = Worldfootball.find_page( basename )
-   league_key = page[:league]
-   season_key = page[:season]
-
-   print "    "
-   print "%-12s"    % league_key
-   print "| %-10s"  % season_key
+pages.each do |page|
+   basename = File.basename( page, File.extname( page ) )
+   print "  #{basename}"
    print "\n"
 
-   seasons = leagues[league_key] ||= []
-   seasons << season_key   unless seasons.include?( season_key )
+   m=BASENAME_RE.match( basename )
+   if m
+     print "    "
+     print "%-10s" % (m[:key1]+m[:key2])
+     print "| %-8s" % m[:season]
+     print "| %-12s" % m[:stage]   if m[:stage]
+     print "\n"
+
+     key    = m[:key1]+m[:key2]
+     season = m[:season]
+     stage  = m[:stage]
+
+     seasons = leagues[key] ||= {}
+     seasons[season] ||= []
+     seasons[season] << stage    if stage
+   else
+    puts "!! ERROR: unknown filename naming format; CANNOT split basename"
+    exit 1
+   end
 end
 
 pp leagues
+
 
 
 ###
@@ -48,8 +69,8 @@ pp leagues
 ##  add somehow!!!
 
 
-leagues.each do |key,seasons|
-  puts "  #{key} - #{seasons.size} seasons (#{seasons.join(' ')}):"
+leagues.each do |key,seasons_hash|
+  puts "  #{key} - #{seasons_hash.size} seasons (#{seasons_hash.keys.join(' ')}):"
 
   ## note: skip english league cup for now; needs score format fix (no extra time but penalties)
   ##  [010] 1. Runde => Round 1
@@ -57,7 +78,7 @@ leagues.each do |key,seasons|
   ##  !! ERROR - unsupported score format >2-4 (1-1, 2-2) i.E.< - sorry
   next if ['eng.cup.l'].include?( key )
 
-  seasons.each do |season|
+  seasons_hash.each do |season, stages|
     puts "    convert( league: '#{key}', season: '#{season}' )"
     convert( league: key, season: season )
   end
@@ -68,8 +89,8 @@ end
 puts
 puts
 puts "#{leagues.size} leagues:"
-leagues.each do |key,seasons|
-  puts "  #{key} - #{seasons.size} season(s) (#{seasons.join(' ')})"
+leagues.each do |key,seasons_hash|
+  puts "  #{key} - #{seasons_hash.size} seasons (#{seasons_hash.keys.join(' ')}):"
 end
 
 

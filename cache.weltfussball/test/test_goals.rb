@@ -43,9 +43,9 @@ page.matches.each_with_index do |match,i|
 
     rows.each do |row|
       extra = if row[:owngoal]
-                '(o.g.)'
+                '(og)'
               elsif row[:penalty]
-                '(pen.)'
+                '(pen)'
               else
                 ''
               end

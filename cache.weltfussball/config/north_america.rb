@@ -24,23 +24,17 @@ LEAGUES_NORTH_AMERICA = {
 #        - Finale
 #      /mex-primera-division-2018-2019-clausura-playoffs/
 'mx.1' => {
-  stages: {
-   'apertura'        => { name: 'Apertura',            slug: 'mex-primera-division-{season}-apertura' },
-  'apertura_finals' => { name: 'Apertura - Liguilla', slug: 'mex-primera-division-{season}-apertura-playoffs' },
-  'clausura'        => { name: 'Clausura',            slug: 'mex-primera-division-{season}-clausura' },
-  'clausura_finals' => { name: 'Clausura - Liguilla', slug: 'mex-primera-division-{season}-clausura-playoffs' },
+  pages: {
+    'mex-primera-division-{season}-apertura'          => 'Apertura',            # 1
+    'mex-primera-division-{season}-apertura-playoffs' => 'Apertura - Liguilla', # 2
+    'mex-primera-division-{season}-clausura'          => 'Clausura',            # 3
+    'mex-primera-division-{season}-clausura-playoffs' => 'Clausura - Liguilla', # 4
  },
- format: ->( season ) {
+ season: ->( season ) {
   case season
-  when Season.new('2020/21')
-    %w[apertura]     # just getting started
-  when Season.new('2019/20')
-    %w[apertura apertura_finals clausura]     # covid-19 - no liguilla
-  when Season.new('2018/19')
-    %w[apertura apertura_finals clausura clausura_finals]
-  else
-    puts "!! ERROR - no configuration found for season >#{season}< for MX1 found; sorry"
-    exit 1
+  when Season('2020/21') then [1]        # just getting started
+  when Season('2019/20') then [1,2,3]    # covid-19 - no liguilla
+  when Season('2018/19') then [1,2,3,4]
   end
  }
 },

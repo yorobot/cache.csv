@@ -194,7 +194,7 @@ def build( rows, season:, league:, stage: '' )   ## rename to fixup or such - wh
 
     print '[%03d]    ' % (i+1)
     print "%-10s | " % date_str
-    print "%-5s | " % time_str
+    print "%-5s | "  % time_str
     print "%-22s | " % team1_str
     print "%-22s | " % team2_str
     print score_str

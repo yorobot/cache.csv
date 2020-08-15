@@ -10,7 +10,8 @@ class Schedule < Page  ## note: use nested class for now - why? why not?
  # <div class="data">
  # <table class="standard_tabelle" cellpadding="3" cellspacing="1">
 
- table = doc.css( 'div.data table.standard_tabelle' ).first    ## get table
+ ## note: use > for "strict" sibling (child without any in-betweens)
+ table = doc.css( 'div.data > table.standard_tabelle' ).first    ## get table
  # puts table.class.name  #=> Nokogiri::XML::Element
  # puts table.text
 
@@ -40,8 +41,9 @@ class Schedule < Page  ## note: use nested class for now - why? why not?
                            Playoffs           # see EL Quali
                            /x
      puts
-     print '[%03d] ' % (i+1)
-     print squish( tr.text )
+     print '[%03d] ' % i
+     ## print squish( tr.text )
+     print "round >#{tr.text.strip}<"
      print "\n"
 
      last_round = tr.text.strip
@@ -56,9 +58,14 @@ class Schedule < Page  ## note: use nested class for now - why? why not?
      ## <td><a href="/teams/hibernian-fc/" title="Hibernian FC">Hibernian FC</a></td>
      ##  todo/check: check if tooltip title always equals text - why? why not?
      team1_anchor = tds[2].css( 'a' )[0]
-     assert( team1_anchor, 'no team1 <a> found')
-     team1_str    = squish( team1_anchor.text )
-     team1_ref    = norm_team_ref( team1_anchor[:href] )
+     if team1_anchor  # note: <a> might be optional (and team name only be plain text)
+       team1_str    = squish( team1_anchor.text )
+       team1_ref    = norm_team_ref( team1_anchor[:href] )
+     else
+       team1_str    = squish( tds[2].text )
+       team1_ref    = nil
+       puts "!! WARN: no team1_ref for >#{team1_str}< found"
+     end
 
      ##  <td> - </td>
      ## e.g. -
@@ -68,17 +75,26 @@ class Schedule < Page  ## note: use nested class for now - why? why not?
 
      ## <td><a href="/teams/st-johnstone-fc/" title="St. Johnstone FC">St. Johnstone FC</a></td>
      team2_anchor = tds[4].css( 'a' )[0]
-     assert( team2_anchor, 'no team2 <a> found')
-     team2_str    = squish( team2_anchor.text )
-     team2_ref    = norm_team_ref( team2_anchor[:href] )
+     if team2_anchor
+       team2_str    = squish( team2_anchor.text )
+       team2_ref    = norm_team_ref( team2_anchor[:href] )
+     else
+       team2_str    = squish( tds[4].text )
+       team2_ref    = nil
+       puts "!! WARN: no team2_ref for >#{team2_str}< found"
+     end
 
      ### was: score_str = squish( tds[5].text )
      ## <a href="/spielbericht/premiership-2020-2021-hibernian-fc-st-johnstone-fc/" title="Spielschema Hibernian FC - St. Johnstone FC">-:-</a>
 
-     score_anchor = tds[5].css( 'a')[0]
-     assert( score_anchor, 'no score<a> found')
-     score_str    = squish( score_anchor.text )
-     score_ref    = norm_score_ref( score_anchor[:href] )
+     score_anchor = tds[5].css( 'a' )[0]
+     if score_anchor   ## note: score ref (match report) is optional!!!!
+       score_str    = squish( score_anchor.text )
+       score_ref    = norm_score_ref( score_anchor[:href] )
+     else
+       score_str    = squish( tds[5].text )
+       score_ref    = nil
+     end
 
 
      ##  todo - find a better way to check for live match
@@ -95,13 +111,13 @@ class Schedule < Page  ## note: use nested class for now - why? why not?
 
      date_str = last_date_str    if date_str.empty?
 
-     print '[%03d]    ' % (i+1)
+     print '[%03d]    ' % i
      print "%-10s | " % date_str
      print "%-5s | " % time_str
      print "%-22s | " % team1_str
      print "%-22s | " % team2_str
      print "%-10s | " % score_str
-     print score_ref
+     print (score_ref ? score_ref : 'n/a')
      print "\n"
 
 
@@ -111,17 +127,17 @@ class Schedule < Page  ## note: use nested class for now - why? why not?
      ## convert date from 25.10.2019 to 2019-25-10
      date     = Date.strptime( date_str, '%d.%m.%Y' )
 
-     rows << { round: last_round,
-               date:  date.strftime( '%Y-%m-%d' ),
-               time:  time_str,
-               team1: { text: team1_str,
-                        ref:  team1_ref
-                      },
-               score: score_str,
-               team2: { text: team2_str,
-                        ref:  team2_ref
-                      },
-               report: score_ref
+     ## note: keep structure flat for now
+     ##        (AND not nested e.g. team:{text:,ref:}) - why? why not?
+     rows << { round:      last_round,
+               date:       date.strftime( '%Y-%m-%d' ),
+               time:       time_str,
+               team1:      team1_str,
+               team1_ref:  team1_ref,
+               score:      score_str,
+               team2:      team2_str,
+               team2_ref:  team2_ref,
+               report_ref: score_ref
              }
 
      last_date_str = date_str
@@ -139,7 +155,10 @@ class Schedule < Page  ## note: use nested class for now - why? why not?
      h = {}
      matches.each do |match|
        ## index by name/text for now NOT ref - why? why not?
-       [match[:team1], match[:team2]].each do |team|
+       [{text: match[:team1],
+         ref:  match[:team1_ref]},
+        {text: match[:team2],
+         ref:  match[:team2_ref]}].each do |team|
          rec = h[ team[:text] ] ||= { count: 0,
                                       name: team[ :text],
                                       ref:  team[ :ref ] }

@@ -185,6 +185,15 @@ Worldfootball.schedule( league: 'sco.1', season: '2020/21' )
 =end
 
 
-Worldfootball.schedule( league: 'nl.1', season: '2020/21' )
-Worldfootball.schedule( league: 'nl.1', season: '2019/20' )
-Worldfootball.schedule( league: 'nl.1', season: '2018/19' )
+# Worldfootball.schedule( league: 'nl.1', season: '2020/21' )
+# Worldfootball.schedule( league: 'nl.1', season: '2019/20' )
+# Worldfootball.schedule( league: 'nl.1', season: '2018/19' )
+
+# Worldfootball.schedule( league: 'eng.1', season: '2019/20' )
+# Worldfootball.schedule( league: 'eng.1', season: '2018/19' )
+
+# Worldfootball.schedule( league: 'eng.2', season: '2019/20' )
+# Worldfootball.schedule( league: 'eng.2', season: '2018/19' )
+
+Worldfootball.schedule( league: 'at.1', season: '2019/20' )
+Worldfootball.schedule( league: 'at.1', season: '2018/19' )

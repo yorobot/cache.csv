@@ -9,7 +9,7 @@ require_relative 'lib/convert'
 # OUT_DIR='./o/eng'
 # OUT_DIR='../../stage/two'
 
-OUT_DIR='./o/aug10'
+OUT_DIR='./o/aug15'
 # OUT_DIR='./tmp'
 
 # OUT_DIR='./o/test'
@@ -121,23 +121,24 @@ end
 # convert( league: 'ie.1', season: '2020' )
 # convert( league: 'ie.1', season: '2019' )
 
-# convert( league: 'sco.1', season: '2020/21' )
-# convert( league: 'sco.1', season: '2019/20' )
-# convert( league: 'sco.1', season: '2018/19' )
+
+=begin
+convert( league: 'sco.1', season: '2020/21' )
+convert( league: 'sco.1', season: '2019/20' )
+convert( league: 'sco.1', season: '2018/19' )
 
 
-# convert( league: 'be.1', season: '2020/21' )
-# convert( league: 'be.1', season: '2019/20' )
-# convert( league: 'be.1', season: '2018/19' )
+convert( league: 'be.1', season: '2020/21' )
+convert( league: 'be.1', season: '2019/20' )
+convert( league: 'be.1', season: '2018/19' )
 
 
 ## note: adjust date/time by -7 offset
-# convert( league: 'mx.1', season: '2020/21', offset: -7 )
-# convert( league: 'mx.1', season: '2019/20', offset: -7 )
-# convert( league: 'mx.1', season: '2018/19', offset: -7 )
+convert( league: 'mx.1', season: '2020/21', offset: -7 )
+convert( league: 'mx.1', season: '2019/20', offset: -7 )
+convert( league: 'mx.1', season: '2018/19', offset: -7 )
 
 
-=begin
 convert( league: 'dk.1', season: '2020/21' )
 convert( league: 'dk.1', season: '2019/20' )
 convert( league: 'dk.1', season: '2018/19' )
@@ -167,9 +168,12 @@ convert( league: 'nz.1', season: '2019/20' )
 convert( league: 'nz.1', season: '2018/19' )
 
 ### todo/fix: add south korea timezone offset!!!!
+=end
+
+
+=begin
 convert( league: 'kr.1', season: '2020' )
 convert( league: 'kr.1', season: '2019' )
-=end
 
 
 
@@ -181,7 +185,8 @@ convert( league: 'de.2', season: '2019/20' )
 
 convert( league: 'de.3', season: '2019/20' )
 
-convert( league: 'de.cup', season: '2020/21' )
 
+convert( league: 'de.cup', season: '2020/21' )
+=end
 
 puts "bye"

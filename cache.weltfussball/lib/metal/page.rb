@@ -36,6 +36,13 @@ module Worldfootball
      ## check for
   end
 
+  # <meta property="og:url"
+  #       content="//www.weltfussball.de/alle_spiele/aut-bundesliga-2010-2011/" />
+  def url
+    @url ||= doc.css( 'meta[property="og:url"]' ).first
+    @url[:content]
+  end
+
 
 
 ##  <!-- [generated 2020-06-30 22:30:19] -->
@@ -64,6 +71,16 @@ GENERATED_RE = %r{
          nil
         end
       end
+   end
+
+   ### convenience helper / formatter
+   def generated_in_days_ago
+     if generated
+      diff_in_days = Date.today.jd - generated.jd
+      "#{diff_in_days}d"
+     else
+      '?'
+     end
    end
 
 ######################

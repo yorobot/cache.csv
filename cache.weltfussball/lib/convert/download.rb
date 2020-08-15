@@ -41,31 +41,27 @@ module Worldfootball
 
 
   def self.schedule( league:, season: )
-    season = Season.new( season )  if season.is_a?( String )
+    season = Season( season )   ## cast (ensure) season class (NOT string, integer, etc.)
 
     league  = find_league( league )
 
-    stages =  league.stages( season: season )
+    pages =  league.pages( season: season )
 
-    if stages
-      stages.each do |stage|
-        # append stage to league for lookup e.g. sco.1.regular
-        slug = stage.slug( season: season )
+    if pages.is_a?( Array )
+      pages.each do |page|
+        slug = page[:slug]
 
         url  = "#{BASE_URL}/alle_spiele/#{slug}/"
 
-        basename = "#{league.key}-#{season.to_path}-#{stage.key}"  # e.g. sco.1-2020-21-regular
-
-        copy( url, "./dl/#{basename}.html" )
-      end # each stage
+        copy( url, "./dl/#{slug}.html" )
+      end # each page (of stage)
     else
-      slug = league.slug( season: season )
+      page = pages
+      slug = page[:slug]
 
-      url = "#{BASE_URL}/alle_spiele/#{slug}/"
+      url  = "#{BASE_URL}/alle_spiele/#{slug}/"
 
-      basename = "#{league.key}-#{season.to_path}"
-
-      copy( url, "./dl/#{basename}.html" )
+      copy( url, "./dl/#{slug}.html" )
     end
   end
 

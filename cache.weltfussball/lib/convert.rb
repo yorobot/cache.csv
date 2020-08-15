@@ -8,7 +8,7 @@ require_relative 'metal'
 
 
 
-$LOAD_PATH.unshift( File.expand_path( '../../../../sportdb/sport.db/sportdb-formats/lib') )
+$LOAD_PATH.unshift( File.expand_path( '../../../sportdb/sport.db/sportdb-formats/lib') )
 require 'sportdb/formats'   ## for Season -- move to test_schedule /fetch!!!!
 
 require_relative '../../csv'
