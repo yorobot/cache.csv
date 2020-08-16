@@ -3,11 +3,25 @@ module Worldfootball
 
 
 LEAGUES_EUROPE.merge!({
+
+#  /2-bundesliga-{season}/
+#  /2-bundesliga-2013-2014/
+#  /dfb-pokal-2019-2020/
+
   'de.1'   => { pages: 'bundesliga' },
   'de.2'   => { pages: '2-bundesliga' },
   'de.3'   => { pages: '3-liga' },
   'de.cup' => { pages: 'dfb-pokal' },
 
+
+
+## note: use aut-2-liga !!! starting 2019-2018 !!!
+##       use aut-erste-liga !!! before e.g. 2010-2011 etc.
+#
+#  /aut-erste-liga-{season}/
+#  /aut-bundesliga-2010-2011/
+#  /aut-erste-liga-2010-2011/
+#  /aut-oefb-cup-2019-2020/
 
 =begin
   2019/2020 Qualifikationsgruppe -- >/alle_spiele/aut-bundesliga-2019-2020-qualifikationsgruppe/<
@@ -40,6 +54,9 @@ LEAGUES_EUROPE.merge!({
   },
   'at.cup' => { pages: 'aut-oefb-cup' },
 
+
+  # /sui-super-league-2019-2020/
+  # /sui-challenge-league-2019-2020/
 
   'ch.1'   => { pages: 'sui-super-league' },
   'ch.2'   => { pages: 'sui-challenge-league' },

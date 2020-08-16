@@ -8,8 +8,7 @@ require_relative '../lib/metal'
    2-liga-2019-2020-vorwaerts-steyr-sk-austria-klagenfurt
    2-liga-2019-2020-vorwaerts-steyr-sv-lafnitz
   ].each do |slug|
-  path = "./dl2/#{slug}.html"
-  page = Worldfootball::Page::Report.from_file( path )
+  page = Worldfootball::Page::Report.from_cache( slug )
 
   puts
   puts page.title

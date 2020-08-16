@@ -9,7 +9,7 @@ require_relative 'lib/convert'
 # OUT_DIR='./o/eng'
 # OUT_DIR='../../stage/two'
 
-OUT_DIR='./o/aug15'
+OUT_DIR='./o/aug16'
 # OUT_DIR='./tmp'
 
 # OUT_DIR='./o/test'
@@ -185,8 +185,11 @@ convert( league: 'de.2', season: '2019/20' )
 
 convert( league: 'de.3', season: '2019/20' )
 
-
-convert( league: 'de.cup', season: '2020/21' )
 =end
+
+
+Worldfootball.convert( league: 'de.cup', season: '2020/21' )
+
+Worldfootball.convert( league: 'at.1', season: '2019/20' )
 
 puts "bye"

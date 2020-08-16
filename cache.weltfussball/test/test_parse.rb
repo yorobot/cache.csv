@@ -3,17 +3,17 @@
 
 require_relative '../lib/metal'
 
-# path = './dl/sco.1-2018-19-championship.html'
-# path = './dl/de.cup-2012-13.html'
-# path = './dl/ie.1-2020.html'
-# path = './dl/nz.1-2019-20-regular.html'
-# path = './dl/lu.1-2019-20.html'
-# path = './dl/tr.1-2019-20.html'
-# path = './dl/sco.1-2020-21-regular.html'
-# path = './dl/at.cup-2019-20.html'
-path = './dl/at.2-2019-20.html'
+# slug = 'sco.1-2018-19-championship'
+# slug = 'de.cup-2012-13'
+# slug = 'ie.1-2020'
+# slug = 'nz.1-2019-20-regular'
+# slug = 'lu.1-2019-20'
+# slug = 'tr.1-2019-20'
+# slug = 'sco.1-2020-21-regular'
+# slug = 'at.cup-2019-20'
+slug = 'at.2-2019-20'
 
-page = Worldfootball::Page::Schedule.from_file( path )
+page = Worldfootball::Page::Schedule.from_cache( slug )
 rows = page.matches
 
 puts "matches - #{rows.size} rows:"

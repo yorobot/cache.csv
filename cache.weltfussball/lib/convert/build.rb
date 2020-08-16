@@ -1,4 +1,6 @@
 
+module Worldfootball
+
 
 MODS = {
   ## AT 1
@@ -70,7 +72,7 @@ MIN_HEADERS = [   ## always keep even if all empty
 ]
 
 
-def vacuum( rows, headers: MAX_HEADERS, fixed_headers: MIN_HEADERS )
+def self.vacuum( rows, headers: MAX_HEADERS, fixed_headers: MIN_HEADERS )
   ## check for unused columns and strip/remove
   counter = Array.new( MAX_HEADERS.size, 0 )
   rows.each do |row|
@@ -115,8 +117,8 @@ end
 
 
 ## build "standard" match records from "raw" table rows
-def build( rows, season:, league:, stage: '' )   ## rename to fixup or such - why? why not?
-  season = Season.new( season )  if season.is_a?( String )
+def self.build( rows, season:, league:, stage: '' )   ## rename to fixup or such - why? why not?
+   season = Season( season )  ## cast (ensure) season class (NOT string, integer, etc.)
 
    raise ArgumentError, "league key as string expepected"  unless league.is_a?(String)  ## note: do NOT pass in league struct! pass in key (string)
 
@@ -226,7 +228,7 @@ end  # build
 
 
 
-def parse_score( score_str )
+def self.parse_score( score_str )
   comments = String.new( '' )     ## check - rename to/use status or such - why? why not?
 
   ## split score
@@ -308,3 +310,4 @@ def parse_score( score_str )
   [ht, ft, et, pen, comments]
 end
 
+end # module Worldfootball

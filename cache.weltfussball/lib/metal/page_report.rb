@@ -4,6 +4,15 @@ module Worldfootball
 
 class Report < Page  ## note: use nested class for now - why? why not?
 
+  def self.config() Worldfootball.config; end
+
+  def self.from_cache( slug )
+    path = "#{config.cache.reports_dir}/#{slug}.html"
+    html = File.open( path, 'r:utf-8' ) {|f| f.read }
+    new( html )
+  end
+
+
 
   def find_table_tore
     # <table class="" cellpadding="3" cellspacing="1">
@@ -43,7 +52,7 @@ class Report < Page  ## note: use nested class for now - why? why not?
 
  trs   = table.css( 'tr' )
  # puts trs.size
- i = 0
+
 
 
  rows = []
@@ -152,10 +161,10 @@ class Report < Page  ## note: use nested class for now - why? why not?
       ## nothing - keep going
     end
 
-     rec = { score:  score_str,
-               team:   team,
-               name:   player_name,  ## fix: change to player: too!!!
-               minute: goal_minute
+     rec = { score:   score_str,
+             team:    team,     # 1 or 2
+             player:  player_name,
+             minute:  goal_minute
              }
       rec[:owngoal] = true   if owngoal
       rec[:penalty] = true   if penalty

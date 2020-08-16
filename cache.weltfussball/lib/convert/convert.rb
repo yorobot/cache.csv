@@ -1,11 +1,12 @@
 
+module Worldfootball
 
-### todo/ move convert into Worldfootball module!!!
 
-def convert( league:, season:, offset: nil )  ## check: rename (optional) offset to time_offset or such?
+
+def self.convert( league:, season:, offset: nil )  ## check: rename (optional) offset to time_offset or such?
   season = Season( season )  ## cast (ensure) season class (NOT string, integer, etc.)
 
-  league  = Worldfootball.find_league( league )
+  league = find_league( league )
 
   pages = league.pages( season: season )
 
@@ -13,20 +14,19 @@ def convert( league:, season:, offset: nil )  ## check: rename (optional) offset
   #         (and NOT a single hash table/record)
   if pages.is_a?(Array)
     recs = []
-    pages.each do |page|
-      slug       = page[:slug]
-      stage_name = page[:stage]
+    pages.each do |page_meta|
+      slug       = page_meta[:slug]
+      stage_name = page_meta[:stage]
       ## todo/fix: report error/check if stage.name is nil!!!
 
-      path = "./dl/#{slug}.html"
-      print "  parsing #{path}..."
+      print "  parsing #{slug}..."
 
       # unless File.exist?( path )
       #  puts "!! WARN - missing stage >#{stage_name}< source - >#{path}<"
       #  next
       # end
 
-      page = Worldfootball::Page::Schedule.from_file( path )
+      page = Page::Schedule.from_cache( slug )
       print "  title=>#{page.title}<..."
       print "\n"
 
@@ -37,13 +37,12 @@ def convert( league:, season:, offset: nil )  ## check: rename (optional) offset
       recs += stage_recs
     end
   else
-    page = pages
-    slug = page[:slug]
+    page_meta = pages
+    slug = page_meta[:slug]
 
-    path = "./dl/#{slug}.html"
-    print "  parsing #{path}..."
+    print "  parsing #{slug}..."
 
-    page = Worldfootball::Page::Schedule.from_file( path )
+    page = Page::Schedule.from_cache( slug )
     print "  title=>#{page.title}<..."
     print "\n"
 
@@ -77,7 +76,7 @@ end
 
 
 ## helper to fix dates to use local timezone (and not utc/london time)
-def fix_date( row, offset )
+def self.fix_date( row, offset )
   return row    if row[3].nil? || row[3].empty?   ## note: time (column) required for fix
 
   col = row[2]
@@ -98,3 +97,4 @@ def fix_date( row, offset )
   row   ## return row for possible pipelining - why? why not?
 end
 
+end # module Worldfootball
