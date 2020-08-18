@@ -89,6 +89,9 @@ class Report < Page  ## note: use nested class for now - why? why not?
      score_str = score_str.gsub( ':', '-' )
      score_str = score_str.gsub( ' ', '' )   ## remove all white space
 
+
+     ### todo/fix: use new Score.split helper here
+     ## score1, score2 = Score.split( score_str )
      parts = score_str.split('-')
      score1 = parts[0].to_i
      score2 = parts[1].to_i
