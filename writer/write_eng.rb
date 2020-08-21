@@ -1,13 +1,16 @@
 require_relative './write_utils'
 
 
-write_eng1( '1888/89', source: 'soccerdata', rounds: false, extra: 'archive/1880s' )
-write_eng1( '1889/90', source: 'soccerdata', rounds: false, extra: 'archive/1880s' )
-write_eng1( '1890/91', source: 'soccerdata', rounds: false, extra: 'archive/1890s' )
-write_eng1( '1891/92', source: 'soccerdata', rounds: false, extra: 'archive/1890s' )
+write_eng1( '2019/20', source: 'two/o' )
 
-write_eng1( '1892/93', source: 'soccerdata', rounds: false, extra: 'archive/1890s' )
-write_eng2( '1892/93', source: 'soccerdata', rounds: false, extra: 'archive/1890s' )
+
+# write_eng1( '1888/89', source: 'soccerdata', rounds: false, extra: 'archive/1880s' )
+# write_eng1( '1889/90', source: 'soccerdata', rounds: false, extra: 'archive/1880s' )
+# write_eng1( '1890/91', source: 'soccerdata', rounds: false, extra: 'archive/1890s' )
+# write_eng1( '1891/92', source: 'soccerdata', rounds: false, extra: 'archive/1890s' )
+
+# write_eng1( '1892/93', source: 'soccerdata', rounds: false, extra: 'archive/1890s' )
+# write_eng2( '1892/93', source: 'soccerdata', rounds: false, extra: 'archive/1890s' )
 
 
 

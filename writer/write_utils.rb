@@ -5,7 +5,7 @@ require_relative './leagues'
 
 
 
-OUT_DIR='./o'
+OUT_DIR='./o2'
 # OUT_DIR='../../../openfootball'
 
 
@@ -25,6 +25,56 @@ SOURCES = {
                     format: 'century', # e.g. 1800s/1888-89
                   }
 }
+
+
+
+def merge_goals( matches, goals )
+  goals_by_match = goals.group_by { |rec| rec.match_id }
+  puts "match goal reports - #{goals_by_match.size} records"
+
+  ## lets group by date for easier lookup
+  matches_by_date = matches.group_by { |rec| rec.date }
+
+
+  ## note: "shadow / reuse" matches and goals vars for now in loop
+  ##  find better names to avoid confusion!!
+  goals_by_match.each_with_index do |(match_id, goals),i|
+    ## split match_id
+    team_str, more_str   = match_id.split( '|' )
+    team1_str, team2_str = team_str.split( ' - ' )
+
+    more_str  = more_str.strip
+    team1_str = team1_str.strip
+    team2_str = team2_str.strip
+
+    ## for now assume date in more (and not round or something else)
+    date_str = more_str  # e.g. in 2019-07-26 format
+
+    puts ">#{team1_str}< - >#{team2_str}< | #{date_str},    #{goals.size} goals"
+
+    ## try a join - find matching match
+    matches = matches_by_date[ date_str ]
+    if matches.nil?
+      puts "!! ERROR: no match found for date >#{date_str}<"
+      exit 1
+    end
+
+    found_matches = matches.select {|match| match.team1 == team1_str &&
+                                            match.team2 == team2_str }
+
+    if found_matches.size == 1
+      match = found_matches[0]
+      match.goals = SportDb::Import::Goal.build( goals )
+    else
+      puts "!!! ERROR: found #{found_matches.size} in #{matches.size} matches for date >#{date_str}<:"
+      matches.each do |match|
+        puts "  >#{match.team1}< - >#{match.team2}<"
+      end
+      exit 1
+    end
+  end
+end
+
 
 
 
@@ -100,7 +150,7 @@ def write_worker( league, season, source:,
                                   split: false,
                                   normalize: true,
                                   rounds: true )
-  season = SportDb::Import::Season.new( season )  ## normalize season
+  season = Season( season )  ## normalize season
 
   league_info = LEAGUES[ league ]
   if league_info.nil?
@@ -125,11 +175,24 @@ def write_worker( league, season, source:,
   in_path = "#{source_path}/#{season_path}/#{league}.csv"   # e.g. ../stage/one/2020/br.1.csv
 
 
-
   matches = SportDb::CsvMatchParser.read( in_path )
+  puts "matches- #{matches.size} records"
+
+
+  ## check for goals
+  in_path_goals = "#{source_path}/#{season_path}/#{league}~goals.csv"   # e.g. ../stage/one/2020/br.1~goals.csv
+  if File.exist?( in_path_goals )
+    goals = Sports::CsvGoalParser.read( in_path_goals )
+    puts "goals - #{goals.size} records"
+    pp goals[0]
+
+    puts
+    puts "merge goals:"
+    merge_goals( matches, goals )
+  end
+
 
   pp matches[0]
-  puts "#{matches.size} matches"
 
 
   matches = normalize( matches, league: league, season: season )   if normalize
@@ -202,7 +265,8 @@ matches = matches.sort do |l,r|
   ## first by date (older first)
   ## next by matchday (lower first)
   res =   l.date <=> r.date
-  res =   l.round <=> r.round   if rounds && res == 0
+  res =   l.time <=> r.time     if res == 0 && l.time && r.time
+  res =   l.round <=> r.round   if res == 0 && rounds
   res
 end
 

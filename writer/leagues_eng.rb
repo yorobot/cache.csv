@@ -4,11 +4,11 @@
 
 
 def eng1( season )
-  case season
-  when Season.new('1888/89')..Season.new('1891/92') ## single league (no divisions)
+  case season    ## todo/fix: - use cast e.g. Season(season) - make sure it's a season obj
+  when Season('1888/89')..Season('1891/92') ## single league (no divisions)
     {name:     'English Football League',
      basename: '1-footballleague'}
-  when Season.new('1892/93')..Season.new('1991/92')  ## start of division 1 & 2
+  when Season('1892/93')..Season('1991/92')  ## start of division 1 & 2
     {name:     'English Division One',
      basename: '1-division1'}
   else  ## starts in season 1992/93
@@ -19,10 +19,10 @@ end
 
 def eng2( season )
   case season
-  when Season.new('1892/93')..Season.new('1991/92')
+  when Season('1892/93')..Season('1991/92')
     {name:     'English Division Two',  ## or use English Football League Second Division ???
      basename: '2-division2'}
-  when Season.new('1992/93')..Season.new('2003/04')   ## start of premier league
+  when Season('1992/93')..Season('2003/04')   ## start of premier league
     {name:     'English Division One',
      basename: '2-division1'}
   else # starts in 2004/05
