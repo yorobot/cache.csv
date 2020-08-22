@@ -2,40 +2,6 @@
 module Worldfootball
 
 
-MODS = {
-  ## AT 1
-  'SC Magna Wiener Neustadt' => 'SC Wiener Neustadt', # in 2010/11
-  'KSV Superfund'            => 'Kapfenberger SV',    # in 2010/11
-  'Kapfenberger SV 1919'     => 'Kapfenberger SV',    # in 2011/12
-  'FC Trenkwalder Admira'    => 'FC Admira Wacker',    # in 2011/12
-  ## AT 2
-  'Austria Wien (A)'         => 'Young Violets',  # in 2019/20
-  'FC Wacker Innsbruck (A)'  => 'FC Wacker Innsbruck II',   # in 2018/19
-  ## AT CUP
-  'Rapid Wien (A)'  => 'Rapid Wien II',  # in 2011/12
-  'Sturm Graz (A)'  => 'Sturm Graz II',
-  'Kapfenberger SV 1919 (A)' =>  'Kapfenberger SV II',
-  'SV Grödig (A)'  => 'SV Grödig II',
-  'FC Trenkwalder Admira (A)' => 'FC Admira Wacker II',
-  'RB Salzburg (A)'  => 'RB Salzburg II',
-  'SR WGFM Donaufeld' => 'SR Donaufeld Wien',
-
-
-  ## NZ 1
-  'Wellington Phoenix (R)' => 'Wellington Phoenix Reserves',
-}
-
-
-
-
-
-## fix/patch known score format errors in at/de cups
-SCORE_ERRORS = {
-    '0-1 (0-0, 0-0, 0-0) n.V.' => '0-1 (0-0, 0-0) n.V.',       # too long
-    '2-1 (1-1, 1-1, 1-0) n.V.' => '2-1 (1-1, 1-1) n.V.',
-    '4-2 (0-0, 0-0) i.E.'      => '4-2 (0-0, 0-0, 0-0) i.E.',  # too short
-}
-
 ROUND_TO_EN = {
   '1. Runde'      => 'Round 1',
   '2. Runde'      => 'Round 2',
@@ -46,8 +12,6 @@ ROUND_TO_EN = {
   'Halbfinale'    => 'Semifinals',
   'Finale'        => 'Final',
 }
-
-
 
 
 ## todo/check:  english league cup/trophy has NO ET - also support - make more flexible!!!
@@ -120,11 +84,18 @@ end
 def self.build( rows, season:, league:, stage: '' )   ## rename to fixup or such - why? why not?
    season = Season( season )  ## cast (ensure) season class (NOT string, integer, etc.)
 
-   raise ArgumentError, "league key as string expepected"  unless league.is_a?(String)  ## note: do NOT pass in league struct! pass in key (string)
+   raise ArgumentError, "league key as string expected"  unless league.is_a?(String)  ## note: do NOT pass in league struct! pass in key (string)
 
    print "  #{rows.size} rows - build #{league} #{season}"
    print " - #{stage}" unless stage.empty?
    print "\n"
+
+
+   ## note: use only first part from key for lookup
+   ##    e.g. at.1  => at
+   ##         eng.1 => eng
+   ##     and so on
+   mods = MODS[ league.split('.')[0] ]
 
 
    i = 0
@@ -158,17 +129,22 @@ def self.build( rows, season:, league:, stage: '' )   ## rename to fixup or such
     print row[:round]
 
 
-    ## do NOT translate rounds
-    if ['at.cup', 'de.cup'].include?( league )
+    ## do NOT translate rounds (to english) - keep in german / deutsch (de)
+    if ['at.cup', 'at.1',    ## at.1 - incl. europa league playoff
+        'de.cup'].include?( league )
       round = row[:round]
     else
       round = ROUND_TO_EN[ row[:round] ]
-      ## todo/fix: report error if no match / mapping found!!!
+      if round.nil?
+        puts "!! ERROR: no mapping for round to english (en) found >#{row[:round]}<:"
+        pp row
+        exit 1
+      end
       print " => #{round}"
     end
     print "\n"
   else
-    puts "!! ERROR: unknown round >#{row[:round]}<for league type >#{format}<:"
+    puts "!! ERROR: unknown round >#{row[:round]}< for league >#{league}<:"
     pp row
     exit 1
   end
@@ -183,15 +159,13 @@ def self.build( rows, season:, league:, stage: '' )   ## rename to fixup or such
     ## check for 0:3 Wert.   - change Wert. to awd.  (awarded)
     score_str = score_str.sub( /Wert\./i, 'awd.' )
 
-    ## clean team name and asciify (e.g. ’->' )
-    team1_str = team1_str.gsub( '(old)', '' ).strip
-    team2_str = team2_str.gsub( '(old)', '' ).strip
-    team1_str = team1_str.gsub( '’', "'" )  ## e.g. Hawke’s Bay United FC
-    team2_str = team2_str.gsub( '’', "'" )
+    ## clean team name (e.g. remove (old))
+    ##   and asciify (e.g. ’ to ' )
+    team1_str = norm_team( team1_str )
+    team2_str = norm_team( team2_str )
 
-
-    team1_str = MODS[ team1_str ]   if MODS[ team1_str ]
-    team2_str = MODS[ team2_str ]   if MODS[ team2_str ]
+    team1_str = mods[ team1_str ]   if mods[ team1_str ]
+    team2_str = mods[ team2_str ]   if mods[ team2_str ]
 
 
     print '[%03d]    ' % (i+1)
@@ -236,7 +210,7 @@ def self.parse_score( score_str )
   ht  = ''
   et  = ''
   pen = ''
-  if score_str == '---'   ## in the future (no score yet)
+  if score_str == '---'   ## in the future (no score yet) - was -:-
     ft = ''
     ht = ''
   elsif score_str == 'n.gesp.'   ## cancelled (british) / canceled (us)

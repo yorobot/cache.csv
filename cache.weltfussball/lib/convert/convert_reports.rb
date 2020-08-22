@@ -6,6 +6,14 @@ def self.convert_reports( league:, season: )
 
   league = find_league( league )
 
+   ## note: use only first part from key for lookup
+   ##    e.g. at.1  => at
+   ##         eng.1 => eng
+   ##     and so on
+   mods = MODS[ league.key.split('.')[0] ]
+
+
+
   pages = league.pages( season: season )
 
   recs = []
@@ -50,7 +58,20 @@ def self.convert_reports( league:, season: )
       if rows.size > 0
         ## add goals
         date = Date.strptime( match[:date], '%Y-%m-%d')
-        match_id = "#{match[:team1]} - #{match[:team2]} | #{date.strftime('%b %-d %Y')}"
+
+        team1 = match[:team1]
+        team2 = match[:team2]
+
+        ## clean team name (e.g. remove (old))
+        ##   and asciify (e.g. ’ to ' )
+        team1 = norm_team( team1 )
+        team2 = norm_team( team2 )
+
+        team1 = mods[ team1 ]   if mods[ team1 ]
+        team2 = mods[ team2 ]   if mods[ team2 ]
+
+        match_id = "#{team1} - #{team2} | #{date.strftime('%b %-d %Y')}"
+
 
         rows.each do |row|
           extra = if row[:owngoal]

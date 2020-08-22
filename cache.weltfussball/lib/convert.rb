@@ -21,8 +21,11 @@ require_relative '../../csv'
 require_relative '../config'
 
 
+
 ## our own code
 require_relative 'convert/download'
+
+require_relative 'convert/mods'
 require_relative 'convert/build'
 require_relative 'convert/convert'
 require_relative 'convert/convert_reports'
