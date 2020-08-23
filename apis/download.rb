@@ -207,7 +207,7 @@ end # module Footballdata
 
 #############
 ## up (ongoing) 2019/20 seasons
-# Footballdata.eng( 2019 )
+Footballdata.eng( 2019 )
 
 # Footballdata.nl( 2019 )
 # Footballdata.pt( 2019 )

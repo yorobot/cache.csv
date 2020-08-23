@@ -190,11 +190,11 @@ convert( league: 'de.3', season: '2019/20' )
 
 # Worldfootball.convert( league: 'de.cup', season: '2020/21' )
 
-# Worldfootball.convert( league: 'at.1', season: '2019/20' )
+Worldfootball.convert( league: 'at.1', season: '2019/20' )
 
-Worldfootball.convert( league: 'at.1', season: '2014/15' )
-Worldfootball.convert( league: 'at.1', season: '2016/17' )
+# Worldfootball.convert( league: 'at.1', season: '2014/15' )
+# Worldfootball.convert( league: 'at.1', season: '2016/17' )
 
-Worldfootball.convert( league: 'at.2', season: '2019/20' )
+# Worldfootball.convert( league: 'at.2', season: '2019/20' )
 
 puts "bye"

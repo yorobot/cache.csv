@@ -216,6 +216,9 @@ def write_worker( league, season, source:,
 
   ## check for stages
   stages = league_info[ :stages ]
+  stages = stages.call( season )    if stages.is_a?( Proc )  ## is proc/func - stages depends on season
+
+
   if stages
 
   ## split into four stages / two files
@@ -347,24 +350,6 @@ def build_stage( matches_by_stage, stages:, name:, lang: )
 
   buf
 end
-
-
-
-def write_br( season, source: 'one' )     write_worker( 'br.1', season, source: source ); end
-
-
-def write_ru(  season, source: 'two' )  write_worker( 'ru.1', season, source: source ); end
-def write_ru2( season, source: 'two' )  write_worker( 'ru.2', season, source: source ); end
-
-
-def write_it(  season, source: 'one' )  write_worker( 'it.1', season, source: source ); end
-def write_it2( season, source: 'two' )  write_worker( 'it.2', season, source: source ); end
-
-def write_fr(  season, source: 'leagues' )  write_worker( 'fr.1', season, source: source ); end
-def write_fr2( season, source: 'two' )      write_worker( 'fr.2', season, source: source ); end
-
-def write_es(  season, source: 'one' )      write_worker( 'es.1', season, source: source ); end
-def write_es2( season, source: 'two' )      write_worker( 'es.2', season, source: source ); end
 
 
 
