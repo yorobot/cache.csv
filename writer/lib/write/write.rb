@@ -1,13 +1,3 @@
-require_relative '../boot'
-
-
-require_relative './leagues'
-
-
-
-OUT_DIR='./o2'
-# OUT_DIR='../../../openfootball'
-
 
 
 SOURCES = {

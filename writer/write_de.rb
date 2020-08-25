@@ -1,7 +1,7 @@
 start_time = Time.now   ## todo: use Timer? t = Timer.start / stop / diff etc. - why? why not?
 
 
-require_relative './write_utils'
+require_relative 'lib/write'
 
 
 boot_time = Time.now

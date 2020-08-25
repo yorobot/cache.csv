@@ -62,11 +62,6 @@ LEAGUES =
             },
 }
 
-require_relative './leagues_eng'
-require_relative './leagues_de'
-require_relative './leagues_at'
-require_relative './leagues_world'
-
 
 
 def write_it1( season, source: 'one' )  write_worker( 'it.1', season, source: source ); end

@@ -1,4 +1,4 @@
-require_relative 'lib/convert'
+require_relative 'helper'
 
 
 ## top 5

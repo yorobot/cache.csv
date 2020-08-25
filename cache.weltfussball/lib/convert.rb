@@ -7,12 +7,6 @@
 require_relative 'metal'
 
 
-$LOAD_PATH.unshift( File.expand_path( '../../../sportdb/sport.db/date-formats/lib') )
-$LOAD_PATH.unshift( File.expand_path( '../../../sportdb/sport.db/score-formats/lib') )
-$LOAD_PATH.unshift( File.expand_path( '../../../sportdb/sport.db/sportdb-langs/lib') )
-$LOAD_PATH.unshift( File.expand_path( '../../../sportdb/sport.db/sportdb-structs/lib') )
-$LOAD_PATH.unshift( File.expand_path( '../../../sportdb/sport.db/sportdb-formats/lib') )
-$LOAD_PATH.unshift( File.expand_path( '../../../sportdb/sport.db/sportdb-catalogs/lib') )
 # require 'sportdb/formats'   ## for Season etc.
 require 'sportdb/catalogs'
 
