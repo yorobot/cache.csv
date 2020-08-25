@@ -134,6 +134,8 @@ end
 
 
 
+###
+# todo/check:  use Writer.open() or FileWriter.open() or such - why? why not?
 def write_buf( path, buf )  ## write buffer helper
   ## for convenience - make sure parent folders/directories exist
   FileUtils.mkdir_p( File.dirname( path ))  unless Dir.exist?( File.dirname( path ))

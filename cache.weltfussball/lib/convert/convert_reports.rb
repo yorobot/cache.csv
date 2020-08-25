@@ -10,7 +10,7 @@ def self.convert_reports( league:, season: )
    ##    e.g. at.1  => at
    ##         eng.1 => eng
    ##     and so on
-   mods = MODS[ league.key.split('.')[0] ]
+   mods = MODS[ league.key.split('.')[0] ] || {}
 
 
 
@@ -96,7 +96,7 @@ def self.convert_reports( league:, season: )
 
   ## pp recs
 
-  out_path = "#{OUT_DIR}/#{season.path}/#{league.key}~goals.csv"
+  out_path = "#{config.convert.out_dir}/#{season.path}/#{league.key}~goals.csv"
 
   headers  = ['Match', 'Score', 'Minute', 'Extra', 'Player', 'Notes']
 

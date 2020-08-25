@@ -1,12 +1,9 @@
-##########
-#  shared "standalone" / no-dependencies configuration for (re)use
 
 
-require_relative 'config/europe'
-require_relative 'config/north_america'
-require_relative 'config/pacific'
-require_relative 'config/asia'
-
+require_relative 'leagues/europe'
+require_relative 'leagues/north_america'
+require_relative 'leagues/pacific'
+require_relative 'leagues/asia'
 
 
 module Worldfootball

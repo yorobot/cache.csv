@@ -3,8 +3,12 @@ module Worldfootball
 
 LEAGUES_EUROPE.merge!({
 
+  # /ita-serie-a-2019-2020/
+  'it.1' =>  { pages: 'ita-serie-a' },
   'it.2'  => { pages: 'ita-serie-b' },
 
+  # /esp-primera-division-2019-2020/
+  'es.1'  => { pages: 'esp-primera-division' },
   'es.2'  => { pages: 'esp-segunda-division' },
 
   'tr.1'  => { pages: 'tur-sueperlig' },
