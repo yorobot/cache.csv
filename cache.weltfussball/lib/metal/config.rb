@@ -15,7 +15,7 @@ class Configuration
 
    #######################
    ## accessors
-  def sleep()       @sleep || 2; end
+  def sleep()       @sleep || 3; end
   def sleep=(value) @sleep = value; end
 
 

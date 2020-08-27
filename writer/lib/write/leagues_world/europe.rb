@@ -1,4 +1,4 @@
-
+module Writer
 
 LEAGUES.merge!(
   'hu.1' => { name:     'Hungarian NB I',
@@ -135,37 +135,39 @@ LEAGUES.merge!(
 )
 
 
-def write_hu1( season, source: ) write_worker( 'hu.1', season, source: source ); end
-def write_gr1( season, source: ) write_worker( 'gr.1', season, source: source ); end
+def self.write_hu1( season, source: ) write( 'hu.1', season, source: source ); end
+def self.write_gr1( season, source: ) write( 'gr.1', season, source: source ); end
 
-def write_pt1( season, source: ) write_worker( 'pt.1', season, source: source ); end
+def self.write_pt1( season, source: ) write( 'pt.1', season, source: source ); end
 
-def write_ch1( season, source: ) write_worker( 'ch.1', season, source: source ); end
-def write_ch2( season, source: ) write_worker( 'ch.2', season, source: source ); end
+def self.write_ch1( season, source: ) write( 'ch.1', season, source: source ); end
+def self.write_ch2( season, source: ) write( 'ch.2', season, source: source ); end
 
-def write_tr1( season, source: ) write_worker( 'tr.1', season, source: source ); end
-def write_tr2( season, source: ) write_worker( 'tr.2', season, source: source ); end
+def self.write_tr1( season, source: ) write( 'tr.1', season, source: source ); end
+def self.write_tr2( season, source: ) write( 'tr.2', season, source: source ); end
 
 
-def write_be1( season, source: ) write_worker( 'be.1', season, source: source ); end
-def write_nl1( season, source: ) write_worker( 'nl.1', season, source: source ); end
-def write_lu1( season, source: ) write_worker( 'lu.1', season, source: source ); end
+def self.write_be1( season, source: ) write( 'be.1', season, source: source ); end
+def self.write_nl1( season, source: ) write( 'nl.1', season, source: source ); end
+def self.write_lu1( season, source: ) write( 'lu.1', season, source: source ); end
 
-def write_is1( season, source: ) write_worker( 'is.1', season, source: source ); end
-def write_ie1( season, source: ) write_worker( 'ie.1', season, source: source ); end
-def write_sco1( season, source: ) write_worker( 'sco.1', season, source: source ); end
+def self.write_is1( season, source: ) write( 'is.1', season, source: source ); end
+def self.write_ie1( season, source: ) write( 'ie.1', season, source: source ); end
+def self.write_sco1( season, source: ) write( 'sco.1', season, source: source ); end
 
-def write_dk1( season, source: ) write_worker( 'dk.1', season, source: source ); end
-def write_no1( season, source: ) write_worker( 'no.1', season, source: source ); end
-def write_se1( season, source: ) write_worker( 'se.1', season, source: source ); end
-def write_se2( season, source: ) write_worker( 'se.2', season, source: source ); end
-def write_fi1( season, source: ) write_worker( 'fi.1', season, source: source ); end
+def self.write_dk1( season, source: ) write( 'dk.1', season, source: source ); end
+def self.write_no1( season, source: ) write( 'no.1', season, source: source ); end
+def self.write_se1( season, source: ) write( 'se.1', season, source: source ); end
+def self.write_se2( season, source: ) write( 'se.2', season, source: source ); end
+def self.write_fi1( season, source: ) write( 'fi.1', season, source: source ); end
 
-def write_pl1( season, source: ) write_worker( 'pl.1', season, source: source ); end
-def write_cz1( season, source: ) write_worker( 'cz.1', season, source: source ); end
-def write_sk1( season, source: ) write_worker( 'sk.1', season, source: source ); end
+def self.write_pl1( season, source: ) write( 'pl.1', season, source: source ); end
+def self.write_cz1( season, source: ) write( 'cz.1', season, source: source ); end
+def self.write_sk1( season, source: ) write( 'sk.1', season, source: source ); end
 
-def write_hr1( season, source: ) write_worker( 'hr.1', season, source: source ); end
+def self.write_hr1( season, source: ) write( 'hr.1', season, source: source ); end
 
-def write_ua1( season, source: ) write_worker( 'ua.1', season, source: source ); end
+def self.write_ua1( season, source: ) write( 'ua.1', season, source: source ); end
 
+
+end   # module Writer

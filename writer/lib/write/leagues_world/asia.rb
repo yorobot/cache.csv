@@ -1,3 +1,4 @@
+module Writer
 
 LEAGUES.merge!(
   'cn.1' => { name:     'Chinese Super League',
@@ -11,5 +12,8 @@ LEAGUES.merge!(
 )
 
 
-def write_cn( season, source: ) write_worker( 'cn.1', season, source: source ); end
-def write_jp( season, source: ) write_worker( 'jp.1', season, source: source ); end
+def self.write_cn( season, source: ) write( 'cn.1', season, source: source ); end
+def self.write_jp( season, source: ) write( 'jp.1', season, source: source ); end
+
+
+end   # module Writer

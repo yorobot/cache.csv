@@ -1,3 +1,5 @@
+module Writer
+
 ############################
 # Germany / Deutschland
 
@@ -24,18 +26,21 @@ LEAGUES.merge!(
               }
 )
 
-def write_de(   season, source: 'leagues', extra: nil, split: false, normalize: true )
-  write_worker( 'de.1', season, source: source, extra: extra, split: split, normalize: normalize )
+def self.write_de1(   season, source: 'leagues', extra: nil, split: false, normalize: true )
+  write( 'de.1', season, source: source, extra: extra, split: split, normalize: normalize )
 end
 
-def write_de2(  season, source: 'leagues', extra: nil, split: false, normalize: true )
-  write_worker( 'de.2', season, source: source, extra: extra, split: split, normalize: normalize )
+def self.write_de2(  season, source: 'leagues', extra: nil, split: false, normalize: true )
+  write( 'de.2', season, source: source, extra: extra, split: split, normalize: normalize )
 end
 
-def write_de3(  season, source: 'leagues', extra: nil, split: false, normalize: true )
-  write_worker( 'de.3', season, source: source, extra: extra, split: split, normalize: normalize )
+def self.write_de3(  season, source: 'leagues', extra: nil, split: false, normalize: true )
+  write( 'de.3', season, source: source, extra: extra, split: split, normalize: normalize )
 end
 
-def write_de_cup(  season, source: 'two', split: false, normalize: true )
-  write_worker( 'de.cup', season, source: source, split: split, normalize: normalize )
+def self.write_de_cup(  season, source: 'two', split: false, normalize: true )
+  write( 'de.cup', season, source: source, split: split, normalize: normalize )
 end
+
+
+end   # module Writer

@@ -1,3 +1,5 @@
+module Writer
+
 ########################
 # Austria
 
@@ -31,17 +33,18 @@ LEAGUES.merge!(
 
 
 
-def write_at1( season, source: 'two', split: false, normalize: true )
+def self.write_at1( season, source: 'two', split: false, normalize: true )
   ## todo use **args, **kwargs!!! to "forward args, see england - why? why not?
-  write_worker( 'at.1', season, source: source, split: split, normalize: normalize )
+  write( 'at.1', season, source: source, split: split, normalize: normalize )
 end
 
-def write_at2( season, source: 'two', split: false, normalize: true )
-  write_worker( 'at.2', season, source: source, split: split, normalize: normalize )
+def self.write_at2( season, source: 'two', split: false, normalize: true )
+  write( 'at.2', season, source: source, split: split, normalize: normalize )
 end
 
-def write_at_cup( season, source: 'two', split: false, normalize: true )
-  write_worker( 'at.cup', season, source: source, split: split, normalize: normalize )
+def self.write_at_cup( season, source: 'two', split: false, normalize: true )
+  write( 'at.cup', season, source: source, split: split, normalize: normalize )
 end
 
 
+end   # module Writer

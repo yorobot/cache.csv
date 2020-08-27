@@ -1,11 +1,15 @@
-require_relative '../../boot'
+##  just use sportdb/catalogs  ?! - why? why not?
+#  require 'sportdb/importers'   # -- requires db support
+#  require 'sportdb/readers'     # -- requires db support
+require 'sportdb/catalogs'
 
 
+require 'sportdb/writers'
 
 
-### todo/fix: wrap everything in Writer module!!!!
 
 ### our own code
+require_relative 'write/config'
 require_relative 'write/write'
 
 require_relative 'write/leagues'
@@ -14,11 +18,4 @@ require_relative 'write/leagues_de'
 require_relative 'write/leagues_at'
 require_relative 'write/leagues_world'
 
-
-### todo/fix: add a config  e.g.  Writer.config.out_dir
-
-
-
-OUT_DIR='./o3'
-# OUT_DIR='../../../openfootball'
 

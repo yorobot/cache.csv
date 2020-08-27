@@ -22,6 +22,7 @@ module Starter
     puts "sites_dir: >#{sites_dir}<"
 
 
+    $LOAD_PATH.unshift( "#{sites_dir}/yorobot/sport.db.more/sportdb-exporters/lib" )
     $LOAD_PATH.unshift( "#{sites_dir}/yorobot/sport.db.more/sportdb-writers/lib" )
     $LOAD_PATH.unshift( "#{sites_dir}/yorobot/sport.db.more/sportdb-linters/lib" )
 

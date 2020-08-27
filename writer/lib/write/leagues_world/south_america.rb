@@ -1,3 +1,5 @@
+module Writer
+
 
 LEAGUES.merge!(
   'ar.1' => { name:     'Argentina Primera Division',
@@ -8,5 +10,7 @@ LEAGUES.merge!(
 
 )
 
-def write_ar( season, source: ) write_worker( 'ar.1', season, source: source ); end
+def self.write_ar( season, source: ) write( 'ar.1', season, source: source ); end
 
+
+end   # module Writer

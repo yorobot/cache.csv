@@ -1,15 +1,16 @@
 start_time = Time.now   ## todo: use Timer? t = Timer.start / stop / diff etc. - why? why not?
 
 
-require_relative 'lib/write'
+require_relative 'helper'
 
 
 boot_time = Time.now
 
 
+Writer.config.out_dir = './o5'
 
-write_de( '2020/21', source: 'two/o' )
-write_de2( '2020/21', source: 'two/o' )
+Writer.write_de1( '2020/21', source: 'two/o' )
+Writer.write_de2( '2020/21', source: 'two/o' )
 
 
 # write_de_cup( '2018/19', source: 'tmp/two' )

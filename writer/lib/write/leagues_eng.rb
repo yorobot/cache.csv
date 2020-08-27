@@ -1,9 +1,10 @@
+module Writer
+
 ####################
 # England
 
 
-
-def eng1( season )
+def self.eng1( season )
   case season    ## todo/fix: - use cast e.g. Season(season) - make sure it's a season obj
   when Season('1888/89')..Season('1891/92') ## single league (no divisions)
     {name:     'English Football League',
@@ -17,7 +18,7 @@ def eng1( season )
   end
 end
 
-def eng2( season )
+def self.eng2( season )
   case season
   when Season('1892/93')..Season('1991/92')
     {name:     'English Division Two',  ## or use English Football League Second Division ???
@@ -66,31 +67,32 @@ LEAGUES.merge!(
 )
 
 
-def write_eng1( season, **kwargs )
+def self.write_eng1( season, **kwargs )
   kwargs[:source] ||= 'one'
-  write_worker( 'eng.1', season, **kwargs )
+  write( 'eng.1', season, **kwargs )
 end
 
-def write_eng2( season, **kwargs )
+def self.write_eng2( season, **kwargs )
   kwargs[:source] ||= 'one'
-  write_worker( 'eng.2', season, **kwargs )
+  write( 'eng.2', season, **kwargs )
 end
 
 
-def write_eng3( season, source: 'two', extra: nil )
-  write_worker( 'eng.3', season, source: source, extra: extra )
+def self.write_eng3( season, source: 'two', extra: nil )
+  write( 'eng.3', season, source: source, extra: extra )
 end
 
-def write_eng4( season, source: 'two', extra: nil )
-  write_worker( 'eng.4', season, source: source, extra: extra )
+def self.write_eng4( season, source: 'two', extra: nil )
+  write( 'eng.4', season, source: source, extra: extra )
 end
 
-def write_eng5( season, source: 'two' )
-  write_worker( 'eng.5', season, source: source )
+def self.write_eng5( season, source: 'two' )
+  write( 'eng.5', season, source: source )
 end
 
-def write_eng_cup( season, source: 'two' )
-  write_worker( 'eng.cup', season, source: source )
+def self.write_eng_cup( season, source: 'two' )
+  write( 'eng.cup', season, source: source )
 end
 
+end   # module Writer
 

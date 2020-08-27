@@ -1,3 +1,4 @@
+module Writer
 
 LEAGUES =
 {
@@ -64,19 +65,20 @@ LEAGUES =
 
 
 
-def write_it1( season, source: 'one' )  write_worker( 'it.1', season, source: source ); end
-def write_it2( season, source: 'two' )  write_worker( 'it.2', season, source: source ); end
+def self.write_it1( season, source: 'one' )  write( 'it.1', season, source: source ); end
+def self.write_it2( season, source: 'two' )  write( 'it.2', season, source: source ); end
 
-def write_fr1( season, source: 'leagues' )  write_worker( 'fr.1', season, source: source ); end
-def write_fr2( season, source: 'two' )      write_worker( 'fr.2', season, source: source ); end
+def self.write_fr1( season, source: 'leagues' )  write( 'fr.1', season, source: source ); end
+def self.write_fr2( season, source: 'two' )      write( 'fr.2', season, source: source ); end
 
-def write_es1( season, source: 'one' )      write_worker( 'es.1', season, source: source ); end
-def write_es2( season, source: 'two' )      write_worker( 'es.2', season, source: source ); end
+def self.write_es1( season, source: 'one' )      write( 'es.1', season, source: source ); end
+def self.write_es2( season, source: 'two' )      write( 'es.2', season, source: source ); end
 
-def write_ru1( season, source: 'two' )  write_worker( 'ru.1', season, source: source ); end
-def write_ru2( season, source: 'two' )  write_worker( 'ru.2', season, source: source ); end
-
-
-def write_br1( season, source: 'one' )     write_worker( 'br.1', season, source: source ); end
+def self.write_ru1( season, source: 'two' )  write( 'ru.1', season, source: source ); end
+def self.write_ru2( season, source: 'two' )  write( 'ru.2', season, source: source ); end
 
 
+def self.write_br1( season, source: 'one' )     write( 'br.1', season, source: source ); end
+
+
+end   # module Writer

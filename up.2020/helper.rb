@@ -4,8 +4,7 @@ require_relative '../starter'
 Starter.setup   ## setup dev load path
 
 
-require_relative 'lib/convert'
-
+require_relative '../cache.weltfussball/lib/convert'
 require_relative '../writer/lib/write'
 
 ### note: use local/relative to this file (e.g. use __FILE__) !!!

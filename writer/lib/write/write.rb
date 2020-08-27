@@ -1,4 +1,6 @@
 
+module Writer
+
 
 SOURCES = {
   'one'      =>  { path: '../../stage/one' },
@@ -18,7 +20,7 @@ SOURCES = {
 
 
 
-def merge_goals( matches, goals )
+def self.merge_goals( matches, goals )
   goals_by_match = goals.group_by { |rec| rec.match_id }
   puts "match goal reports - #{goals_by_match.size} records"
 
@@ -71,7 +73,7 @@ end
 ########
 # helpers
 #   normalize team names
-def normalize( matches, league:, season: nil )
+def self.normalize( matches, league:, season: nil )
     league = SportDb::Import.catalog.leagues.find!( league )
     country = league.country
 
@@ -102,7 +104,7 @@ end
 
 
 
-def split_matches( matches, season: )
+def self.split_matches( matches, season: )
   matches_i  = []
   matches_ii = []
   matches.each do |match|
@@ -126,7 +128,7 @@ end
 
 ###
 # todo/check:  use Writer.open() or FileWriter.open() or such - why? why not?
-def write_buf( path, buf )  ## write buffer helper
+def self.write_buf( path, buf )  ## write buffer helper
   ## for convenience - make sure parent folders/directories exist
   FileUtils.mkdir_p( File.dirname( path ))  unless Dir.exist?( File.dirname( path ))
 
@@ -137,11 +139,11 @@ end
 
 
 
-def write_worker( league, season, source:,
-                                  extra: nil,
-                                  split: false,
-                                  normalize: true,
-                                  rounds: true )
+def self.write( league, season, source:,
+                                extra: nil,
+                                split: false,
+                                normalize: true,
+                                rounds: true )
   season = Season( season )  ## normalize season
 
   league_info = LEAGUES[ league ]
@@ -150,11 +152,22 @@ def write_worker( league, season, source:,
     exit 1
   end
 
-
-  source_info = SOURCES[ source ]
-  if source_info.nil?
-    puts "!! ERROR - no source found for >#{source}<; sorry"
-    exit 1
+  ## check - if source is directory (assume if starting ./ or ../ or /)
+  if source.start_with?( './')  ||
+     source.start_with?( '../') ||
+     source.start_with?( '/')
+     ## check if directory exists
+     unless File.exist?( source )
+       puts "!! ERROR: source dir >#{source}< does not exist"
+       exit 1
+     end
+     source_info = { path: source }   ## wrap in "plain" source dir in source info
+  else
+    source_info = SOURCES[ source ]
+    if source_info.nil?
+      puts "!! ERROR - no source found for >#{source}<; sorry"
+      exit 1
+    end
   end
 
   source_path = source_info[:path]
@@ -174,7 +187,7 @@ def write_worker( league, season, source:,
   ## check for goals
   in_path_goals = "#{source_path}/#{season_path}/#{league}~goals.csv"   # e.g. ../stage/one/2020/br.1~goals.csv
   if File.exist?( in_path_goals )
-    goals = Sports::CsvGoalParser.read( in_path_goals )
+    goals = SportDb::CsvGoalParser.read( in_path_goals )
     puts "goals - #{goals.size} records"
     pp goals[0]
 
@@ -251,7 +264,7 @@ def write_worker( league, season, source:,
                                          lang: lang )
 
     ## note: might be empty!!! if no matches skip (do NOT write)
-    write_buf( "#{OUT_DIR}/#{repo_path}/#{season_path}/#{stage_basename}.txt", buf )   unless buf.empty?
+    write_buf( "#{config.out_dir}/#{repo_path}/#{season_path}/#{stage_basename}.txt", buf )   unless buf.empty?
   end
   else  ## no stages - assume "regular" plain vanilla season
 
@@ -268,21 +281,21 @@ end
   if split
     matches_i, matches_ii = split_matches( matches, season: season )
 
-    out_path = "#{OUT_DIR}/#{repo_path}/#{season_path}/#{basename}-i.txt"
+    out_path = "#{config.out_dir}/#{repo_path}/#{season_path}/#{basename}-i.txt"
 
     SportDb::TxtMatchWriter.write( out_path, matches_i,
                                    name: "#{league_name} #{season.key}",
                                    lang:  lang,
                                    rounds: rounds )
 
-    out_path = "#{OUT_DIR}/#{repo_path}/#{season_path}/#{basename}-ii.txt"
+    out_path = "#{config.out_dir}/#{repo_path}/#{season_path}/#{basename}-ii.txt"
 
     SportDb::TxtMatchWriter.write( out_path, matches_ii,
                                    name: "#{league_name} #{season.key}",
                                    lang:  lang,
                                    rounds: rounds )
   else
-    out_path = "#{OUT_DIR}/#{repo_path}/#{season_path}/#{basename}.txt"
+    out_path = "#{config.out_dir}/#{repo_path}/#{season_path}/#{basename}.txt"
 
     SportDb::TxtMatchWriter.write( out_path, matches,
                                    name: "#{league_name} #{season.key}",
@@ -314,7 +327,7 @@ end
 
 
 
-def build_stage( matches_by_stage, stages:, name:, lang: )
+def self.build_stage( matches_by_stage, stages:, name:, lang: )
   buf = String.new('')
 
   ## note: allow convenience shortcut - assume stage_in is stage_out - auto-convert
@@ -344,4 +357,4 @@ def build_stage( matches_by_stage, stages:, name:, lang: )
 end
 
 
-
+end   # module Writer
