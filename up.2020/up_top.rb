@@ -1,6 +1,9 @@
 require_relative 'helper'
 
 
+require_relative '../git'
+
+
 ## top 5 countries / leagues
 
 LEAGUES = [
@@ -58,10 +61,28 @@ Worldfootball.config.cache.reports_dir   = '../cache.weltfussball/dl2'
 
 # Worldfootball.config.convert.out_dir = './o/aug25'
 Worldfootball.config.convert.out_dir = './o'
-convert
+# convert
 
-Writer.config.out_dir = './tmp'
+# Writer.config.out_dir = './tmp'
+Writer.config.out_dir = '../../../openfootball'
 write
 
+
+def push
+  msg = "auto-update week #{Date.today.cweek}"
+  puts msg
+
+  ['england',
+   'deutschland',
+   'france',
+  ].each do |name|
+    path = "../../../openfootball/#{name}"
+    git_push( path, msg )
+  end
+end
+
+## todo/fix: add a getch or something to hit return before commiting pushing - why? why not?
+
+push
 
 puts "bye"
