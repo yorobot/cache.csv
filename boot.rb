@@ -14,7 +14,7 @@ require 'sportdb/catalogs'
 
 require 'sportdb/linters'    # e.g. uses TeamSummary class
 
-require 'sportdb/writers'
+## require 'sportdb/writers'
 
 
 ## require 'sportdb/exporters'   ## requires db support

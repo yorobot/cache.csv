@@ -132,6 +132,16 @@ LEAGUES.merge!(
                           'Playoffs - Relegation',
                           'Europa League Finals']]
             },
+
+
+   'ru.1' => { name:     'Russian Premier League',
+               basename: '1-premierliga',
+               path:     'world/europe/russia',
+             },
+    'ru.2' => { name:     'Russian 1. Division',
+                basename: '2-division1',
+                path:     'world/europe/russia',
+              },
 )
 
 
@@ -168,6 +178,9 @@ def self.write_sk1( season, source: ) write( 'sk.1', season, source: source ); e
 def self.write_hr1( season, source: ) write( 'hr.1', season, source: source ); end
 
 def self.write_ua1( season, source: ) write( 'ua.1', season, source: source ); end
+
+def self.write_ru1( season, source: ) write( 'ru.1', season, source: source ); end
+def self.write_ru2( season, source: ) write( 'ru.2', season, source: source ); end
 
 
 end   # module Writer

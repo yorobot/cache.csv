@@ -10,18 +10,23 @@ LEAGUES =
               lang:     'pt_BR',
             },
 
-########################
-# Russia
-  'ru.1' => { name:     'Russian Premier League',
-              basename: '1-premierliga',
-              path:     'russia',
-              lang:     'en',   ## note: use english for now
-            },
-  'ru.2' => { name:     'Russian 1. Division',
-              basename: '2-division1',
-              path:     'russia',
-              lang:     'en',
-            },
+##############################
+# Mexico
+#
+#  - Viertelfinale
+#  - Halbfinale
+#  - Finale
+
+  'mx.1' => { name:     'Liga MX',
+              basename: '1-ligamx',   ## note: gets "overwritten" by stages (see below)
+              path:     'mexico',
+              lang:     'es',
+              stages: [{basename: '1-apertura',          names: ['Apertura']},
+                       {basename: '1-apertura_liguilla', names: ['Apertura - Liguilla']},
+                       {basename: '1-clausura',          names: ['Clausura']},
+                       {basename: '1-clausura_liguilla', names: ['Clausura - Liguilla']},
+                      ],
+        },
 
 ########################
 # Italy
@@ -65,20 +70,19 @@ LEAGUES =
 
 
 
-def self.write_it1( season, source: 'one' )  write( 'it.1', season, source: source ); end
-def self.write_it2( season, source: 'two' )  write( 'it.2', season, source: source ); end
+def self.write_it1( season, source: ) write( 'it.1', season, source: source ); end
+def self.write_it2( season, source: ) write( 'it.2', season, source: source ); end
 
-def self.write_fr1( season, source: 'leagues' )  write( 'fr.1', season, source: source ); end
-def self.write_fr2( season, source: 'two' )      write( 'fr.2', season, source: source ); end
+def self.write_fr1( season, source: ) write( 'fr.1', season, source: source ); end
+def self.write_fr2( season, source: ) write( 'fr.2', season, source: source ); end
 
-def self.write_es1( season, source: 'one' )      write( 'es.1', season, source: source ); end
-def self.write_es2( season, source: 'two' )      write( 'es.2', season, source: source ); end
-
-def self.write_ru1( season, source: 'two' )  write( 'ru.1', season, source: source ); end
-def self.write_ru2( season, source: 'two' )  write( 'ru.2', season, source: source ); end
+def self.write_es1( season, source: ) write( 'es.1', season, source: source ); end
+def self.write_es2( season, source: ) write( 'es.2', season, source: source ); end
 
 
-def self.write_br1( season, source: 'one' )     write( 'br.1', season, source: source ); end
 
+def self.write_br1( season, source: ) write( 'br.1', season, source: source ); end
+
+def self.write_mx1( season, source: ) write( 'mx.1', season, source: source ); end
 
 end   # module Writer
