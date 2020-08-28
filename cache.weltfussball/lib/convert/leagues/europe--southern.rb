@@ -5,7 +5,12 @@ LEAGUES_EUROPE.merge!({
 
   # /ita-serie-a-2019-2020/
   'it.1' =>  { pages: 'ita-serie-a' },
-  'it.2'  => { pages: 'ita-serie-b' },
+  'it.2' =>  { pages: 'ita-serie-b' },
+
+  # /por-primeira-liga-2019-2020/
+  # /por-segunda-liga-2019-2020/
+  'pt.1' =>  { pages: 'por-primeira-liga' },
+  'pt.2' =>  { pages: 'por-segunda-liga' },
 
   # /esp-primera-division-2019-2020/
   'es.1'  => { pages: 'esp-primera-division' },
