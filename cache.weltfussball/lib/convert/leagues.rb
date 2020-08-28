@@ -2,6 +2,7 @@
 
 require_relative 'leagues/europe'
 require_relative 'leagues/north_america'
+require_relative 'leagues/south_america'
 require_relative 'leagues/pacific'
 require_relative 'leagues/asia'
 
@@ -10,6 +11,7 @@ module Worldfootball
 
 LEAGUES = [LEAGUES_EUROPE,
            LEAGUES_NORTH_AMERICA,
+           LEAGUES_SOUTH_AMERICA,
            LEAGUES_PACIFIC,
            LEAGUES_ASIA].reduce({}) { |mem,h| mem.merge!( h ); mem }
 
