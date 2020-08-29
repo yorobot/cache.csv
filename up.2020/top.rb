@@ -24,6 +24,7 @@ LEAGUES = [    ## regular academic / season e.g. 2020/21
 
 'at.1',         # starts
 'at.2',         # starts
+'at.3.o',       # starts
 'at.cup',       # starts
 
 'fr.1',         # starts Fri Aug 21
@@ -50,8 +51,14 @@ if ARGV.empty?
 else
   INCLUDES = ARGV
 
+  leagues = []
   repos = []
-  INCLUDES.each do |league|
+  INCLUDES.each do |q|   ## find all matching leagues (that is, league keys)
+    more_leagues = (LEAGUES + LEAGUES_YEAR).find_all {|league| league.start_with?(q) }
+    leagues += more_leagues  if more_leagues
+  end
+
+  leagues.each do |league|
     league_info = Writer::LEAGUES[ league ]
     pp league_info
     path = league_info[:path]

@@ -53,6 +53,8 @@ LEAGUES_EUROPE.merge!({
             'aut-erste-liga'],
     season: ->(season) { season.start_year >= 2019 ? 1 : 2 }
   },
+  # /aut-regionalliga-ost-2020-2021/
+  'at.3.o' => { pages: 'aut-regionalliga-ost' },
   'at.cup' => { pages: 'aut-oefb-cup' },
 
 

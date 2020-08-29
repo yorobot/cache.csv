@@ -31,9 +31,11 @@ MODS = {
     'Sturm Graz (A)'           => 'Sturm Graz II',
     'Kapfenberger SV 1919 (A)' => 'Kapfenberger SV II',
     'SV Grödig (A)'            => 'SV Grödig II',
-    'FC Trenkwalder Admira (A)' => 'FC Admira Wacker II',
     'RB Salzburg (A)'          => 'RB Salzburg II',
     'SR WGFM Donaufeld'        => 'SR Donaufeld Wien',
+    'FC Trenkwalder Admira (A)' => 'FC Admira Wacker II',
+    ## AT 3.O (Regionalliga Ost)
+    'FC Admira Wacker (A)'     => 'FC Admira Wacker II',  # in 2020/21
   },
  'nz' => {
     ## NZ 1

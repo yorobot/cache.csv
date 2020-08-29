@@ -24,18 +24,19 @@ require 'optparse'
 puts "-- optparse:"
 
 OPTS = {}
-OptionParser.new do |opts|
+optparser = OptionParser.new do |opts|
   opts.banner = "Usage: #{NAME} [options]"
 
-  opts.on("-d", "--download", "Download web pages") do |download|
+  opts.on( "-d", "--download", "Download web pages" ) do |download|
     OPTS[:download] = download
   end
 
-  opts.on("-p", "--push", "(Commit &) push changes to git") do |push|
+  opts.on( "-p", "--push", "(Commit &) push changes to git" ) do |push|
     OPTS[:push] = push
   end
 
-end.parse!
+end
+optparser.parse!
 
 puts "OPTS:"
 p OPTS
@@ -77,8 +78,8 @@ def download_pages( leagues, season,
                       includes: nil,
                       excludes: nil )
   leagues.each do |league|
-    next  if excludes &&  excludes.include?( league )
-    next  if includes && !includes.include?( league )
+    next  if excludes && excludes.find { |q| league.start_with?( q ) }
+    next  if includes && includes.find { |q| league.start_with?( q ) }.nil?
 
     puts "downloading #{league} #{season}..."
 
@@ -116,8 +117,8 @@ def convert( leagues, season,
                includes: nil,
                excludes: nil )
   leagues.each do |league|
-    next  if excludes &&  excludes.include?( league )
-    next  if includes && !includes.include?( league )
+    next  if excludes && excludes.find { |q| league.start_with?( q ) }
+    next  if includes && includes.find { |q| league.start_with?( q ) }.nil?
 
     Worldfootball.convert( league: league,
                            season: season,
@@ -133,8 +134,8 @@ def write( leagues, season,
              includes: nil,
              excludes: nil )
   leagues.each do |league|
-    next  if excludes &&  excludes.include?( league )
-    next  if includes && !includes.include?( league )
+    next  if excludes && excludes.find { |q| league.start_with?( q ) }
+    next  if includes && includes.find { |q| league.start_with?( q ) }.nil?
 
     Writer.write( league, season, source: source )
   end
@@ -169,6 +170,17 @@ end
 
 
 =begin
+
+>> git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+>> git pull --ff-only
+Already up to date.
+
+
+
 ###########################################
 ## trying to commit & push repo in path >C:/Sites/openfootball/mexico<
 Dir.getwd: C:/Sites/openfootball/mexico
