@@ -1,11 +1,8 @@
 require_relative 'helper'
 
 
-require_relative '../git'
-
 
 ## top-level countries / leagues
-
 
 LEAGUES_YEAR = [
   'br.1',    # starts Sun Aug 9
@@ -25,8 +22,6 @@ LEAGUES = [    ## regular academic / season e.g. 2020/21
 # 'de.cup',
 
 
-# ERROR - no match for club >SV St. Jakob/Rosental<
-
 'at.1',         # starts
 'at.2',         # starts
 'at.cup',       # starts
@@ -41,69 +36,37 @@ LEAGUES = [    ## regular academic / season e.g. 2020/21
 ]
 
 
-def download_pages( leagues, season,
-                      includes: nil,
-                      excludes: nil )
-  leagues.each do |league|
-    next  if excludes &&  excludes.include?( league )
-    next  if includes && !includes.include?( league )
 
-    ## todo/check: what to do: if league is both included and excluded?
-    ##   include forces include? or exclude has the last word? - why? why not?
-    ##  Excludes match before includes,
-    ##   meaning that something that has been excluded cannot be included again
+if ARGV.empty?
+  INCLUDES = nil
+  REPOS    = [
+              'england',
+              'deutschland',
+              'austria',
+              'france',
+              'mexico',
+              'brazil',
+             ]
+else
+  INCLUDES = ARGV
 
-    puts "downloading #{league} #{season}..."
+  repos = []
+  INCLUDES.each do |league|
+    league_info = Writer::LEAGUES[ league ]
+    pp league_info
+    path = league_info[:path]
 
-    Worldfootball.schedule( league: league, season: season )
+    ## use only first part e.g. world/europe/belgium => world
+    repos << path.split( %r{[/\\]})[0]
   end
+
+  repos
+  pp repos
+  REPOS = repos.uniq
+  pp REPOS
 end
 
 
-## todo - find "proper/classic" timezone ("winter time")
-
-##  Brasilia - Distrito Federal, Brasil  (GMT-3)  -- summer time?
-##  Ciudad de México, CDMX, México       (GMT-5)  -- summer time?
-##  Londres, Reino Unido (GMT+1)
-##   Madrid -- ?
-##   Lisboa -- ?
-##   Moskow -- ?
-##
-## todo/check - quick fix timezone offsets for leagues for now
-##   - find something better - why? why not?
-## note: assume time is in GMT+1
-OFFSETS = {
-  'eng.1' => -1,
-  'eng.2' => -1,
-  'eng.3' => -1,
-  'eng.4' => -1,
-  'eng.5' => -1,
-
-  # 'es.1',       # starts ??
-
-  'br.1'  => -5,
-  'mx.1'  => -7,
-}
-
-def convert( leagues, season )
-  leagues.each do |league|
-    Worldfootball.convert( league: league,
-                           season: season,
-                           offset: OFFSETS[ league ] )
-  end
-end
-
-def write( leagues, season,
-             source:,
-             includes: nil,
-             excludes: nil )
-  leagues.each do |league|
-    next  if excludes &&  excludes.include?( league )
-    next  if includes && !includes.include?( league )
-
-    Writer.write( league, season, source: source )
-  end
-end
 
 
 Worldfootball.config.cache.schedules_dir = '../cache.weltfussball/dl'
@@ -113,41 +76,36 @@ Worldfootball.config.cache.reports_dir   = '../cache.weltfussball/dl2'
 
 ## download_pages( %w[at.1 at.2 at.cup] )
 
-## download_pages( LEAGUES,      '2020/21', includes: %w[ mx.1 ])
-## download_pages( LEAGUES_YEAR, '2020' )
-
-# Worldfootball.config.convert.out_dir = './o/aug25'
-Worldfootball.config.convert.out_dir = './o'
-convert( LEAGUES,      '2020/21' )
-convert( LEAGUES_YEAR, '2020'    )
-
-Writer.config.out_dir = './tmp'
-# Writer.config.out_dir = '../../../openfootball'
-write( LEAGUES,      '2020/21',
-          source: Worldfootball.config.convert.out_dir )
-write( LEAGUES_YEAR, '2020',
-          source: Worldfootball.config.convert.out_dir )
-
-
-
-def push
-  msg = "auto-update week #{Date.today.cweek}"
-  puts msg
-
-  [
-#   'england',
-#   'deutschland',
-   'austria',
-#   'france',
-#   'mexico',
-#   'brazil',
-  ].each do |name|
-    path = "../../../openfootball/#{name}"
-    git_push( path, msg )
-  end
+if OPTS[:download]
+  download_pages( LEAGUES,      '2020/21', includes: INCLUDES )
+  download_pages( LEAGUES_YEAR, '2020',    includes: INCLUDES )
 end
 
+
+# Worldfootball.config.convert.out_dir = './o/aug29'
+Worldfootball.config.convert.out_dir = './o'
+convert( LEAGUES,      '2020/21', includes: INCLUDES )
+convert( LEAGUES_YEAR, '2020',    includes: INCLUDES )
+
+
+if OPTS[:push]
+  Writer.config.out_dir = '../../../openfootball'
+else
+  Writer.config.out_dir = './tmp'
+end
+write( LEAGUES,      '2020/21', includes: INCLUDES )
+write( LEAGUES_YEAR, '2020',    includes: INCLUDES    )
+
+
+
 ## todo/fix: add a getch or something to hit return before commiting pushing - why? why not?
-# push
+push( REPOS )    if OPTS[:push]
+
+
+
+puts "INCLUDES:"
+pp INCLUDES
+puts "REPOS:"
+pp REPOS
 
 puts "bye"
