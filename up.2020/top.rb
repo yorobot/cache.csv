@@ -89,6 +89,10 @@ if OPTS[:download]
 end
 
 
+## always pull before push!! (use fast_forward)
+fast_forward_if_clean( REPOS )  if OPTS[:push]
+
+
 # Worldfootball.config.convert.out_dir = './o/aug29'
 Worldfootball.config.convert.out_dir = './o'
 convert( LEAGUES,      '2020/21', includes: INCLUDES )

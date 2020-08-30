@@ -151,15 +151,18 @@ def push( names )   ## optenfootball repo names e.g. world, england, etc.
   msg = "auto-update week #{Date.today.cweek}"
   puts msg
 
-### todo/fix:
-##    do a use always a git_pull first!!!! - why? why not?
-##
   names.each do |name|
     path = "#{SITES_DIR}/openfootball/#{name}"
     git_push( path, msg )
   end
 end
 
+def fast_forward_if_clean( names )
+  names.each do |name|
+    path = "#{SITES_DIR}/openfootball/#{name}"
+    git_fast_forward_if_clean( path )
+  end
+end
 
 
 ### todo/fix:
