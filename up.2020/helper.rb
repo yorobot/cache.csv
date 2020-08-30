@@ -147,12 +147,31 @@ end
 require_relative '../git'
 
 
+###
+## todo/fix:
+##   add -i/--interactive flag
+##     will prompt yes/no  before git operations (with consequences)!!!
+
 def push( names )   ## optenfootball repo names e.g. world, england, etc.
   msg = "auto-update week #{Date.today.cweek}"
   puts msg
 
   names.each do |name|
     path = "#{SITES_DIR}/openfootball/#{name}"
+
+    ## add dirty?/changes?
+    ##     clean?  - why? why not?   (git.status shortcuts??)
+
+    ## todo/fix: change to something like
+    ##  GitRepo.open( path ) do |git|
+    ##    git.(auto_)commit_and_push_if_changes/if_dirty()
+    ##  end
+    ##
+    ##   or use
+    ##    if git.changes?
+    ##      git.auto_commit    ## e.g. git add .; git commit or git commit -a
+    ##      git.push
+    ##    end
     git_push( path, msg )
   end
 end
@@ -160,9 +179,18 @@ end
 def fast_forward_if_clean( names )
   names.each do |name|
     path = "#{SITES_DIR}/openfootball/#{name}"
+
+    ##
+    ##  or use
+    ##    if git.clean?
+    ##      git.fast_forward  # e.g. pull --ff-only
+    ##    end
+
     git_fast_forward_if_clean( path )
   end
 end
+
+
 
 
 ### todo/fix:

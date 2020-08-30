@@ -3,8 +3,8 @@
 #     lets you use environments
 #     e.g. dev/development or production
 
-require 'pp'
 
+require_relative '../mono'
 
 
 ## convenience pre-configured/pre-built shortcut - lets you use
@@ -20,20 +20,20 @@ module Mono
     puts "Mono.root: >#{root}<"
 
     $LOAD_PATH.unshift( "#{root}/yorobot/sport.db.more/sportdb-exporters/lib" )
-    $LOAD_PATH.unshift( "#{sites_dir}/yorobot/sport.db.more/sportdb-writers/lib" )
-    $LOAD_PATH.unshift( "#{sites_dir}/yorobot/sport.db.more/sportdb-linters/lib" )
+    $LOAD_PATH.unshift( "#{root}/yorobot/sport.db.more/sportdb-writers/lib" )
+    $LOAD_PATH.unshift( "#{root}/yorobot/sport.db.more/sportdb-linters/lib" )
 
-    $LOAD_PATH.unshift( "#{sites_dir}/sportdb/sport.db/sports/lib" )
+    $LOAD_PATH.unshift( "#{root}/sportdb/sport.db/sports/lib" )
 
-    $LOAD_PATH.unshift( "#{sites_dir}/sportdb/sport.db/sportdb-importers/lib" )
+    $LOAD_PATH.unshift( "#{root}/sportdb/sport.db/sportdb-importers/lib" )
     ## todo - add readers, models, sync, etc.
 
-    $LOAD_PATH.unshift( "#{sites_dir}/sportdb/sport.db/sportdb-catalogs/lib" )
-    $LOAD_PATH.unshift( "#{sites_dir}/sportdb/sport.db/sportdb-formats/lib" )
-    $LOAD_PATH.unshift( "#{sites_dir}/sportdb/sport.db/sportdb-structs/lib" )
-    $LOAD_PATH.unshift( "#{sites_dir}/sportdb/sport.db/sportdb-langs/lib" )
-    $LOAD_PATH.unshift( "#{sites_dir}/sportdb/sport.db/score-formats/lib" )
-    $LOAD_PATH.unshift( "#{sites_dir}/sportdb/sport.db/date-formats/lib" )
+    $LOAD_PATH.unshift( "#{root}/sportdb/sport.db/sportdb-catalogs/lib" )
+    $LOAD_PATH.unshift( "#{root}/sportdb/sport.db/sportdb-formats/lib" )
+    $LOAD_PATH.unshift( "#{root}/sportdb/sport.db/sportdb-structs/lib" )
+    $LOAD_PATH.unshift( "#{root}/sportdb/sport.db/sportdb-langs/lib" )
+    $LOAD_PATH.unshift( "#{root}/sportdb/sport.db/score-formats/lib" )
+    $LOAD_PATH.unshift( "#{root}/sportdb/sport.db/date-formats/lib" )
 
 
     pp $:  # print load path
@@ -54,13 +54,3 @@ end # module Mono
 ##   extend Starter::SportDb
 ## end
 
-
-
-
-####
-# for testing
-
-if __FILE__ == $0
-  Starter.setup
-  puts "bye"
-end

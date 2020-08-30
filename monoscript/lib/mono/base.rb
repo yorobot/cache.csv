@@ -1,3 +1,4 @@
+
 module Mono
 
   def self.root   ## root of single (monorepo) source tree
@@ -5,7 +6,7 @@ module Mono
         ## todo/fix:
         ##  check if windows - otherwise use /sites
         ##  check if root directory exists?
-        'c:/sites'
+        'C:/Sites'
     end
   end
 
