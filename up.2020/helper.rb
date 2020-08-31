@@ -48,20 +48,21 @@ puts
 
 
 
-require_relative '../starter'
-Starter.setup   ## setup dev load path
+## hack: use "local" dev monoscript too :-) for now
+$LOAD_PATH.unshift( 'C:/Sites/yorobot/cache.csv/monoscript/lib' )
+
+require 'mono/sportdb'
+Mono.setup   ## setup dev load path
+
 
 
 require_relative '../cache.weltfussball/lib/convert'
 require_relative '../writer/lib/write'
 
-### note: use local/relative to this file (e.g. use __FILE__) !!!
-## todo/check: get (reuse) sites_dir from Starter - why? why not?
-SITES_DIR =  File.expand_path( "#{File.dirname(__FILE__)}/../../.." )
 
 ## use (switch to) "external" datasets
-SportDb::Import.config.clubs_dir   = "#{SITES_DIR}/openfootball/clubs"
-SportDb::Import.config.leagues_dir = "#{SITES_DIR}/openfootball/leagues"
+SportDb::Import.config.clubs_dir   = "#{Mono.root}/openfootball/clubs"
+SportDb::Import.config.leagues_dir = "#{Mono.root}/openfootball/leagues"
 
 
 
@@ -144,99 +145,59 @@ end
 
 
 
-require_relative '../git'
-
-
 ###
 ## todo/fix:
 ##   add -i/--interactive flag
 ##     will prompt yes/no  before git operations (with consequences)!!!
 
-def push( names )   ## optenfootball repo names e.g. world, england, etc.
-  msg = "auto-update week #{Date.today.cweek}"
-  puts msg
+
+
+########################
+#  push & pull github scripts
+
+
+## todo/fix: rename to something like
+##    git_(auto_)commit_and_push_if_changes/if_dirty()
+
+def git_push_if_changes( names )   ## optenfootball repo names e.g. world, england, etc.
+  message = "auto-update week #{Date.today.cweek}"
+  puts message
 
   names.each do |name|
-    path = "#{SITES_DIR}/openfootball/#{name}"
+    path = "#{Mono.root}/openfootball/#{name}"
 
-    ## add dirty?/changes?
-    ##     clean?  - why? why not?   (git.status shortcuts??)
-
-    ## todo/fix: change to something like
-    ##  GitRepo.open( path ) do |git|
-    ##    git.(auto_)commit_and_push_if_changes/if_dirty()
-    ##  end
-    ##
-    ##   or use
-    ##    if git.changes?
-    ##      git.auto_commit    ## e.g. git add .; git commit or git commit -a
-    ##      git.push
-    ##    end
-    git_push( path, msg )
-  end
-end
-
-def fast_forward_if_clean( names )
-  names.each do |name|
-    path = "#{SITES_DIR}/openfootball/#{name}"
-
-    ##
-    ##  or use
-    ##    if git.clean?
-    ##      git.fast_forward  # e.g. pull --ff-only
-    ##    end
-
-    git_fast_forward_if_clean( path )
+    GitRepo.open( path ) do |git|
+      puts ''
+      puts "###########################################"
+      puts "## trying to commit & push repo in path >#{path}<"
+      puts "Dir.getwd: #{Dir.getwd}"
+      output = git.status( '--short' )
+      if output.empty?
+        puts "no changes found; skipping commit & push"
+      else
+        git.add( '.' )
+        git.commit( message: message )
+        git.push
+      end
+    end
   end
 end
 
 
+def git_fast_forward_if_clean( names )
+  names.each do |name|
+    path = "#{Mono.root}/openfootball/#{name}"
 
+    GitRepo.open( path ) do |git|
+      output = git.status( '--short' )
+      unless  output.empty?
+        puts "FAIL - cannot git pull (fast-forward) - working tree has changes:"
+        puts output
+        exit 1
+      end
 
-### todo/fix:
-##  try to capture output ?? and check if no changes
-##   present on pull ???
+      git.fast_forward
+   end
+  end
+end
 
-### use git status with short format for easier capture??
-
-
-=begin
-
->> git status
-On branch master
-Your branch is up to date with 'origin/master'.
-
-nothing to commit, working tree clean
->> git pull --ff-only
-Already up to date.
-
-
-
-###########################################
-## trying to commit & push repo in path >C:/Sites/openfootball/mexico<
-Dir.getwd: C:/Sites/openfootball/mexico
-On branch master
-Your branch is up to date with 'origin/master'.
-
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-        modified:   2020-21/1-apertura.txt
-
-no changes added to commit (use "git add" and/or "git commit -a")
-true
-true
-[master 52bc88f] auto-update week 35
- 1 file changed, 4 insertions(+), 4 deletions(-)
-true
-Enumerating objects: 7, done.
-Counting objects: 100% (7/7), done.
-Delta compression using up to 2 threads
-Compressing objects: 100% (3/3), done.
-Writing objects: 100% (4/4), 421 bytes | 84.00 KiB/s, done.
-Total 4 (delta 2), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
-To github.com:openfootball/mexico.git
-   5ee65ad..52bc88f  master -> master
-true
-=end

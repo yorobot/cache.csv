@@ -90,7 +90,7 @@ end
 
 
 ## always pull before push!! (use fast_forward)
-fast_forward_if_clean( REPOS )  if OPTS[:push]
+git_fast_forward_if_clean( REPOS )  if OPTS[:push]
 
 
 # Worldfootball.config.convert.out_dir = './o/aug29'
@@ -110,7 +110,7 @@ write( LEAGUES_YEAR, '2020',    includes: INCLUDES    )
 
 
 ## todo/fix: add a getch or something to hit return before commiting pushing - why? why not?
-push( REPOS )    if OPTS[:push]
+git_push_if_changes( REPOS )    if OPTS[:push]
 
 
 
