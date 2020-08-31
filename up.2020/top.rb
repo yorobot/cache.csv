@@ -39,7 +39,6 @@ LEAGUES = [    ## regular academic / season e.g. 2020/21
 
 
 if ARGV.empty?
-  INCLUDES = nil
   REPOS    = [
               'england',
               'deutschland',
@@ -49,11 +48,9 @@ if ARGV.empty?
               'brazil',
              ]
 else
-  INCLUDES = ARGV
-
   leagues = []
   repos = []
-  INCLUDES.each do |q|   ## find all matching leagues (that is, league keys)
+  ARGV.each do |q|   ## find all matching leagues (that is, league keys)
     more_leagues = (LEAGUES + LEAGUES_YEAR).find_all {|league| league.start_with?(q) }
     leagues += more_leagues  if more_leagues
   end
@@ -75,48 +72,11 @@ end
 
 
 
-
-Worldfootball.config.cache.schedules_dir = '../cache.weltfussball/dl'
-Worldfootball.config.cache.reports_dir   = '../cache.weltfussball/dl2'
-## download_pages( %w[ de.2 de.3 ])
-## download_pages( %w[ eng.2 eng.3 eng.4 ])
-
-## download_pages( %w[at.1 at.2 at.cup] )
-
-if OPTS[:download]
-  download_pages( LEAGUES,      '2020/21', includes: INCLUDES )
-  download_pages( LEAGUES_YEAR, '2020',    includes: INCLUDES )
-end
-
-
-## always pull before push!! (use fast_forward)
-git_fast_forward_if_clean( REPOS )  if OPTS[:push]
-
-
-# Worldfootball.config.convert.out_dir = './o/aug29'
-Worldfootball.config.convert.out_dir = './o'
-convert( LEAGUES,      '2020/21', includes: INCLUDES )
-convert( LEAGUES_YEAR, '2020',    includes: INCLUDES )
-
-
-if OPTS[:push]
-  Writer.config.out_dir = '../../../openfootball'
-else
-  Writer.config.out_dir = './tmp'
-end
-write( LEAGUES,      '2020/21', includes: INCLUDES )
-write( LEAGUES_YEAR, '2020',    includes: INCLUDES    )
-
-
-
-## todo/fix: add a getch or something to hit return before commiting pushing - why? why not?
-git_push_if_changes( REPOS )    if OPTS[:push]
-
-
-
-puts "INCLUDES:"
-pp INCLUDES
-puts "REPOS:"
-pp REPOS
+process( [['2020/21', LEAGUES],
+          ['2020',    LEAGUES_YEAR]],
+         REPOS,
+         includes: ARGV
+       )
 
 puts "bye"
+

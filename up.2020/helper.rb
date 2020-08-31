@@ -75,6 +75,9 @@ SportDb::Import.config.leagues_dir = "#{Mono.root}/openfootball/leagues"
 ##  Excludes match before includes,
 ##   meaning that something that has been excluded cannot be included again
 
+
+
+
 def download_pages( leagues, season,
                       includes: nil,
                       excludes: nil )
@@ -199,5 +202,65 @@ def git_fast_forward_if_clean( names )
       git.fast_forward
    end
   end
+end
+
+
+
+
+###
+## todo/fix:  move into a tool class or such? - why? why not?
+
+def process( seasons, repos, includes: )
+  ## quick fix: move/handle empty array upstream!!!!
+  includes = nil   if includes.is_a?(Array) && includes.empty?
+
+
+  Worldfootball.config.cache.schedules_dir = '../cache.weltfussball/dl'
+  Worldfootball.config.cache.reports_dir   = '../cache.weltfussball/dl2'
+
+  if OPTS[:download]
+    seasons.each do |item|
+      season  = item[0]
+      leagues = item[1]   ## array of league keys e.g. at.1, at.cup, etc.
+
+      download_pages( leagues, season, includes: includes )
+    end
+  end
+
+  ## always pull before push!! (use fast_forward)
+  git_fast_forward_if_clean( repos )  if OPTS[:push]
+
+
+  # Worldfootball.config.convert.out_dir = './o/aug29'
+  Worldfootball.config.convert.out_dir = './o'
+
+  seasons.each do |item|
+    season  = item[0]
+    leagues = item[1]   ## array of league keys e.g. at.1, at.cup, etc.
+
+    convert( leagues, season, includes: includes )
+  end
+
+
+  if OPTS[:push]
+    Writer.config.out_dir = '../../../openfootball'
+  else
+    Writer.config.out_dir = './tmp'
+  end
+
+  seasons.each do |item|
+    season  = item[0]
+    leagues = item[1]   ## array of league keys e.g. at.1, at.cup, etc.
+
+    write( leagues, season, includes: includes )
+  end
+
+  ## todo/fix: add a getch or something to hit return before commiting pushing - why? why not?
+  git_push_if_changes( repos )    if OPTS[:push]
+
+  puts "INCLUDES:"
+  pp includes
+  puts "REPOS:"
+  pp repos
 end
 

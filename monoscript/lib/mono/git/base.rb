@@ -30,11 +30,38 @@ class Git   ## make Git a module - why? why not?
   #################
   ## standard git commands
 
+  def self.version
+    cmd = 'git --version'
+    Shell.run( cmd )
+  end
+
   def self.status( opts=nil )
     cmd = 'git status'
     cmd << " #{opts}"   unless opts.nil? || opts.empty?
     Shell.run( cmd )
   end
+
+  def self.changes( opts=nil )  ## same as git status --short  - keep shortcut / alias - why? why not?
+    ## returns changed files - one per line or empty if no changes
+    cmd = 'git status --short'
+    cmd << " #{opts}"   unless opts.nil? || opts.empty?
+    Shell.run( cmd )
+  end
+
+  #####################
+  ## status helpers
+
+  ## git status --short  returns empty stdout/list
+  def self.clean?()   changes.empty?; end
+
+  def self.changes?() clean? == false; end  ## reverse of clean?
+  class << self
+    alias_method :dirty?, :changes?  ## add alias
+  end
+
+
+  #######
+  ## more (major) git commands
 
   def self.pull( opts=nil )
     cmd = 'git pull'
@@ -47,7 +74,9 @@ class Git   ## make Git a module - why? why not?
     cmd << " #{opts}"   unless opts.nil? || opts.empty?
     Shell.run( cmd )
   end
-  def self.ff( opts=nil ) fast_forward( opts ); end ## add alias
+  class << self
+    alias_method :ff, :fast_forward   ## add alias
+  end
 
 
   def self.push( opts=nil )
@@ -69,14 +98,6 @@ class Git   ## make Git a module - why? why not?
     Shell.run( cmd )
   end
 
-  #####################
-  ## status helpers
-
-  ## git status --short  returns empty stdout/list
-  def self.clean?()   status( '--short' ).empty?; end
-
-  def self.changes?() clean? == false; end  ## reverse of clean?
-  def self.dirty?()   changes?; end         ## add alias
 
 ###
 #  use nested class for "base" for running commands - why? why not?
@@ -98,6 +119,8 @@ def self.run( cmd )
   end
 
   unless stderr.empty?
+    ## todo/check: or use >2: or &2: or such
+    ##  stderr output not always an error (that is, exit status might be 0)
     puts "STDERR:"
     puts stderr
   end
@@ -105,10 +128,9 @@ def self.run( cmd )
   if status.success?
     stdout   # return stdout string
   else
-    ## todo/fix: raise GitError !!!
     puts "!! ERROR: cmd exec >#{cmd}< failed with exit status #{status.exitstatus}:"
     puts stderr
-    exit 1
+    raise GitError, "git cmd exec >#{cmd}< failed with exit status #{status.exitstatus}<: #{stderr}"
   end
 end
 end # class Shell
@@ -123,19 +145,21 @@ class GitRepo
   end
 
   def initialize( path )
+    raise ArgumentError, "dir >#{path}< not found; dir MUST already exist for GitRepo class - sorry"   unless Dir.exist?( path )
     @path = path
   end
 
   def open( &blk )
-    puts "Dir.getwd: #{Dir.getwd}"
+    ## puts "Dir.getwd: #{Dir.getwd}"
     Dir.chdir( @path ) do
       blk.call( self )
     end
-    puts "Dir.getwd: #{Dir.getwd}"
+    ## puts "Dir.getwd: #{Dir.getwd}"
   end
 
 
   def status( opts=nil )        Git.status( opts ); end
+  def changes( opts=nil )       Git.changes( opts ); end
   def clean?()                  Git.clean?; end
   def changes?()                Git.changes?; end
   alias_method :dirty?, :changes?
