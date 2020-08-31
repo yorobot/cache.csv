@@ -4,6 +4,11 @@
 #     e.g. dev/development or production
 
 
+## todo/fix: move later app/gem-family/-specific configs
+##   to its own gem e.g. mono-sportdb or such - why? why not?
+
+
+
 require_relative '../mono'
 
 
