@@ -11,18 +11,14 @@ class Git   ## make Git a module - why? why not?
   ###############
   ## "setup" starter git commands
 
-  def self.clone( repo, opts=nil )
+  def self.clone( repo, name=nil )
     cmd = "git clone #{repo}"
-    ## todo/fix: check if options MUST go before repo arg?
-    ##   just use *args and args.join(' ') or such why? why not?
-    cmd << " #{opts}"   unless opts.nil? || opts.empty?
+    cmd << " #{name}"   unless name.nil? || name.empty?
     Shell.run( cmd )
   end
 
-  def self.mirror( repo, opts=nil )
+  def self.mirror( repo )
     cmd = "git clone --mirror #{repo}"
-    ## todo/fix: check if options MUST go before repo arg?
-    cmd << " #{opts}"   unless opts.nil? || opts.empty?
     Shell.run( cmd )
   end
 
@@ -35,16 +31,15 @@ class Git   ## make Git a module - why? why not?
     Shell.run( cmd )
   end
 
-  def self.status( opts=nil )
+  def self.status( short: false )
     cmd = 'git status'
-    cmd << " #{opts}"   unless opts.nil? || opts.empty?
+    cmd << " --short"   if short
     Shell.run( cmd )
   end
 
-  def self.changes( opts=nil )  ## same as git status --short  - keep shortcut / alias - why? why not?
+  def self.changes  ## same as git status --short  - keep shortcut / alias - why? why not?
     ## returns changed files - one per line or empty if no changes
     cmd = 'git status --short'
-    cmd << " #{opts}"   unless opts.nil? || opts.empty?
     Shell.run( cmd )
   end
 
@@ -63,15 +58,13 @@ class Git   ## make Git a module - why? why not?
   #######
   ## more (major) git commands
 
-  def self.pull( opts=nil )
+  def self.pull
     cmd = 'git pull'
-    cmd << " #{opts}"   unless opts.nil? || opts.empty?
     Shell.run( cmd )
   end
 
-  def self.fast_forward( opts=nil )
+  def self.fast_forward
     cmd = 'git pull --ff-only'
-    cmd << " #{opts}"   unless opts.nil? || opts.empty?
     Shell.run( cmd )
   end
   class << self
@@ -79,22 +72,25 @@ class Git   ## make Git a module - why? why not?
   end
 
 
-  def self.push( opts=nil )
+  def self.push
     cmd = 'git push'
-    cmd << " #{opts}"   unless opts.nil? || opts.empty?
     Shell.run( cmd )
   end
 
-  def self.add( opts=nil )
+  def self.add( pathspec=nil )  ## e.g. git add .  or git add *.rb or such
     cmd = 'git add'
-    cmd << " #{opts}"   unless opts.nil? || opts.empty?
+    cmd << " #{pathspec}"   unless pathspec.nil? || pathspec.empty?
     Shell.run( cmd )
   end
 
-  def self.commit( opts=nil, message: nil )
+  def self.add_all
+    cmd = 'git add --all'
+    Shell.run( cmd )
+  end
+
+  def self.commit( message: )
     cmd = 'git commit'
     cmd << %Q{ -m "#{message}"}  unless message.nil? || message.empty?
-    cmd << " #{opts}"            unless opts.nil? || opts.empty?
     Shell.run( cmd )
   end
 
@@ -158,22 +154,21 @@ class GitRepo
   end
 
 
-  def status( opts=nil )        Git.status( opts ); end
-  def changes( opts=nil )       Git.changes( opts ); end
+  def status( short: false )    Git.status( short: short ); end
+  def changes()                 Git.changes; end
   def clean?()                  Git.clean?; end
   def changes?()                Git.changes?; end
   alias_method :dirty?, :changes?
 
-  def pull( opts=nil )          Git.pull( opts ); end
-  def fast_forward( opts=nil )  Git.fast_forward( opts ); end
+  def pull()                    Git.pull; end
+  def fast_forward()            Git.fast_forward; end
   alias_method :ff, :fast_forward
 
-  def push( opts=nil )          Git.push( opts ); end
+  def push()                    Git.push; end
 
-  def add( opts=nil )           Git.add( opts ); end
-  def commit( opts=nil, message: nil )
-    Git.commit( opts, message: message )
-  end
+  def add( pathspec )           Git.add( pathspec ); end
+  def add_all()                 Git.add_all; end
+  def commit( message: )        Git.commit( message: message ); end
 
 
 end # class GitRepo

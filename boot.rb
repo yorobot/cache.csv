@@ -1,5 +1,5 @@
 ## hack: use "local" dev monoscript too :-) for now
-$LOAD_PATH.unshift( 'C:/Sites/yorobot/cache.csv/monoscript/lib' )
+$LOAD_PATH.unshift( 'C:/Sites/yorobot/cache.csv/monos/lib' )
 
 ## note: use the local version of sportdb-source gem
 require 'mono/sportdb'

@@ -3,7 +3,7 @@ require './lib/mono/version.rb'
 
 Hoe.spec 'monoscript' do
 
-  self.version = Monoscript::VERSION
+  self.version = Mono::Module::VERSION
 
   self.summary = "monoscript - (startup) scripts for mono source trees / monorepos"
   self.description = summary

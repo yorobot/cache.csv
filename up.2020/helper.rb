@@ -49,7 +49,7 @@ puts
 
 
 ## hack: use "local" dev monoscript too :-) for now
-$LOAD_PATH.unshift( 'C:/Sites/yorobot/cache.csv/monoscript/lib' )
+$LOAD_PATH.unshift( 'C:/Sites/yorobot/cache.csv/monos/lib' )
 
 require 'mono/sportdb'
 Mono.setup   ## setup dev load path

@@ -1,7 +1,10 @@
 require 'pp'
 require 'time'
 require 'date'
+require 'yaml'
 require 'open3'
+require 'fileutils'
+require 'optparse'
 
 
 ###
@@ -9,7 +12,9 @@ require 'open3'
 require 'mono/version' # let version always go first
 require 'mono/base'
 require 'mono/git/base'
+require 'mono/git/sync'
+require 'mono/git/status'
+require 'mono/git/tool'
 
 
-
-puts Monoscript.banner   # say hello
+puts Mono::Module.banner   # say hello
