@@ -10,7 +10,7 @@ module Mono
     count_repos = 0
 
     ## sum up total number of repos
-    total_repos = h.reduce(0) {|sum,(org,names)| sum+= names.size; sum }
+    total_repos = h.reduce(0) {|sum,(_,names)| sum+= names.size; sum }
 
 
     h.each do |org_with_counter,names|

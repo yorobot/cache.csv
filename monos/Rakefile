@@ -1,11 +1,11 @@
 require 'hoe'
 require './lib/mono/version.rb'
 
-Hoe.spec 'monoscript' do
+Hoe.spec 'monos' do
 
   self.version = Mono::Module::VERSION
 
-  self.summary = "monoscript - (startup) scripts for mono source trees / monorepos"
+  self.summary = "monos - monorepo / mono source tree tools and (startup) scripts"
   self.description = summary
 
   self.urls = ['https://github.com/sportdb/sport.db']

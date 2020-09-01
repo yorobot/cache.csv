@@ -7,9 +7,9 @@ require 'helper'
 class TestBase < MiniTest::Test
 
   def test_version
-    puts Monoscript::VERSION
-    puts Monoscript.banner
-    puts Monoscript.root
+    puts Mono::Module::VERSION
+    puts Mono::Module.banner
+    puts Mono::Module.root
   end
 
   def test_root

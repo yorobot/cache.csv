@@ -6,7 +6,13 @@ module Mono
         ## todo/fix:
         ##  check if windows - otherwise use /sites
         ##  check if root directory exists?
-        'C:/Sites'
+        if ENV['MOPATH']
+          ENV['MOPATH']
+        elsif Dir.exist?( 'C:/Sites' )
+          'C:/Sites'
+        else
+          '/sites'
+        end
     end
   end
 
