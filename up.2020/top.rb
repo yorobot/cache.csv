@@ -5,7 +5,7 @@ require_relative 'helper'
 ## top-level countries / leagues
 
 LEAGUES_YEAR = [
-  'br.1',    # starts Sun Aug 9
+  'br.1',    # starts Sun Aug 9      *****
 ]
 
 
@@ -22,18 +22,22 @@ LEAGUES = [    ## regular academic / season e.g. 2020/21
 # 'de.cup',
 
 
-'at.1',         # starts
-'at.2',         # starts
-'at.3.o',       # starts
-'at.cup',       # starts
+'at.1',         # starts Fri Sep 11
+'at.2',         # starts Fri Sep 11
+'at.3.o',       # starts Fri Aug 21   *****
+'at.cup',       # starts Fri Aug 28   *****
 
-'fr.1',         # starts Fri Aug 21
-'fr.2',         # starts Sat Aug 22
+'fr.1',         # starts Fri Aug 21   *****
+'fr.2',         # starts Sat Aug 22   *****
 
-  # 'es.1',       # starts ??
-  # 'it.1',       # starts ??
+'es.1',         # starts Fri Sep 11
+'es.2',         # starts Fri Sep 11
 
-'mx.1',         # starts
+
+'it.1',         # starts Sun Sep 20
+# 'it.2',
+
+'mx.1',         # starts Fri Jul 24   *****
 ]
 
 
@@ -44,6 +48,8 @@ if ARGV.empty?
               'deutschland',
               'austria',
               'france',
+              'italy',
+              'espana',
               'mexico',
               'brazil',
              ]

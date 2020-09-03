@@ -49,7 +49,7 @@ puts
 
 
 ## hack: use "local" dev monoscript too :-) for now
-$LOAD_PATH.unshift( 'C:/Sites/yorobot/cache.csv/monos/lib' )
+$LOAD_PATH.unshift( 'C:/Sites/sportdb/sport.db/monos/lib' )
 
 require 'mono/sportdb'
 Mono.setup   ## setup dev load path
@@ -111,7 +111,8 @@ OFFSETS = {
   'eng.4' => -1,
   'eng.5' => -1,
 
-  # 'es.1',       # starts ??
+  'es.1' => -1,
+  'es.2' => -1,
 
   'br.1'  => -5,
   'mx.1'  => -7,
@@ -174,7 +175,7 @@ def git_push_if_changes( names )   ## optenfootball repo names e.g. world, engla
       puts "###########################################"
       puts "## trying to commit & push repo in path >#{path}<"
       puts "Dir.getwd: #{Dir.getwd}"
-      output = git.status( '--short' )
+      output = git.changes
       if output.empty?
         puts "no changes found; skipping commit & push"
       else
@@ -192,7 +193,7 @@ def git_fast_forward_if_clean( names )
     path = "#{Mono.root}/openfootball/#{name}"
 
     GitRepo.open( path ) do |git|
-      output = git.status( '--short' )
+      output = git.changes
       unless  output.empty?
         puts "FAIL - cannot git pull (fast-forward) - working tree has changes:"
         puts output
