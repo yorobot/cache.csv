@@ -172,18 +172,18 @@ def git_push_if_changes( names )   ## optenfootball repo names e.g. world, engla
   names.each do |name|
     path = "#{SportDb::Boot.root}/openfootball/#{name}"
 
-    Gitti::GitRepo.open( path ) do |git|
+    Gitti::GitProject.open( path ) do |proj|
       puts ''
       puts "###########################################"
       puts "## trying to commit & push repo in path >#{path}<"
       puts "Dir.getwd: #{Dir.getwd}"
-      output = git.changes
+      output = proj.changes
       if output.empty?
         puts "no changes found; skipping commit & push"
       else
-        git.add( '.' )
-        git.commit( message: message )
-        git.push
+        proj.add( '.' )
+        proj.commit( message )
+        proj.push
       end
     end
   end
@@ -194,15 +194,15 @@ def git_fast_forward_if_clean( names )
   names.each do |name|
     path = "#{SportDb::Boot.root}/openfootball/#{name}"
 
-    Gitti::GitRepo.open( path ) do |git|
-      output = git.changes
+    Gitti::GitProject.open( path ) do |proj|
+      output = proj.changes
       unless  output.empty?
         puts "FAIL - cannot git pull (fast-forward) - working tree has changes:"
         puts output
         exit 1
       end
 
-      git.fast_forward
+      proj.fast_forward
    end
   end
 end
@@ -246,7 +246,7 @@ def process( seasons, repos, includes: )
 
 
   if OPTS[:push]
-    Writer.config.out_dir = '../../../openfootball'
+    Writer.config.out_dir = "#{SportDb::Boot.root}/openfootball"
   else
     Writer.config.out_dir = './tmp'
   end
