@@ -49,10 +49,10 @@ puts
 
 
 ## hack: use "local" dev monoscript too :-) for now
-$LOAD_PATH.unshift( 'C:/Sites/sportdb/sport.db/monos/lib' )
+$LOAD_PATH.unshift( 'C:/Sites/rubycoco/monos/lib' )
 
-require 'mono/sportdb'
-Mono.setup   ## setup dev load path
+require 'sportdb/setup'
+SportDb::Boot.setup   ## setup dev load path
 
 
 
@@ -61,8 +61,8 @@ require_relative '../writer/lib/write'
 
 
 ## use (switch to) "external" datasets
-SportDb::Import.config.clubs_dir   = "#{Mono.root}/openfootball/clubs"
-SportDb::Import.config.leagues_dir = "#{Mono.root}/openfootball/leagues"
+SportDb::Import.config.clubs_dir   = "#{SportDb::Boot.root}/openfootball/clubs"
+SportDb::Import.config.leagues_dir = "#{SportDb::Boot.root}/openfootball/leagues"
 
 
 
@@ -160,6 +160,8 @@ end
 #  push & pull github scripts
 
 
+
+
 ## todo/fix: rename to something like
 ##    git_(auto_)commit_and_push_if_changes/if_dirty()
 
@@ -168,9 +170,9 @@ def git_push_if_changes( names )   ## optenfootball repo names e.g. world, engla
   puts message
 
   names.each do |name|
-    path = "#{Mono.root}/openfootball/#{name}"
+    path = "#{SportDb::Boot.root}/openfootball/#{name}"
 
-    GitRepo.open( path ) do |git|
+    Gitti::GitRepo.open( path ) do |git|
       puts ''
       puts "###########################################"
       puts "## trying to commit & push repo in path >#{path}<"
@@ -190,9 +192,9 @@ end
 
 def git_fast_forward_if_clean( names )
   names.each do |name|
-    path = "#{Mono.root}/openfootball/#{name}"
+    path = "#{SportDb::Boot.root}/openfootball/#{name}"
 
-    GitRepo.open( path ) do |git|
+    Gitti::GitRepo.open( path ) do |git|
       output = git.changes
       unless  output.empty?
         puts "FAIL - cannot git pull (fast-forward) - working tree has changes:"

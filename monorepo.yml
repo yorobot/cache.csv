@@ -18,6 +18,14 @@ sportdb:
 - sport.db.sources
 - football.db
 
+
+##############
+#  some support gems libs
+rubycoco:
+- monos
+- gitti
+
+
 #####################
 # football.db - open football
 openfootball:

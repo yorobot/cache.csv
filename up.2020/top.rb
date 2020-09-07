@@ -19,7 +19,7 @@ LEAGUES = [    ## regular academic / season e.g. 2020/21
 'de.1',         # starts Fri Sep 18
 'de.2',         # starts Fri Sep 18
 'de.3',         # starts Fri Sep 18
-# 'de.cup',
+'de.cup',
 
 
 'at.1',         # starts Fri Sep 11
