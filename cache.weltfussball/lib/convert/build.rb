@@ -149,7 +149,8 @@ def self.parse_score( score_str )
   if score_str == '---'   ## in the future (no score yet) - was -:-
     ft = ''
     ht = ''
-  elsif score_str == 'n.gesp.'   ## cancelled (british) / canceled (us)
+  elsif score_str == 'n.gesp.' ||   ## cancelled (british) / canceled (us)
+        score_str == 'ausg.'     ## todo/check: change to some other status ????
     ft = '(*)'
     ht = ''
     comments = 'cancelled'
