@@ -3,12 +3,18 @@
 - [ ] add time!!! to datasets - why? why not?
 
 
-- [ ] check Brazil 2020 !!! - schedule now runs into 2021!!!!
+- [ ] check Brazil 2020 !!! - schedule now runs into 2021 - fix season!!!!
 
 ´´´
 2020/21 (Aug 9 - Feb 24) - 20 clubs, 380 matches, 247 goals
   match status: {"FINISHED"=>104, "POSTPONED"=>4, "SCHEDULED"=>272}
+
+ The competition was originally scheduled to begin on 3 May
+ and end on 6 December, however due to the COVID-19 pandemic
+ the tournament was rescheduled, starting on 8 August 2020 and
+ending on 24 February 2021.
 ´´´
+
 
 - [ ] check champions league - add country code to team/club names - why? why not?
 

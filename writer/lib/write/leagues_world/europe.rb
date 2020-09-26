@@ -9,11 +9,18 @@ LEAGUES.merge!(
               basename: '1-superleague',
               path:     'world/europe/greece',
             },
+
   'pt.1' => { name:     'Portuguese Primeira Liga',
               basename: '1-primeiraliga',
               path:     'world/europe/portugal',
               lang:     'pt_PT',
             },
+  'pt.2' => { name:     'Portuguese Segunda Liga',
+              basename: '2-segundaliga',
+              path:     'world/europe/portugal',
+              lang:     'pt_PT',
+            },
+
   'ch.1' => { name:     'Swiss Super League',
               basename: '1-superleague',
               path:     'world/europe/switzerland',

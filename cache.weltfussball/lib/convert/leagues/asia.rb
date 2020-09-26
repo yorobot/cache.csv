@@ -2,6 +2,13 @@ module Worldfootball
 
 LEAGUES_ASIA = {
 
+  # /chn-super-league-2020/
+  'cn.1'     => { pages: 'chn-super-league' },
+
+  # /jpn-j1-league-2020/
+  'jp.1'     => { pages: 'jpn-j1-league' },
+
+
 =begin
 2020                           -- >/alle_spiele/kor-k-league-1-2020/<
 2019 Meisterschaft             -- >/alle_spiele/kor-k-league-1-2019-meisterschaft/<

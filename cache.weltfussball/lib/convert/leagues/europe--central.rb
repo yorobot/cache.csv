@@ -64,6 +64,22 @@ LEAGUES_EUROPE.merge!({
   'ch.1'   => { pages: 'sui-super-league' },
   'ch.2'   => { pages: 'sui-challenge-league' },
 
+  # /hun-nb-i-2020-2021/
+  'hu.1'   => { pages: 'hun-nb-i' },
+
+  # /cze-1-fotbalova-liga-2020-2021/
+  'cz.1' => {
+     pages: {
+      'cze-1-fotbalova-liga-{season}'          => 'Regular Season',           # 1
+     },
+     season: ->( season ) {
+      case season
+      when Season('2020/21') then [1]     # just getting started
+      end
+     }
+    },
+
+
   # /pol-ekstraklasa-2020-2021/
   # /pol-ekstraklasa-2019-2020-playoffs/
   # /pol-ekstraklasa-2019-2020-abstieg/
