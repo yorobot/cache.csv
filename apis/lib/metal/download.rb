@@ -167,6 +167,8 @@ module Footballdata
 
       if response.code == '200'
         download_path = "#{config.cache.download_dir}/#{path}.json"
+
+        FileUtils.mkdir_p( config.cache.download_dir )
         File.open( download_path, 'w:utf-8' ) { |f| f.write( txt ) }
       else
         puts "!! ERROR - #{response.code}:"
