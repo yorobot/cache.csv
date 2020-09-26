@@ -1,5 +1,27 @@
 # Notes
 
+- [ ] add time!!! to datasets - why? why not?
+
+
+- [ ] check Brazil 2020 !!! - schedule now runs into 2021!!!!
+
+´´´
+2020/21 (Aug 9 - Feb 24) - 20 clubs, 380 matches, 247 goals
+  match status: {"FINISHED"=>104, "POSTPONED"=>4, "SCHEDULED"=>272}
+´´´
+
+- [ ] check champions league - add country code to team/club names - why? why not?
+
+´´´
+Qualifying,Qual. Round 1,,Wed Aug 19 2020,FC Sheriff Tiraspol,2-0,1-0,CS Fola Esch
+Qualifying,Qual. Round 1,,Wed Aug 19 2020,Floriana FC,0-2,0-0,FC CFR 1907 Cluj
+Qualifying,Qual. Round 1,,Fri Aug 21 2020,KÍ,3-0 (*),,ŠK Slovan Bratislava,awarded
+Qualifying,Qual. Round 2,,Tue Aug 25 2020,PAOK FC,3-1,3-1,Beşiktaş JK
+Qualifying,Qual. Round 2,,Tue Aug 25 2020,KF Tirana,0-1,0-0,FK Crvena Zvezda
+Qualifying,Qual. Round 2,,Wed Aug 26 2020,AZ,1-1,0-0,FC Viktoria Plzeň,3-1
+...
+´´´
+
 
 - [ ] todo - handle champs (int'l club competition with stages) e.g.
 
