@@ -1,43 +1,46 @@
 require_relative 'helper'
 
 
-
 ## top-level countries / leagues
 
 LEAGUES_YEAR = [
-  'br.1',    # starts Sun Aug 9      *****
+  'br.1',    # starts Sun Aug 9  - note: now runs into 2021!!!
 ]
 
+
+###
+## check / use uefa country league ranking - 1. eng, 2. de, etc. ????
 
 LEAGUES = [    ## regular academic / season e.g. 2020/21
 'eng.1',        # starts Sat Sep 12
 'eng.2',        # starts Sat Sep 12
 'eng.3',        # starts Sat Sep 12
 'eng.4',        # starts Sat Sep 12
-# 'eng.5',      # starts ??
+'eng.5',        # starts Sat Oct 3
+## todo/fix: add league cup and ...
 
 'de.1',         # starts Fri Sep 18
 'de.2',         # starts Fri Sep 18
 'de.3',         # starts Fri Sep 18
 'de.cup',
 
-
-'at.1',         # starts Fri Sep 11
-'at.2',         # starts Fri Sep 11
-'at.3.o',       # starts Fri Aug 21   *****
-'at.cup',       # starts Fri Aug 28   *****
-
-'fr.1',         # starts Fri Aug 21   *****
-'fr.2',         # starts Sat Aug 22   *****
-
 'es.1',         # starts Fri Sep 11
 'es.2',         # starts Fri Sep 11
 
+'fr.1',         # starts Fri Aug 21
+'fr.2',         # starts Sat Aug 22
 
 'it.1',         # starts Sun Sep 20
-# 'it.2',
+'it.2',         # starts Fri Sep 25
 
-'mx.1',         # starts Fri Jul 24   *****
+
+'at.1',         # starts Fri Sep 11
+'at.2',         # starts Fri Sep 11
+'at.3.o',       # starts Fri Aug 21
+'at.cup',       # starts Fri Aug 28
+
+
+'mx.1',         # starts Fri Jul 24
 ]
 
 

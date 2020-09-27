@@ -9,9 +9,9 @@ LEAGUES_YEAR = [
   ### Northern Europe
   'se.1',  ## Sweden
   'se.2',
+  'fi.1',  ## Finland
 
-
- ### todo/fix: move to Asia :-) or something!!!!!
+  ### Asia
   'cn.1',  ## China
   'jp.1',  ## Japan
 ]
@@ -19,11 +19,13 @@ LEAGUES_YEAR = [
 
 
 LEAGUES = [   # academic / regular-style season e.g 2020/21
- ### Southern Europe
- 'pt.1',        # Portugal - starts ??
- 'pt.2',
+  ### Northern Europe
+  'dk.1',       # starts Fri Sep/11
 
- ### Benelux
+  ### British Isles / Western Europe
+  'sco.1',       # starts Sat Aug/1
+
+ ### Benelux / Western Europe
  'be.1',        # starts Sat Aug/8
  'nl.1',        # starts Sat Sep/12
  'lu.1',        # starts Fri Aug/21
@@ -34,12 +36,20 @@ LEAGUES = [   # academic / regular-style season e.g 2020/21
 
  'hu.1',        # Hungary        - starts ??
  'cz.1',        # Czech Republic - starts ??
+ 'pl.1',        # Poland         - starts Aug/28
 
-  ### British Isles
- 'sco.1',       # starts Sat Aug/1
 
- ### todo/fix: move to Asia :-) or something!!!!!
 
+  ### Southern Europe
+  'pt.1',        # Portugal - starts ??
+  'pt.2',
+
+  'gr.1',       # starts Fri Sep/11
+  'tr.1',       # starts Fri Sep/11
+
+  ### Eastern Europe
+  'ro.1',       # Romania   - starts
+  'ru.1',       # Russia    - starts  Aug/8
 ]
 
 

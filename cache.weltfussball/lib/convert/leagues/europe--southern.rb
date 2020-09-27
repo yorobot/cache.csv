@@ -4,6 +4,7 @@ module Worldfootball
 LEAGUES_EUROPE.merge!({
 
   # /ita-serie-a-2019-2020/
+  # /ita-serie-b-2020-2021/
   'it.1' =>  { pages: 'ita-serie-a' },
   'it.2' =>  { pages: 'ita-serie-b' },
 
@@ -16,10 +17,12 @@ LEAGUES_EUROPE.merge!({
   'es.1'  => { pages: 'esp-primera-division' },
   'es.2'  => { pages: 'esp-segunda-division' },
 
+  # /tur-sueperlig-2020-2021/
   'tr.1'  => { pages: 'tur-sueperlig' },
   'tr.2'  => { pages: 'tur-1-lig' },
 
-
+  # /gre-super-league-2020-2021/
+  'gr.1'  => { pages: 'gre-super-league' },
 
 
   ## todo/check: add europe southeastern or balkans - why? why not?

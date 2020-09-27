@@ -131,6 +131,14 @@ LEAGUES.merge!(
                           'Playoffs - Relegation']]
             },
 
+  'ro.1' => { name:     'Romanian Liga 1',
+              basename: '1-liga1',
+              path:     'world/europe/romania',
+              stages:   [['Regular Season'],
+                         ['Playoffs - Championship',
+                          'Playoffs - Relegation']]
+            },
+
   'ua.1' => { name:     'Ukraine Premier League',
               basename: '1-premierleague',
               path:     'world/europe/ukraine',
