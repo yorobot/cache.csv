@@ -57,8 +57,6 @@ SportDb::Boot.setup   ## setup dev load path
 
 
 require_relative '../cache.weltfussball/lib/convert'
-require_relative './tool'
-
 require_relative '../writer/lib/write'
 
 
@@ -147,7 +145,7 @@ end
 
 
 ###
-## todo/fix:  move into a tool class or such? - why? why not?
+## todo/fix:  move more code into tool class or such? - why? why not?
 
 def process( leagues_by_season, repos, includes: )
   ## quick fix: move/handle empty array upstream!!!!

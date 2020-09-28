@@ -30,4 +30,7 @@ require_relative 'convert/convert'
 require_relative 'convert/convert_reports'
 
 
+require_relative 'convert/tool'
+
+
 
