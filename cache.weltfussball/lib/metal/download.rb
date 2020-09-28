@@ -92,6 +92,7 @@ class Metal
       html = response.body.to_s
       html = html.force_encoding( Encoding::UTF_8 )
 
+      FileUtils.mkdir_p( File.dirname(path) )
       File.open( path, 'w:utf-8' ) {|f| f.write( html ) }
     else
       puts "!! ERROR - #{response.code}:"
