@@ -57,6 +57,8 @@ SportDb::Boot.setup   ## setup dev load path
 
 
 require_relative '../cache.weltfussball/lib/convert'
+require_relative './tool'
+
 require_relative '../writer/lib/write'
 
 
@@ -65,74 +67,6 @@ SportDb::Import.config.clubs_dir   = "#{SportDb::Boot.root}/openfootball/clubs"
 SportDb::Import.config.leagues_dir = "#{SportDb::Boot.root}/openfootball/leagues"
 
 
-
-################################
-# add more helpers
-#  move upstream for (re)use - why? why not?
-
-## todo/check: what to do: if league is both included and excluded?
-##   include forces include? or exclude has the last word? - why? why not?
-##  Excludes match before includes,
-##   meaning that something that has been excluded cannot be included again
-
-
-
-
-def download_pages( leagues, season,
-                      includes: nil,
-                      excludes: nil )
-  leagues.each do |league|
-    next  if excludes && excludes.find { |q| league.start_with?( q ) }
-    next  if includes && includes.find { |q| league.start_with?( q ) }.nil?
-
-    puts "downloading #{league} #{season}..."
-
-    Worldfootball.schedule( league: league, season: season )
-  end
-end
-
-
-## todo - find "proper/classic" timezone ("winter time")
-
-##  Brasilia - Distrito Federal, Brasil  (GMT-3)  -- summer time?
-##  Ciudad de México, CDMX, México       (GMT-5)  -- summer time?
-##  Londres, Reino Unido (GMT+1)
-##   Madrid -- ?
-##   Lisboa -- ?
-##   Moskow -- ?
-##
-## todo/check - quick fix timezone offsets for leagues for now
-##   - find something better - why? why not?
-## note: assume time is in GMT+1
-OFFSETS = {
-  'eng.1' => -1,
-  'eng.2' => -1,
-  'eng.3' => -1,
-  'eng.4' => -1,
-  'eng.5' => -1,
-
-  'es.1' => -1,
-  'es.2' => -1,
-
-  'pt.1' => -1,
-  'pt.2' => -1,
-
-  'br.1'  => -5,
-  'mx.1'  => -7,
-}
-
-def convert( leagues, season,
-               includes: nil,
-               excludes: nil )
-  leagues.each do |league|
-    next  if excludes && excludes.find { |q| league.start_with?( q ) }
-    next  if includes && includes.find { |q| league.start_with?( q ) }.nil?
-
-    Worldfootball.convert( league: league,
-                           season: season,
-                           offset: OFFSETS[ league ] )
-  end
-end
 
 ##
 ## todo/check:  remove default for source to make it more "generic" / less magic - why? why not?
@@ -212,26 +146,23 @@ end
 
 
 
-
 ###
 ## todo/fix:  move into a tool class or such? - why? why not?
 
-def process( seasons, repos, includes: )
+def process( leagues_by_season, repos, includes: )
   ## quick fix: move/handle empty array upstream!!!!
   includes = nil   if includes.is_a?(Array) && includes.empty?
+
+
+  tool = Worldfootball::Tool.new(
+                         includes: includes )
 
 
   Worldfootball.config.cache.schedules_dir = '../cache.weltfussball/dl'
   Worldfootball.config.cache.reports_dir   = '../cache.weltfussball/dl2'
 
-  if OPTS[:download]
-    seasons.each do |item|
-      season  = item[0]
-      leagues = item[1]   ## array of league keys e.g. at.1, at.cup, etc.
 
-      download_pages( leagues, season, includes: includes )
-    end
-  end
+  tool.download( leagues_by_season )  if OPTS[:download]
 
   ## always pull before push!! (use fast_forward)
   git_fast_forward_if_clean( repos )  if OPTS[:push]
@@ -240,12 +171,7 @@ def process( seasons, repos, includes: )
   # Worldfootball.config.convert.out_dir = './o/aug29'
   Worldfootball.config.convert.out_dir = './o'
 
-  seasons.each do |item|
-    season  = item[0]
-    leagues = item[1]   ## array of league keys e.g. at.1, at.cup, etc.
-
-    convert( leagues, season, includes: includes )
-  end
+  tool.convert( leagues_by_season )
 
 
   if OPTS[:push]
@@ -254,7 +180,7 @@ def process( seasons, repos, includes: )
     Writer.config.out_dir = './tmp'
   end
 
-  seasons.each do |item|
+  leagues_by_season.each do |item|
     season  = item[0]
     leagues = item[1]   ## array of league keys e.g. at.1, at.cup, etc.
 
