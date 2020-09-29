@@ -34,7 +34,7 @@ LEAGUES_NORTH_AMERICA = {
   case season
   when Season('2020/21') then [1]        # just getting started
   when Season('2019/20') then [1,2,3]    # covid-19 - no liguilla
-  when Season('2018/19') then [1,2,3,4]
+  when Season('2010/11')..Season('2018/19') then [1,2,3,4]
   end
  }
 },

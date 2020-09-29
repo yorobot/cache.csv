@@ -3,21 +3,35 @@ module Worldfootball
 
 LEAGUES_EUROPE.merge!({
 
-  # /rou-liga-1-2020-2021/
-  # /rou-liga-1-2019-2020-relegati
-  # /rou-liga-1-2019-2020-championship/
+  # /rou-liga-1-2019-2020
+  # /rou-liga-1-2019-2020-championship
+  # /rou-liga-1-2019-2020-relegation
+  # ..
+  # /rom-liga-1-2015-2016
+  # /rom-liga-1-2015-2016-championship
+  # /rou-liga-1-2015-2016-relegation
+
+
   'ro.1' => {
     pages: {
      'rou-liga-1-{season}'               => 'Regular Season',
      'rou-liga-1-{season}-championship'  => 'Playoffs - Championship',
      'rou-liga-1-{season}-relegation'    => 'Playoffs - Relegation',
+     ## note: change of country code from rou to rom in slug in 2015/16!!!
+     'rom-liga-1-{season}'               => 'Regular Season',
+     'rom-liga-1-{season}-championship'  => 'Playoffs - Championship',
+     'rom-liga-1-{season}-relegation'    => 'Playoffs - Relegation',
     },
     season: ->( season ) {
      case season
      when Season('2020/21') then [1]  # just getting started
+     when Season('2016/17')..Season('2019/20') then [1,2,3]
+     when Season('2015/16') then [4,5,3]  # handle special case with weird mixed slugs
+     when Season('2010/11')..Season('2014/15') then 4   ## use simple format for the rest; note: index NOT wrapped in array
      end
     }
   },
+
 
   'ru.1'  => { pages: 'rus-premier-liga' },
   'ru.2'  => { pages: 'rus-1-division' },
