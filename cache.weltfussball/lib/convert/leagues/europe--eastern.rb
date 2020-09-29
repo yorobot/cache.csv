@@ -32,8 +32,29 @@ LEAGUES_EUROPE.merge!({
     }
   },
 
-
-  'ru.1'  => { pages: 'rus-premier-liga' },
+  #   rus-premier-liga-2020-2021
+  #   ..
+  #   rus-premier-liga-2012-2013
+  #
+  #   rus-premier-liga-2011-2012
+  #   rus-premier-liga-2011-2012-meisterschaft
+  #   rus-premier-liga-2011-2012-relegation
+  #
+  #   rus-premier-liga-2010
+  'ru.1'  => {
+    pages: {
+     'rus-premier-liga-{season}'                => 'Regular Season',
+     'rus-premier-liga-{season}-meisterschaft'  => 'Playoffs - Championship',
+     'rus-premier-liga-{season}-relegation'     => 'Playoffs - Relegation',
+    },
+    season: ->( season ) {
+     case season
+     when Season('2012/13')..Season('2020/21') then 1   ## use simple format for the rest; note: index NOT wrapped in array
+     when Season('2011/12') then [1,2,3]
+     when Season('2004')..Season('2010') then 1         ## use simple format for the rest; note: index NOT wrapped in array
+     end
+    }
+  },
   'ru.2'  => { pages: 'rus-1-division' },
 
   # /ukr-premyer-liga-2019-2020/

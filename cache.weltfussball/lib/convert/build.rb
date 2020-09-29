@@ -33,6 +33,8 @@ def self.build( rows, season:, league:, stage: '' )   ## rename to fixup or such
    ##     and so on
    mods = MODS[ league.split('.')[0] ] || {}
 
+   score_errors = SCORE_ERRORS[ league ] || {}
+
 
    i = 0
    recs = []
@@ -92,6 +94,35 @@ def self.build( rows, season:, league:, stage: '' )   ## rename to fixup or such
     team2_str = row[:team2]
     score_str = row[:score]
 
+    ## convert date from string e.g. 2019-25-10
+    date = Date.strptime( date_str, '%Y-%m-%d' )
+
+
+    ### check for score_error; first (step 1) lookup by date
+    score_error = score_errors[ date.strftime('%Y-%m-%d') ]
+    if score_error
+      if team1_str == score_error[0] &&
+         team2_str == score_error[1]
+         ## check if team names match too; if yes, apply fix/patch!!
+         if score_str != score_error[2][0]
+           puts "!! WARN - score fix changed? - expected #{score_error[2][0]}, got #{score_str} - fixing to #{score_error[2][1]}"
+           pp row
+         end
+         puts "FIX - applying score error fix - from #{score_error[2][0]} to => #{score_error[2][1]}"
+         score_str = score_error[2][1]
+      end
+    end
+
+
+    print '[%03d]    ' % (i+1)
+    print "%-10s | " % date_str
+    print "%-5s | "  % time_str
+    print "%-22s | " % team1_str
+    print "%-22s | " % team2_str
+    print score_str
+    print "\n"
+
+
     ## check for 0:3 Wert.   - change Wert. to awd.  (awarded)
     score_str = score_str.sub( /Wert\./i, 'awd.' )
 
@@ -104,22 +135,11 @@ def self.build( rows, season:, league:, stage: '' )   ## rename to fixup or such
     team2_str = mods[ team2_str ]   if mods[ team2_str ]
 
 
-    print '[%03d]    ' % (i+1)
-    print "%-10s | " % date_str
-    print "%-5s | "  % time_str
-    print "%-22s | " % team1_str
-    print "%-22s | " % team2_str
-    print score_str
-    print "\n"
 
-
-    score_str = SCORE_ERRORS[ score_str ]   if SCORE_ERRORS[ score_str ]
 
     ht, ft, et, pen, comments = parse_score( score_str )
 
 
-    ## convert date from string e.g. 2019-25-10
-    date = Date.strptime( date_str, '%Y-%m-%d' )
 
     recs <<  [stage,
               round,
@@ -214,7 +234,7 @@ def self.parse_score( score_str )
      ft = "#{$1}-#{$2}"     ## e.g. see luxemburg and others
      ht = ''
   else
-     puts "!! ERROR - unsupported score format >#{score_str}< - sorry"
+     puts "!! ERROR - unsupported score format >#{score_str}< - sorry; maybe add a score error fix/patch"
      exit 1
   end
 

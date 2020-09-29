@@ -7,12 +7,19 @@ Worldfootball.config.cache.reports_dir   = '../cache.weltfussball/dl2'
 Worldfootball.config.convert.out_dir     = './o'
 
 
-# league  = 'mx.1'
-league = 'ro.1'
-seasons = Season('2010/11')..Season('2019/20')
+# league = 'mx.1'
+# league = 'ro.1'
+# seasons = Season('2010/11')..Season('2019/20')
+
+league = 'ru.1'
+seasons =    (Season('2004')..Season('2010')).to_a +
+             (Season('2011/12')..Season('2020/21')).to_a
+pp seasons
+
 
 
 ### convert
+
 seasons.each do |season|
   puts "#{league} #{season}:"
 
@@ -23,6 +30,7 @@ seasons.each do |season|
 end
 
 __END__
+
 
 ### write
 

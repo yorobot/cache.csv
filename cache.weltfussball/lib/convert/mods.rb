@@ -46,10 +46,21 @@ MODS = {
 
 
 ## fix/patch known score format errors in at/de cups
+##   new convention
+##   for a fix require league, date, and team1 & team2 for now!!!!
+##    - do NOT use some "generic" fix / patch!!!!
+##
+## old de/at patches/fixes:
+##  '0-1 (0-0, 0-0, 0-0) n.V.' => '0-1 (0-0, 0-0) n.V.',       # too long
+##  '2-1 (1-1, 1-1, 1-0) n.V.' => '2-1 (1-1, 1-1) n.V.',
+##  '4-2 (0-0, 0-0) i.E.'      => '4-2 (0-0, 0-0, 0-0) i.E.',  # too short
+
+
 SCORE_ERRORS = {
-  #  '0-1 (0-0, 0-0, 0-0) n.V.' => '0-1 (0-0, 0-0) n.V.',       # too long
-  #  '2-1 (1-1, 1-1, 1-0) n.V.' => '2-1 (1-1, 1-1) n.V.',
-  #  '4-2 (0-0, 0-0) i.E.'      => '4-2 (0-0, 0-0, 0-0) i.E.',  # too short
+  'ro.1' => {
+    ## 2013/14
+    '2013-07-29' => [ 'FC Brașov', 'Săgeata Năvodari', ['1-1 (0-0, 0-1)', '1-1 (0-0)']],
+  }
 }
 
 

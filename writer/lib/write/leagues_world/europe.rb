@@ -134,9 +134,15 @@ LEAGUES.merge!(
   'ro.1' => { name:     'Romanian Liga 1',
               basename: '1-liga1',
               path:     'world/europe/romania',
-              stages:   [['Regular Season'],
-                         ['Playoffs - Championship',
-                          'Playoffs - Relegation']]
+              stages:   ->(season) {
+                        if season.start_year >= 2015  # new league system starting with 2015/16 season
+                         [['Regular Season'],
+                          ['Playoffs - Championship',
+                           'Playoffs - Relegation']]
+                        else
+                          nil
+                        end
+                       },
             },
 
   'ua.1' => { name:     'Ukraine Premier League',

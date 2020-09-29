@@ -8,6 +8,38 @@ Worldfootball.config.cache.schedules_dir = '../cache.weltfussball/dl'
 Worldfootball.config.cache.reports_dir   = '../cache.weltfussball/dl2'
 
 
+##
+## note: ru - special (transition) league format for season 2011/12 (lasting 18 month!!)
+#  1)  rus-premier-liga-2011-2012/     -- 30 rounds
+#  2a) rus-premier-liga-2011-2012-meisterschaft/  -- 2011/2012 Meisterschaft (rounds 31 to 44)
+#   b) rus-premier-liga-2011-2012-relegation/     -- 2011/2012 Relegation    (rounds 31 to 44)
+
+
+RU = %w[
+  rus-premier-liga-2020-2021
+  rus-premier-liga-2019-2020
+  rus-premier-liga-2018-2019
+  rus-premier-liga-2017-2018
+  rus-premier-liga-2016-2017
+  rus-premier-liga-2015-2016
+  rus-premier-liga-2014-2015
+  rus-premier-liga-2013-2014
+  rus-premier-liga-2012-2013
+
+  rus-premier-liga-2011-2012
+  rus-premier-liga-2011-2012-meisterschaft
+  rus-premier-liga-2011-2012-relegation
+
+  rus-premier-liga-2010
+  rus-premier-liga-2009
+  rus-premier-liga-2008
+  rus-premier-liga-2007
+  rus-premier-liga-2006
+  rus-premier-liga-2005
+  rus-premier-liga-2004
+]
+
+
 RO = %w[
 rou-liga-1-2020-2021
 
@@ -94,7 +126,9 @@ MX = %w[
 
 
 # SLUGS = MX
-SLUGS = RO
+# SLUGS = RO
+SLUGS = RU
+
 
 SLUGS.each_with_index do |slug,i|
   puts "[#{i+1}/#{SLUGS.size}]>#{slug}<"
