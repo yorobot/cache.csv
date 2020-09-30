@@ -8,6 +8,37 @@ Worldfootball.config.cache.schedules_dir = '../cache.weltfussball/dl'
 Worldfootball.config.cache.reports_dir   = '../cache.weltfussball/dl2'
 
 
+
+PT = %w[
+  por-primeira-liga-2020-2021
+  por-primeira-liga-2019-2020
+  por-primeira-liga-2018-2019
+  por-primeira-liga-2017-2018
+  por-primeira-liga-2016-2017
+  por-primeira-liga-2015-2016
+  por-primeira-liga-2014-2015
+  por-primeira-liga-2013-2014
+  por-liga-zon-sagres-2012-2013
+  por-liga-zon-sagres-2011-2012
+  por-liga-sagres-2010-2011
+]
+
+
+NL = %w[
+  ned-eredivisie-2020-2021
+  ned-eredivisie-2019-2020
+  ned-eredivisie-2018-2019
+  ned-eredivisie-2017-2018
+  ned-eredivisie-2016-2017
+  ned-eredivisie-2015-2016
+  ned-eredivisie-2014-2015
+  ned-eredivisie-2013-2014
+  ned-eredivisie-2012-2013
+  ned-eredivisie-2011-2012
+  ned-eredivisie-2010-2011
+]
+
+
 ##
 ## note: ru - special (transition) league format for season 2011/12 (lasting 18 month!!)
 #  1)  rus-premier-liga-2011-2012/     -- 30 rounds
@@ -127,8 +158,8 @@ MX = %w[
 
 # SLUGS = MX
 # SLUGS = RO
-SLUGS = RU
-
+# SLUGS = RU
+SLUGS = PT
 
 SLUGS.each_with_index do |slug,i|
   puts "[#{i+1}/#{SLUGS.size}]>#{slug}<"

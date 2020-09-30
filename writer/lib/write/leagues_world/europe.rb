@@ -158,7 +158,16 @@ LEAGUES.merge!(
    'ru.1' => { name:     'Russian Premier League',
                basename: '1-premierliga',
                path:     'world/europe/russia',
-             },
+               stages:   ->(season) {
+                if season.start_year == 2011  # 2011/12 - new (transition) league system during season switch from calendar year to academic
+                 [['Regular Season'],
+                  ['Playoffs - Championship',
+                   'Playoffs - Relegation']]
+                else
+                  nil
+                end
+               },
+     },
     'ru.2' => { name:     'Russian 1. Division',
                 basename: '2-division1',
                 path:     'world/europe/russia',

@@ -7,43 +7,51 @@ Worldfootball.config.cache.reports_dir   = '../cache.weltfussball/dl2'
 Worldfootball.config.convert.out_dir     = './o'
 
 
-# league = 'mx.1'
-# league = 'ro.1'
-# seasons = Season('2010/11')..Season('2019/20')
+LEAGUES = [
+# ['mx.1', (Season('2010/11')..Season('2019/20')).to_a],
+# ['ro.1', (Season('2010/11')..Season('2019/20')).to_a],
+# ['ru.1', (Season('2004')..Season('2010')).to_a +
+#          (Season('2011/12')..Season('2020/21')).to_a],
+  ['nl.1', (Season('2010/11')..Season('2019/20')).to_a],
+  ['pt.1', (Season('2010/11')..Season('2019/20')).to_a],
+]
 
-league = 'ru.1'
-seasons =    (Season('2004')..Season('2010')).to_a +
-             (Season('2011/12')..Season('2020/21')).to_a
-pp seasons
+pp LEAGUES
+
 
 
 
 ### convert
+LEAGUES.each do |item|
+  league  = item[0]
+  seasons = item[1]
+  seasons.each do |season|
+    puts "#{league} #{season}:"
 
-seasons.each do |season|
-  puts "#{league} #{season}:"
+    Worldfootball.convert( league: league,
+                           season: season,
+                           offset: Worldfootball::OFFSETS[ league ] )
 
-  Worldfootball.convert( league: league,
-                         season: season,
-                         offset: Worldfootball::OFFSETS[ league ] )
-
+   end
 end
 
 __END__
 
-
 ### write
 
-#  Writer.config.out_dir = "#{SportDb::Boot.root}/openfootball"
+# Writer.config.out_dir = "#{SportDb::Boot.root}/openfootball"
 Writer.config.out_dir = './tmp'
 
-seasons.each do |season|
-  puts "#{league} #{season}:"
+LEAGUES.each do |item|
+  league  = item[0]
+  seasons = item[1]
+  seasons.each do |season|
+    puts "#{league} #{season}:"
 
-  Writer.write( league, season,
-                source: Worldfootball.config.convert.out_dir )
+    Writer.write( league, season,
+                  source: Worldfootball.config.convert.out_dir )
+  end
 end
-
 
 
 puts "bye"
