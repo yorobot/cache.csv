@@ -9,6 +9,75 @@ Worldfootball.config.cache.reports_dir   = '../cache.weltfussball/dl2'
 
 
 
+GR = %w[
+  gre-super-league-2020-2021
+
+  gre-superleague-2019-2020
+  gre-super-league-2019-2020-meisterschaft
+  gre-super-league-2019-2020-abstieg
+
+  gre-superleague-2018-2019
+  gre-superleague-2017-2018
+
+  gre-superleague-2016-2017
+  gre-superleague-2017-playoffs
+
+  gre-superleague-2015-2016
+  gre-superleague-2016-playoffs
+
+  gre-superleague-2014-2015
+  gre-superleague-2015-playoffs
+
+  gre-superleague-2013-2014
+  gre-superleague-2014-playoffs
+
+  gre-superleague-2012-2013
+  gre-superleague-2013-playoffs
+  gre-superleague-2013-spiel-um-platz-6
+
+  gre-superleague-2011-2012
+  gre-superleague-2012-playoffs
+
+  gre-superleague-2010-2011
+  gre-superleague-2011-playoffs
+]
+
+
+
+TR = %w[
+  tur-sueperlig-2020-2021
+  tur-sueperlig-2019-2020
+  tur-sueperlig-2018-2019
+  tur-sueperlig-2017-2018
+  tur-sueperlig-2016-2017
+  tur-sueperlig-2015-2016
+  tur-sueperlig-2014-2015
+  tur-sueperlig-2013-2014
+  tur-sueperlig-2012-2013
+]
+## note: start with 2012/13 for now!!!
+## in 2011/12 a new format was introduced, in which after the regular season
+##  two play-off groups were played to decide over the Champions League and Europa League starting rounds
+## 1)  - tur-sueperlig-2011-2012
+## 2a) - tur-sueperlig-2012-meisterschaft  -- 2012 Meisterschaft
+## 2b) - tur-sueperlig-2012-platzierung    -- 2012 Platzierung
+
+
+CH = %w[
+  sui-super-league-2020-2021
+  sui-super-league-2019-2020
+  sui-super-league-2018-2019
+  sui-super-league-2017-2018
+  sui-super-league-2016-2017
+  sui-super-league-2015-2016
+  sui-super-league-2014-2015
+  sui-super-league-2013-2014
+  sui-super-league-2012-2013
+  sui-super-league-2011-2012
+  sui-super-league-2010-2011
+]
+
+
 PT = %w[
   por-primeira-liga-2020-2021
   por-primeira-liga-2019-2020
@@ -159,7 +228,11 @@ MX = %w[
 # SLUGS = MX
 # SLUGS = RO
 # SLUGS = RU
-SLUGS = PT
+# SLUGS = PT
+# SLUGS = CH
+# SLUGS = TR
+SLUGS = GR
+
 
 SLUGS.each_with_index do |slug,i|
   puts "[#{i+1}/#{SLUGS.size}]>#{slug}<"

@@ -45,8 +45,29 @@ LEAGUES_EUROPE.merge!({
   'tr.1'  => { pages: 'tur-sueperlig' },
   'tr.2'  => { pages: 'tur-1-lig' },
 
+
   # /gre-super-league-2020-2021/
-  'gr.1'  => { pages: 'gre-super-league' },
+  'gr.1'  => {
+    pages: {
+      ## note: change from superleague to super-league !!!
+      'gre-super-league'                             => 'Regular Season',
+      'gre-super-league-{season}-meisterschaft'      => 'Playoffs - Championship',
+      'gre-super-league-{season}-abstieg'            => 'Playoffs - Relegation',
+      'gre-superleague'                              => 'Regular Season',
+      'gre-superleague-{end_year}-playoffs'          => 'Playoffs',
+      'gre-superleague-{end_year}-spiel-um-platz-6'  => 'Match 6th Place',
+    },
+    season: ->( season ) {
+            case season
+            when Season('2020/21') then [1]    ## just getting started
+            when Season('2019/20') then [4,2,3]
+            when Season('2017/18')..Season('2018/19') then 4
+            when Season('2013/14')..Season('2016/17') then [4,5]
+            when Season('2012/13')                    then [4,5,6]
+            when Season('2010/11')..Season('2011/12') then [4,5]
+            end
+    },
+  },
 
 
   ## todo/check: add europe southeastern or balkans - why? why not?
