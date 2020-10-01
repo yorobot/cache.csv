@@ -8,25 +8,15 @@ Worldfootball.config.convert.out_dir     = './o'
 
 
 LEAGUES = [
-# ['mx.1', (Season('2010/11')..Season('2019/20')).to_a],
-# ['ro.1', (Season('2010/11')..Season('2019/20')).to_a],
-# ['ru.1', (Season('2004')..Season('2010')).to_a +
-#          (Season('2011/12')..Season('2020/21')).to_a],
-
-  ['nl.1', (Season('2010/11')..Season('2019/20')).to_a],
-  ['pt.1', (Season('2010/11')..Season('2019/20')).to_a],
-
-  ['gr.1', (Season('2010/11')..Season('2019/20')).to_a],
-  ['tr.1', (Season('2012/13')..Season('2019/20')).to_a],
-  ['ch.1', (Season('2010/11')..Season('2019/20')).to_a],
+  ['eng.1', [Season('1998/99')]],
 ]
 
 pp LEAGUES
 
 
 
-
 ### convert
+=begin
 LEAGUES.each do |item|
   league  = item[0]
   seasons = item[1]
@@ -39,13 +29,19 @@ LEAGUES.each do |item|
 
    end
 end
-
+=end
 
 ### write
 
-Writer.config.out_dir = "#{SportDb::Boot.root}/openfootball"
-# Writer.config.out_dir = './tmp'
+# Writer.config.out_dir = "#{SportDb::Boot.root}/openfootball"
+Writer.config.out_dir = './tmp'
 
+
+Writer.write( 'eng.1', '1998/99',
+              source: Worldfootball.config.convert.out_dir,
+              extra: 'archive/1990s' )
+
+=begin
 LEAGUES.each do |item|
   league  = item[0]
   seasons = item[1]
@@ -56,6 +52,6 @@ LEAGUES.each do |item|
                   source: Worldfootball.config.convert.out_dir )
   end
 end
-
+=end
 
 puts "bye"

@@ -8,6 +8,27 @@ LEAGUES.merge!(
   'gr.1' => { name:     'Super League Greece',
               basename: '1-superleague',
               path:     'world/europe/greece',
+              stages:   ->(season) {
+                if season.start_year >= 2019  # new league system starting with 2015/16 season
+                 [['Regular Season'],
+                  ['Playoffs - Championship',
+                   'Playoffs - Relegation']]
+                elsif [2017,2018].include?( season.start_year )  ## 2017/18, 2018/19
+                  nil
+                elsif [2013,2014,2015,2016].include?( season.start_year )
+                  [['Regular Season'],
+                   ['Playoffs']]
+                elsif season.start_year == 2012
+                  [['Regular Season'],
+                   ['Playoffs',
+                    'Match 6th Place']]
+                elsif [2010,2011].include?( season.start_year )
+                  [['Regular Season'],
+                   ['Playoffs']]
+                else
+                  nil
+                end
+               },
             },
 
   'pt.1' => { name:     'Portuguese Primeira Liga',

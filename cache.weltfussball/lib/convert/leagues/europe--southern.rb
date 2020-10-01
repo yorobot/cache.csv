@@ -22,6 +22,13 @@ LEAGUES_EUROPE.merge!({
   # por-liga-sagres-2010-2011
   # ...
   # /por-segunda-liga-2019-2020/
+  # note: Sponsorship names for seasons
+  #  2002–2005: SuperLiga GalpEnergia
+  #  2005–2006: Liga betandwin.com
+  #  2006–2008: BWINLIGA
+  #  2008–2010: Liga Sagres
+  #  2010–2014: Liga ZON Sagres
+  #  2014–2020: Liga NOS
   'pt.1' =>  {
     pages: ['por-primeira-liga',
             'por-liga-zon-sagres',

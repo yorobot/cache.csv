@@ -1,0 +1,11 @@
+dl/
+dl2/
+o/
+tmp/
+temp/
+
+####
+# ignore all databases
+*.db
+
+
