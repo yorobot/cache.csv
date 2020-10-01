@@ -1,11 +1,12 @@
 require_relative '../cache.weltfussball/lib/convert'
 
 
+Webcache.config.root = '../../cache'
+
 
 Worldfootball.config.sleep = 3
 
-Worldfootball.config.cache.schedules_dir = '../cache.weltfussball/dl'
-Worldfootball.config.cache.reports_dir   = '../cache.weltfussball/dl2'
+
 
 SLUGS = %w[
   eng-premier-league-1998-1999

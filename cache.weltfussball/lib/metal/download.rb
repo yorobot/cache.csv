@@ -18,35 +18,28 @@ class Metal
   BASE_URL = 'https://www.weltfussball.de'
 
 
-
-  # def self.report_path( slug )  ## change to report_local_path or mk_report_path or such??
-  #  "#{config.cache.reports_dir}/#{slug}.html"
-  # end
-
-  # def self.report?( slug )
-  #  File.exist?( report_path( slug ) )
-  # end
+  def self.schedule_url( slug )  "#{BASE_URL}/alle_spiele/#{slug}/";  end
+  def self.report_url( slug )    "#{BASE_URL}/spielbericht/#{slug}/"; end
 
 
   def self.report( slug, cache: true )
-    url  = "#{BASE_URL}/spielbericht/#{slug}/"
-
-    out_path = "#{config.cache.reports_dir}/#{slug}.html"
+    url  = report_url( slug )
 
     ## check check first
-    if cache && File.exist?( out_path )
-       puts "  reuse local copy (#{out_path})"
+    if cache && Webcache.cached?( url )
+       ### todo/fix: use Webcache.url_to_path  - add/make public !!!!!
+       puts "  reuse local (cached) copy"  ### todo: add local path - why? why not?
     else
-      copy( url, out_path )
+      get( url )
     end
   end
 
-  def self.schedule( slug )
-    url  = "#{BASE_URL}/alle_spiele/#{slug}/"
 
-    out_path = "#{config.cache.schedules_dir}/#{slug}.html"
-    copy( url, out_path  )
+  def self.schedule( slug )
+    url = schedule_url( slug )
+    get( url )
   end
+
 
 
   def self.schedule_reports( slug, cache: true ) ## todo/check: rename to reports_for_schedule or such - why? why not?
@@ -80,8 +73,24 @@ class Metal
 
   ##################
   #  helpers
+  def self.get( url )  ## get & record/save to cache
 
-  def self.copy( url, path )  ## copy (save) to file
+    puts "  sleep #{config.sleep} sec(s)..."
+    sleep( config.sleep )   ## slow down - sleep 2secs before each http request
+
+    response = worker.get( url )
+
+    if response.code == '200'
+      Webcache.record( url, response )
+    else
+      puts "!! ERROR - #{response.code}:"
+      pp response
+      exit 1
+    end
+  end
+
+
+  def self.remove_old_copy( url, path )  ## copy (save) to file
 
     puts "  sleep #{config.sleep} sec(s)..."
     sleep( config.sleep )   ## slow down - sleep 2secs before each http request

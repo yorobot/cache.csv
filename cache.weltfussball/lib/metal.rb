@@ -4,16 +4,12 @@
 #    and rest / convert  with sportdb references / goodies
 
 
-require 'pp'
-require 'time'
-require 'date'
-require 'fileutils'
+## 3rd party (our own)
+require_relative '../../cachedb/lib/webcache'    ## note: incl. (web) fetcher too
 
 ## 3rd party
 require 'nokogiri'
 
-## 3rd party (our own)
-require 'fetcher'
 
 
 ## our own code
