@@ -30,7 +30,29 @@ LEAGUES_EUROPE.merge!({
   },
 
    # e.g. /irl-premier-division-2019/
-  'ie.1'  => { pages: 'irl-premier-division' },
+   # irl-premier-division-2020
+   # irl-premier-division-2019
+   # irl-premier-division-2018
+   # irl-premier-division-2017
+   # irl-premier-division-2016
+   # irl-premier-division-2015
+   # irl-premier-division-2014
+   # irl-premier-division-2013
+   # irl-airtricity-league-2012
+   # irl-airtricity-league-2011
+   # irl-airtricity-league-2010
+
+  'ie.1'  => {
+    pages: [
+      'irl-premier-division',
+      'irl-airtricity-league'],
+    season: ->( season ) {
+      case season
+      when Season('2013')..Season('2020') then 1
+      when Season('2010')..Season('2012') then 2
+    end
+   }
+  },
 })
 
 end

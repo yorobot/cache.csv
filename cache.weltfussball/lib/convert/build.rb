@@ -170,7 +170,8 @@ def self.parse_score( score_str )
     ft = ''
     ht = ''
   elsif score_str == 'n.gesp.' ||   ## cancelled (british) / canceled (us)
-        score_str == 'ausg.'     ## todo/check: change to some other status ????
+        score_str == 'ausg.'   ||   ## todo/check: change to some other status ????
+        score_str == 'annull.'      ## todo/check: change to some other status (see ie 2012) ????
     ft = '(*)'
     ht = ''
     comments = 'cancelled'

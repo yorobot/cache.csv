@@ -1,12 +1,25 @@
 require_relative '../cache.weltfussball/lib/convert'
 
 
+Webcache.config.root = '../../cache'
+
 
 Worldfootball.config.sleep = 3
 
-Worldfootball.config.cache.schedules_dir = '../cache.weltfussball/dl'
-Worldfootball.config.cache.reports_dir   = '../cache.weltfussball/dl2'
 
+IE = %w[
+  irl-premier-division-2020
+  irl-premier-division-2019
+  irl-premier-division-2018
+  irl-premier-division-2017
+  irl-premier-division-2016
+  irl-premier-division-2015
+  irl-premier-division-2014
+  irl-premier-division-2013
+  irl-airtricity-league-2012
+  irl-airtricity-league-2011
+  irl-airtricity-league-2010
+]
 
 
 GR = %w[
@@ -231,8 +244,8 @@ MX = %w[
 # SLUGS = PT
 # SLUGS = CH
 # SLUGS = TR
-SLUGS = GR
-
+# SLUGS = GR
+SLUGS = IE
 
 SLUGS.each_with_index do |slug,i|
   puts "[#{i+1}/#{SLUGS.size}]>#{slug}<"
