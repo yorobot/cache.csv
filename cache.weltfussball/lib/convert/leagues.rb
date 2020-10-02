@@ -139,6 +139,29 @@ SEASON_RE = /[0-9]{4}
               )?
             /x
 
+
+  def self.find_page!( slug )
+    page = find_page( slug )
+    if page.nil?
+      puts "!! ERROR: no mapping for page >#{slug}< found; sorry"
+
+      season_str = nil
+      norm = slug.sub( SEASON_RE ) do |match|  ## replace season with var placeholder {}
+                season_str = match   ## keep reference to season str
+                '{}'  ## replace with {}
+              end
+
+      puts "   season:      >#{season_str}<"
+      puts "   slug (norm): >#{norm}<"
+      puts
+      ## pp PAGES
+      exit 1
+    end
+    page
+  end
+
+
+
   def self.find_page( slug )
     ## return league key and season
     season_str = nil
@@ -153,14 +176,8 @@ SEASON_RE = /[0-9]{4}
     end
 
     rec = PAGES[ norm ]
-    if rec.nil?
-      puts "!! ERROR: no mapping for page >#{slug}< found; sorry"
-      puts "   season:      >#{season_str}<"
-      puts "   slug (norm): >#{norm}<"
-      puts
-      pp PAGES
-      exit 1
-    end
+    return nil  if rec.nil?
+
 
     league_key = rec[:league]
     slug_tmpl  = rec[:slug]
