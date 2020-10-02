@@ -50,7 +50,8 @@ module Webcache
  class << self
    alias_method :exist?, :cached?
  end
-
+ def self.url_to_id( url ) cache.url_to_id( url ); end  ## todo/check: rename to just id or something - why? why not?
+ def self.read( url ) cache.read( url ); end
 
 
 class DiskCache
@@ -59,6 +60,13 @@ class DiskCache
     File.exist?( body_path )
   end
   alias_method :exist?, :cached?
+
+
+  def read( url )
+    body_path = "#{Webcache.root}/#{url_to_path( url )}"
+    File.open( body_path, 'r:utf-8' ) {|f| f.read }
+  end
+
 
   def record( url, response )  ## add more save / put / etc. aliases - why? why not?
 
@@ -82,6 +90,11 @@ class DiskCache
       end
     end
   end
+
+
+  ### note: use file path as id for DiskCache  (is different for DbCache/SqlCache?)
+  ##    use file:// instead of disk:// - why? why not?
+  def url_to_id( str ) "disk://#{url_to_path( str )}"; end
 
 
   ### helpers

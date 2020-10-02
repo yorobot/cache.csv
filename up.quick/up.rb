@@ -1,8 +1,7 @@
 require_relative 'helper'
 
+Webcache.config.root = '../../cache'
 
-Worldfootball.config.cache.schedules_dir = '../cache.weltfussball/dl'
-Worldfootball.config.cache.reports_dir   = '../cache.weltfussball/dl2'
 
 Worldfootball.config.convert.out_dir     = './o'
 
@@ -30,6 +29,13 @@ LEAGUES.each do |item|
    end
 end
 =end
+
+
+Worldfootball.convert( league: 'eng.1',
+                       season: '1998/99',
+                       offset: Worldfootball::OFFSETS[ 'eng.1' ] )
+
+
 
 ### write
 

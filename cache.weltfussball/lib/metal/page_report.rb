@@ -4,11 +4,10 @@ module Worldfootball
 
 class Report < Page  ## note: use nested class for now - why? why not?
 
-  def self.config() Worldfootball.config; end
 
   def self.from_cache( slug )
-    path = "#{config.cache.reports_dir}/#{slug}.html"
-    html = File.open( path, 'r:utf-8' ) {|f| f.read }
+    url  = Worldfootball::Metal.report_url( slug )
+    html = Webcache.read( url )
     new( html )
   end
 

@@ -22,27 +22,27 @@ class Metal
   def self.report_url( slug )    "#{BASE_URL}/spielbericht/#{slug}/"; end
 
 
-  def self.report( slug, cache: true )
+  def self.download_schedule( slug )
+    url = schedule_url( slug )
+    get( url )
+  end
+
+  def self.download_report( slug, cache: true )
     url  = report_url( slug )
 
     ## check check first
     if cache && Webcache.cached?( url )
-       ### todo/fix: use Webcache.url_to_path  - add/make public !!!!!
-       puts "  reuse local (cached) copy"  ### todo: add local path - why? why not?
+       puts "  reuse local (cached) copy >#{Webcache.url_to_id( url )}<"
     else
       get( url )
     end
   end
 
 
-  def self.schedule( slug )
-    url = schedule_url( slug )
-    get( url )
-  end
 
 
 
-  def self.schedule_reports( slug, cache: true ) ## todo/check: rename to reports_for_schedule or such - why? why not?
+  def self.download_schedule_reports( slug, cache: true ) ## todo/check: rename to reports_for_schedule or such - why? why not?
 
     page = Page::Schedule.from_cache( slug )
     matches = page.matches
@@ -61,7 +61,7 @@ class Metal
        puts "fetching #{i+1}/#{matches.size} (#{est} min(s)) - #{match[:round]} | #{match[:team1]} v #{match[:team2]}..."
        report_ref = match[:report_ref ]
        if report_ref
-         report( report_ref, cache: cache )
+         download_report( report_ref, cache: cache )
        else
          puts "!! WARN: report ref missing for match:"
          pp match
@@ -69,6 +69,13 @@ class Metal
     end
   end
 
+
+  ### add some "old" (back compat) aliases - keep - why? why not?
+  class << self
+    alias_method :schedule,          :download_schedule
+    alias_method :report,            :download_report
+    alias_method :schedule_reports,  :download_schedule_reports
+  end
 
 
   ##################
@@ -89,26 +96,6 @@ class Metal
     end
   end
 
-
-  def self.remove_old_copy( url, path )  ## copy (save) to file
-
-    puts "  sleep #{config.sleep} sec(s)..."
-    sleep( config.sleep )   ## slow down - sleep 2secs before each http request
-
-    response = worker.get( url )
-
-    if response.code == '200'
-      html = response.body.to_s
-      html = html.force_encoding( Encoding::UTF_8 )
-
-      FileUtils.mkdir_p( File.dirname(path) )
-      File.open( path, 'w:utf-8' ) {|f| f.write( html ) }
-    else
-      puts "!! ERROR - #{response.code}:"
-      pp response
-      exit 1
-    end
-  end
 
 end # class Metal
 end # module Worldfootball

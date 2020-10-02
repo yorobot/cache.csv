@@ -4,12 +4,10 @@ module Worldfootball
 
 class Schedule < Page  ## note: use nested class for now - why? why not?
 
-  def self.config() Worldfootball.config; end
-
 
   def self.from_cache( slug )
-    path = "#{config.cache.schedules_dir}/#{slug}.html"
-    html = File.open( path, 'r:utf-8' ) {|f| f.read }
+    url  = Worldfootball::Metal.schedule_url( slug )
+    html = Webcache.read( url )
     new( html )
   end
 
