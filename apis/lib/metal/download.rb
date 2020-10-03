@@ -105,15 +105,6 @@ module Footballdata
   def self.get( service )
     service_uri = BASE_URI + service
 
-    ## make a file path - for auto-save
-    ##   change ? to -I-
-    ##   change / to ~~
-    ##   change = to ~
-    path = service.gsub( '?', '-I-' )
-                  .gsub( '/', '~~' )
-                  .gsub( '=', '~')
-
-    puts path
     puts service_uri
 
 
@@ -143,13 +134,6 @@ module Footballdata
     puts response["content-type"]
     # => "text/html; charset=UTF-8"
 
-    # Iterate all response headers.
-    response.each_header do |key, value|
-      puts "#{key} => #{value}"
-    end
-    # => "location => http://www.google.com/"
-    # => "content-type => text/html; charset=UTF-8"
-    # ...
 
       # Note: Net::HTTP will NOT set encoding UTF-8 etc.
       # will be set to ASCII-8BIT == BINARY == Encoding Unknown; Raw Bytes Here
@@ -166,10 +150,8 @@ module Footballdata
 
 
       if response.code == '200'
-        download_path = "#{config.cache.download_dir}/#{path}.json"
-
-        FileUtils.mkdir_p( config.cache.download_dir )
-        File.open( download_path, 'w:utf-8' ) { |f| f.write( txt ) }
+        ## note: use format json for pretty printing and parse check!!!!
+        Webcache.record( service_uri, response, format: 'json' )
       else
         puts "!! ERROR - #{response.code}:"
         pp response

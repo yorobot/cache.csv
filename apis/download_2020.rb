@@ -6,21 +6,25 @@ require_relative 'lib/metal'
 ### note: free trier has a 10 request/minute limit
 ##  sleep/wait 10secs after every request (should result in ~6 requests/minute)
 
+Webcache.config.root = '../../cache'
+
 
 Footballdata.config.sleep = 10
 
 
-Footballdata.eng( 2020 )   ## note. includes Premier League & Championship
+# Footballdata.eng( 2020 )   ## note. includes Premier League & Championship
+
 Footballdata.de( 2020 )
 Footballdata.es( 2020 )
-Footballdata.fr( 2020 )
-Footballdata.it( 2020 )
 
-Footballdata.nl( 2020 )
-Footballdata.pt( 2020 )
+# Footballdata.fr( 2020 )
+# Footballdata.it( 2020 )
 
-Footballdata.br( 2020 )
+# Footballdata.nl( 2020 )
+# Footballdata.pt( 2020 )
 
-Footballdata.cl( 2020 )
+# Footballdata.br( 2020 )
+
+# Footballdata.cl( 2020 )
 
 

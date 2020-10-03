@@ -4,14 +4,8 @@
 #    and rest / convert  with sportdb references / goodies
 
 
-
-require 'pp'
-require 'time'
-require 'date'
-require 'json'
-require 'net/http'
-require 'uri'
-require 'fileutils'
+## 3rd party (our own)
+require_relative '../../cachedb/lib/webcache'    ## note: incl. (web) fetcher too
 
 
 

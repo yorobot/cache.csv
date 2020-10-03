@@ -11,6 +11,7 @@ require 'json'
 require 'yaml'
 
 
+
 ###
 # our own 3rd party libs
 require 'fetcher'
@@ -45,7 +46,9 @@ module Webcache
  ### "interface" for "generic" cache storage (might be sqlite database or filesystem)
  def self.cache() @cache ||= DiskCache.new; end
 
- def self.record( url, response )  cache.record( url, response ); end
+ def self.record( url, response, format: 'html' )
+   cache.record( url, response, format: format );
+ end
  def self.cached?( url ) cache.cached?( url ); end
  class << self
    alias_method :exist?, :cached?
@@ -68,7 +71,9 @@ class DiskCache
   end
 
 
-  def record( url, response )  ## add more save / put / etc. aliases - why? why not?
+  ## add more save / put / etc. aliases - why? why not?
+  ##  rename to record_html - why? why not?
+  def record( url, response, format: 'html' )
 
     body_path = "#{Webcache.root}/#{url_to_path( url )}"
     meta_path = "#{body_path}.meta.txt"
@@ -81,7 +86,14 @@ class DiskCache
     body = response.body.to_s
     body = body.force_encoding( Encoding::UTF_8 )
 
-    File.open( body_path, 'w:utf-8' ) {|f| f.write( body ) }
+
+    ## todo/check: verify content-type - why? why not?
+    if format == 'json'
+      data = JSON.parse( body )
+      File.open( body_path, 'w:utf-8' ) {|f| f.write( JSON.pretty_generate( data )) }
+    else
+      File.open( body_path, 'w:utf-8' ) {|f| f.write( body ) }
+    end
 
     File.open( meta_path, 'w:utf-8' ) do |f|
       response.each_header do |key, value|  # Iterate all response headers.
@@ -116,10 +128,28 @@ class DiskCache
 
     ### special "prettify" rule for weltfussball
     ##   /eng-league-one-2019-2020/  => /eng-league-one-2019-2020.html
-    if (host_dir.index( 'weltfussball.de' ) ||
-        host_dir.index( 'worldfootball.net' )
-       ) && req_path.end_with?( '/' )
-         req_path = "#{req_path[0..-2]}.html"
+    if host_dir.index( 'weltfussball.de' ) ||
+       host_dir.index( 'worldfootball.net' )
+          if req_path.end_with?( '/' )
+             req_path = "#{req_path[0..-2]}.html"
+          else
+            puts "ERROR: expected request_uri for >#{host_dir}< ending with '/'; got: >#{req_path}<"
+            exit 1
+          end
+    elsif host_dir.index( 'football-data.org' )
+      req_path = req_path.sub( 'v2/', '' )  # shorten - cut off v2/
+
+      ## flattern - make a file path - for auto-save
+      ##   change ? to -I-
+      ##   change / to ~~
+      ##   change = to ~
+      req_path = req_path.gsub( '?', '-I-' )
+                         .gsub( '/', '~~' )
+                         .gsub( '=', '~')
+
+      req_path = "#{req_path}.json"
+    else
+      ## no special rule
     end
 
     page_path = "#{host_dir}/#{req_path}"
