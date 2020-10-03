@@ -7,9 +7,7 @@ require_relative 'lib/metal'
 ##  sleep/wait 10secs after every request (should result in ~6 requests/minute)
 
 Webcache.config.root = '../../cache'
-
-
-Footballdata.config.sleep = 10
+Webclient.config.sleep = 10   ## use wait instead of sleep - why? why not?
 
 
 # Footballdata.eng( 2020 )   ## note. includes Premier League & Championship

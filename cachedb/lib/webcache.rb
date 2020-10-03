@@ -14,7 +14,7 @@ require 'yaml'
 
 ###
 # our own 3rd party libs
-require 'fetcher'
+#   require 'fetcher'   -- note: change to Webclient for now - why? why not?
 
 
 
@@ -32,10 +32,8 @@ module Webcache
  ##   Webcache.configure do |config|
  ##      config.root = './cache'
  ##   end
-
- def self.configure()  yield( config ); end
-
- def self.config()  @config ||= Configuration.new;  end
+ def self.configure() yield( config ); end
+ def self.config()    @config ||= Configuration.new;  end
 
 
  ## add "high level" root convenience helpers
@@ -165,3 +163,61 @@ end  # module Webcache
 
 ## add convenience alias for camel case / alternate different spelling
 WebCache = Webcache
+
+
+
+############################
+###############################
+
+class Webclient
+
+  class Configuration  ## nested class
+
+    #######################
+    ## accessors
+    def sleep()       @sleep || 3; end
+    def sleep=(value) @sleep = value; end
+
+  end # (nested) class Configuration
+
+  ## lets you use
+  ##   Webclient.configure do |config|
+  ##      config.sleep = 10
+  ##   end
+  def self.configure() yield( config ); end
+  def self.config()    @config ||= Configuration.new;  end
+
+
+
+
+def self.get( url, headers: {} )
+
+  puts "  sleep #{config.sleep} sec(s)..."
+  sleep( config.sleep )   ## slow down - sleep 3secs before each http request
+
+  uri = URI.parse( url )
+  http = Net::HTTP.new( uri.host, uri.port )
+
+  request = Net::HTTP::Get.new( uri.request_uri )
+
+  ### add (custom) headers if any
+  ##  check/todo: is there are more idiomatic way for Net::HTTP ???
+  ## e.g.
+  ##   request['X-Auth-Token'] = 'xxxxxxx'
+  ##   request['User-Agent']   = 'ruby'
+  ##   request['Accept']       = '*/*'
+  if headers && headers.size > 0
+    headers.each do |key,value|
+      request[ key ] = value
+    end
+  end
+
+  response = http.request( request )
+  response
+end  # method self.get
+
+end  # class Weblclient
+
+
+## add convenience alias for camel case / alternate different spelling
+WebClient = Webclient

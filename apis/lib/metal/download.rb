@@ -1,5 +1,5 @@
 module Footballdata
-  BASE_URI = 'http://api.football-data.org/v2/'
+  BASE_URL = 'http://api.football-data.org/v2/'
 
 
   def self.competitions_tier_one
@@ -103,39 +103,28 @@ module Footballdata
 
 
   def self.get( service )
-    service_uri = BASE_URI + service
-
-    puts service_uri
-
-
-    puts "  sleep #{config.sleep} sec(s)..."
-    sleep( config.sleep )   ## slow down - sleep 2secs before each http request
-
-    uri = URI.parse( service_uri )
-    http = Net::HTTP.new( uri.host, uri.port )
-
-    request = Net::HTTP::Get.new( uri.request_uri )
+    service_url = BASE_URL + service
+    puts service_url
 
     token = ENV['FOOTBALLDATA']
     ## note: because of public workflow log - do NOT output token
     ## puts token
 
-    request['X-Auth-Token'] = token    if token
-    request['User-Agent']   = 'ruby'
-    request['Accept']       = '*/*'
+    headers = {}
+    headers['X-Auth-Token'] = token    if token
+    headers['User-Agent']   = 'ruby'
+    headers['Accept']       = '*/*'
 
-    response = http.request( request )
+    response = Webclient.get( service_url, headers: headers )
 
-    puts response.code             # => '301'  note: code is a string!!!
-    puts response.code.class.name
+    puts response.code             # => '301'  note: code returns/is a string!!!
 
-
-    # Get specific header
-    puts response["content-type"]
-    # => "text/html; charset=UTF-8"
+    # get specific header
+    puts response['content-type']
+    # => "application/json;charset=UTF-8"
 
 
-      # Note: Net::HTTP will NOT set encoding UTF-8 etc.
+      # note: Net::HTTP will NOT set encoding UTF-8 etc.
       # will be set to ASCII-8BIT == BINARY == Encoding Unknown; Raw Bytes Here
       # thus, set/force encoding to utf-8
       txt = response.body.to_s
@@ -151,7 +140,7 @@ module Footballdata
 
       if response.code == '200'
         ## note: use format json for pretty printing and parse check!!!!
-        Webcache.record( service_uri, response, format: 'json' )
+        Webcache.record( service_url, response, format: 'json' )
       else
         puts "!! ERROR - #{response.code}:"
         pp response
