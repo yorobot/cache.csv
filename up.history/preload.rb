@@ -2,9 +2,7 @@ require_relative '../cache.weltfussball/lib/metal'
 
 
 Webcache.config.root = '../../cache'
-
-
-Worldfootball.config.sleep = 3
+Webclient.config.sleep = 3
 
 
 
@@ -101,6 +99,8 @@ SLUGS = [
   'hon-liga-nacional-2020-2021-apertura',
 
   'nca-liga-primera-2020-2021-apertura',
+
+  'col-primera-a-2020',
 ]
 
 

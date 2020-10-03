@@ -198,11 +198,19 @@ def self.get( url, headers: {} )
   uri = URI.parse( url )
   http = Net::HTTP.new( uri.host, uri.port )
 
+  if uri.instance_of? URI::HTTPS
+    http.use_ssl     = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+  end
+
   request = Net::HTTP::Get.new( uri.request_uri )
 
   ### add (custom) headers if any
   ##  check/todo: is there are more idiomatic way for Net::HTTP ???
-  ## e.g.
+  ##   use
+  ##     request = Net::HTTP::Get.new( uri.request_uri, headers )
+  ##    why? why not?
+  ##  instead of e.g.
   ##   request['X-Auth-Token'] = 'xxxxxxx'
   ##   request['User-Agent']   = 'ruby'
   ##   request['Accept']       = '*/*'
@@ -211,6 +219,7 @@ def self.get( url, headers: {} )
       request[ key ] = value
     end
   end
+
 
   response = http.request( request )
   response

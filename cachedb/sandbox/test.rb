@@ -10,8 +10,8 @@ Webcache.root = './cache'
 puts Webcache.root
 puts Webcache.config.root
 
-url = 'https://raw.githubusercontent.com/openfootball/football.json/master/2015-16/en.1.clubs.json'
-res = Fetcher.get( url )
+url = 'https://raw.githubusercontent.com/openfootball/football.json/master/2019-20/en.1.clubs.json'
+res = Webclient.get( url )
 
 Webcache.record( url, res )
 

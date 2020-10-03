@@ -117,11 +117,12 @@ module Footballdata
 
     response = Webclient.get( service_url, headers: headers )
 
-    puts response.code             # => '301'  note: code returns/is a string!!!
 
-    # get specific header
+    # note: code returns/is a string!!! e.g. => "301"
+    puts "#{response.code} #{response.message}"
+    # get specific header e.g. => "application/json;charset=UTF-8"
     puts response['content-type']
-    # => "application/json;charset=UTF-8"
+
 
 
       # note: Net::HTTP will NOT set encoding UTF-8 etc.

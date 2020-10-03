@@ -8,12 +8,6 @@ module Worldfootball
 ## todo/check: put in Downloader namespace/class - why? why not?
 ##   or use Metal    - no "porcelain" downloaders / machinery
 class Metal
-  def self.worker
-      @worker ||= Fetcher::Worker.new
-  end
-
-  def self.config() Worldfootball.config;  end   ## reuse/forward config
-
 
   BASE_URL = 'https://www.weltfussball.de'
 
@@ -53,10 +47,10 @@ class Metal
     puts "#{page.generated_in_days_ago}  - #{page.generated}"
 
     ## todo/fix: restore sleep to old value at the end!!!!
-    config.sleep = 8    ## fetch 7-8 pages/min
+    ## Webclient.config.sleep = 8    ## fetch 7-8 pages/min
 
     matches.each_with_index do |match,i|
-       est = (config.sleep * (matches.size-(i+1)))/60.0   # estimated time left
+       est = (Webclient.config.sleep * (matches.size-(i+1)))/60.0   # estimated time left
 
        puts "fetching #{i+1}/#{matches.size} (#{est} min(s)) - #{match[:round]} | #{match[:team1]} v #{match[:team2]}..."
        report_ref = match[:report_ref ]
@@ -82,15 +76,13 @@ class Metal
   #  helpers
   def self.get( url )  ## get & record/save to cache
 
-    puts "  sleep #{config.sleep} sec(s)..."
-    sleep( config.sleep )   ## slow down - sleep 2secs before each http request
-
-    response = worker.get( url )
+    response = Webclient.get( url )
 
     if response.code == '200'
+      puts "#{response.code} #{response.message}"
       Webcache.record( url, response )
     else
-      puts "!! ERROR - #{response.code}:"
+      puts "!! ERROR - #{response.code} #{response.message}:"
       pp response
       exit 1
     end
