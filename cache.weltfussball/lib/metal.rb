@@ -5,7 +5,7 @@
 
 
 ## 3rd party (our own)
-require_relative '../../cachedb/lib/webcache'    ## note: incl. (web) fetcher too
+require 'webget'    ## incl. webget, webcache, webclient, etc.
 
 ## 3rd party
 require 'nokogiri'
