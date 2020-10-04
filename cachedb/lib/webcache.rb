@@ -229,7 +229,7 @@ end  # class Webclient
 ############################
 ###############################
 
-class Webgo   # web gopher - a web (go get) crawler
+class Webget   # a web (go get) crawler
 
   class Configuration  ## nested class
 
@@ -241,15 +241,15 @@ class Webgo   # web gopher - a web (go get) crawler
   end # (nested) class Configuration
 
   ## lets you use
-  ##   Webgo.configure do |config|
+  ##   Webget.configure do |config|
   ##      config.sleep = 10
   ##   end
   def self.configure() yield( config ); end
   def self.config()    @config ||= Configuration.new;  end
 
 
-  def self.get( url, headers: {}, format: 'html' )
 
+  def self.call( url, headers: {} )  ## assumes json format
     puts "  sleep #{config.sleep} sec(s)..."
     sleep( config.sleep )   ## slow down - sleep 3secs before each http request
 
@@ -257,7 +257,7 @@ class Webgo   # web gopher - a web (go get) crawler
 
     if response.status.ok?  ## must be HTTP 200
       puts "#{response.code} #{response.message}"
-      Webcache.record( url, response )
+      Webcache.record( url, response, format: 'json' )
     else
       ## todo/check - log error
       puts "!! ERROR - #{response.code} #{response.message}:"
@@ -266,13 +266,38 @@ class Webgo   # web gopher - a web (go get) crawler
 
     ## to be done / continued
     response
-  end
+  end  # method self.call
 
-end  # class Webgo
+
+  def self.page( url, headers: {} )  ## assumes html format
+    puts "  sleep #{config.sleep} sec(s)..."
+    sleep( config.sleep )   ## slow down - sleep 3secs before each http request
+
+    response = Webclient.get( url, headers: headers )
+
+    if response.status.ok?  ## must be HTTP 200
+      puts "#{response.code} #{response.message}"
+      Webcache.record( url, response )   ## assumes format: html (default)
+    else
+      ## todo/check - log error
+      puts "!! ERROR - #{response.code} #{response.message}:"
+      pp response
+    end
+
+    ## to be done / continued
+    response
+  end  # method self.page
+
+end  # class Webget
+
 
 
 
 ## add convenience alias for camel case / alternate different spelling
 WebCache  = Webcache
 WebClient = Webclient
-WebGo     = Webgo
+WebGet    = Webget
+
+## use Webgo as (alias) name (keep reserver for now) - why? why not?
+WebGo    = Webget
+Webgo    = Webget

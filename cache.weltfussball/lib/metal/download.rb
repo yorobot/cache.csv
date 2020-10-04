@@ -76,10 +76,10 @@ class Metal
   #  helpers
   def self.get( url )  ## get & record/save to cache
 
-    response = Webgo.get( url )
+    response = Webget.page( url )  ## fetch (and cache) html page (via HTTP GET)
 
     ## note: exit on get / fetch error - do NOT continue for now - why? why not?
-    exit 1   if response.code != '200'
+    exit 1   if response.status.nok?    ## e.g.  HTTP status code != 200
   end
 
 

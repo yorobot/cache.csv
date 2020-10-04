@@ -116,9 +116,7 @@ module Footballdata
     headers['Accept']       = '*/*'
 
     ## note: add format: 'json' for pretty printing json (before) save in cache
-    response = Webgo.get( service_url,
-                          headers: headers,
-                          format: 'json' )
+    response = Webget.call( service_url, headers: headers )
 
 
       # note: Net::HTTP will NOT set encoding UTF-8 etc.
@@ -136,7 +134,7 @@ module Footballdata
 
       puts response.text[0..400]    ## print pretty printed json snipped for debugging - why? why not?
 
-      if response.code == '200'
+      if response.status.ok?   # e.g. HTTP status code == 200
         ## note: use format json for pretty printing and parse check!!!!
         Webcache.record( service_url, response, format: 'json' )
       else
