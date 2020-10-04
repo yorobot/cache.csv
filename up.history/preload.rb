@@ -1,9 +1,7 @@
 require_relative '../cache.weltfussball/lib/metal'
 
 
-Webcache.config.root = '../../cache'
-Webclient.config.sleep = 3
-
+Webget.config.sleep = 3
 
 
 
@@ -82,9 +80,6 @@ SLUGS = [
 
   'copa-libertadores-2020',
 
-  'per-primera-division-2020-apertura',
-  'chi-primera-division-2020',
-  'uru-primera-division-2020-apertura',
 
   'concacaf-champions-league-2020',
 
@@ -100,7 +95,14 @@ SLUGS = [
 
   'nca-liga-primera-2020-2021-apertura',
 
+  'per-primera-division-2020-apertura',
+  'chi-primera-division-2020',
+  'uru-primera-division-2020-apertura',
   'col-primera-a-2020',
+  'bol-liga-profesional-2020-apertura',
+  'ecu-serie-a-2020',
+
+  'egy-premiership-2019-2020',
 ]
 
 

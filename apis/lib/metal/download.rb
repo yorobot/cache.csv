@@ -118,32 +118,10 @@ module Footballdata
     ## note: add format: 'json' for pretty printing json (before) save in cache
     response = Webget.call( service_url, headers: headers )
 
+    ## for debugging print pretty printed json first 400 chars
+    puts JSON.pretty_generate( response.json )[0..400]
 
-      # note: Net::HTTP will NOT set encoding UTF-8 etc.
-      # will be set to ASCII-8BIT == BINARY == Encoding Unknown; Raw Bytes Here
-      # thus, set/force encoding to utf-8
-      txt = response.body.to_s
-      txt = txt.force_encoding( Encoding::UTF_8 )
-      txt
-      ## puts txt
-
-      data = JSON.parse( txt )
-
-      txt = JSON.pretty_generate( data )
-      puts txt[0..400]
-
-      puts response.text[0..400]    ## print pretty printed json snipped for debugging - why? why not?
-
-      if response.status.ok?   # e.g. HTTP status code == 200
-        ## note: use format json for pretty printing and parse check!!!!
-        Webcache.record( service_url, response, format: 'json' )
-      else
-        puts "!! ERROR - #{response.code}:"
-        pp response
-        exit 1
-      end
-
-      response.json
+    exit 1  if response.status.nok?   # e.g. HTTP status code != 200
   end
 end # module Footballdata
 

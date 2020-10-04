@@ -15,10 +15,38 @@ require 'yaml'
 
 module Webcache
 
+  #####
+  # copied from props gem, see Env.home
+  #    - https://github.com/rubycoco/props/blob/master/props/lib/props/env.rb
+  #   todo/fix: use original - and do NOT copy-n-paste!!! - why? why not?
+  def self.home
+    path = if( ENV['HOME'] || ENV['USERPROFILE'] )
+             ENV['HOME'] || ENV['USERPROFILE']
+           elsif( ENV['HOMEDRIVE'] && ENV['HOMEPATH'] )
+             "#{ENV['HOMEDRIVE']}#{ENV['HOMEPATH']}"
+           else
+             begin
+                File.expand_path('~')
+             rescue
+                if File::ALT_SEPARATOR
+                   'C:/'
+                else
+                   '/'
+                end
+             end
+           end
+
+    ## note: use File.expand_path to "unify" path e.g
+    ##  C:\Users\roman  becomes
+    ##  C:/Users/roman
+
+    File.expand_path( path )
+ end
+
 
  class Configuration
     ## root directory - todo/check: find/use a better name - why? why not?
-    def root()       @root || './dl'; end
+    def root()       @root || "#{Webcache.home}/.cache"; end
     def root=(value) @root = value; end
  end # class Configuration
 
@@ -75,26 +103,24 @@ class DiskCache
     FileUtils.mkdir_p( File.dirname( body_path ) )
 
 
-    ## note - for now always assume utf8!!!!!!!!!
-    body = response.body.to_s
-    body = body.force_encoding( Encoding::UTF_8 )
-
+    puts "[cache] saving #{body_path}..."
 
     ## todo/check: verify content-type - why? why not?
     if format == 'json'
-      data = JSON.parse( body )
-      File.open( body_path, 'w:utf-8' ) {|f| f.write( JSON.pretty_generate( data )) }
+      File.open( body_path, 'w:utf-8' ) {|f| f.write( JSON.pretty_generate( response.json )) }
     else
-      File.open( body_path, 'w:utf-8' ) {|f| f.write( body ) }
+      ## note - for now always assume utf8!!!!!!!!!
+      File.open( body_path, 'w:utf-8' ) {|f| f.write( response.text ) }
     end
 
     File.open( meta_path, 'w:utf-8' ) do |f|
-      response.each_header do |key, value|  # Iterate all response headers.
+      response.headers.each do |key, value|  # iterate all response headers
         f.write( "#{key}: #{value}" )
         f.write( "\n" )
       end
     end
   end
+
 
 
   ### note: use file path as id for DiskCache  (is different for DbCache/SqlCache?)
@@ -168,10 +194,32 @@ class Webclient
     end
     def raw() @response; end
 
-    def code()    @response.code.to_i; end
-    def message() @response.message;   end
+
+    def text
+      # note: Net::HTTP will NOT set encoding UTF-8 etc.
+      # will be set to ASCII-8BIT == BINARY == Encoding Unknown; Raw Bytes Here
+      # thus, set/force encoding to utf-8
+      text = @response.body.to_s
+      text = text.force_encoding( Encoding::UTF_8 )
+      text
+    end
+
+    ## convenience helper; returns parsed json data
+    def json() JSON.parse( text ); end
 
 
+
+    class Headers # nested (nested) class
+      def initialize( response )
+        @response = response
+      end
+      def each( &blk )
+        @response.each_header do |key, value|  # Iterate all response headers
+          blk.call( key, value )
+        end
+      end
+    end
+    def headers() @headers ||= Headers.new( @response ); end
 
     class Status  # nested (nested) class
       def initialize( response )
@@ -182,7 +230,7 @@ class Webclient
       def nok?() code != 200; end
       def message() @response.message; end
     end
-    def status() @status ||= Status.new( self ); end
+    def status() @status ||= Status.new( @response ); end
   end # (nested) class Response
 
 
@@ -256,12 +304,14 @@ class Webget   # a web (go get) crawler
     response = Webclient.get( url, headers: headers )
 
     if response.status.ok?  ## must be HTTP 200
-      puts "#{response.code} #{response.message}"
-      Webcache.record( url, response, format: 'json' )
+      puts "#{response.status.code} #{response.status.message}"
+      ## note: use format json for pretty printing and parse check!!!!
+      Webcache.record( url, response,
+                       format: 'json' )
     else
       ## todo/check - log error
-      puts "!! ERROR - #{response.code} #{response.message}:"
-      pp response
+      puts "!! ERROR - #{response.status.code} #{response.status.message}:"
+      pp response.raw  ## note: dump inner (raw) response (NOT the wrapped)
     end
 
     ## to be done / continued
@@ -276,12 +326,12 @@ class Webget   # a web (go get) crawler
     response = Webclient.get( url, headers: headers )
 
     if response.status.ok?  ## must be HTTP 200
-      puts "#{response.code} #{response.message}"
+      puts "#{response.status.code} #{response.status.message}"
       Webcache.record( url, response )   ## assumes format: html (default)
     else
       ## todo/check - log error
-      puts "!! ERROR - #{response.code} #{response.message}:"
-      pp response
+      puts "!! ERROR - #{response.status.code} #{response.status.message}:"
+      pp response.raw  ## note: dump inner (raw) response (NOT the wrapped)
     end
 
     ## to be done / continued

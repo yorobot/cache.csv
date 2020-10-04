@@ -47,10 +47,10 @@ class Metal
     puts "#{page.generated_in_days_ago}  - #{page.generated}"
 
     ## todo/fix: restore sleep to old value at the end!!!!
-    ## Webclient.config.sleep = 8    ## fetch 7-8 pages/min
+    ## Webget.config.sleep = 8    ## fetch 7-8 pages/min
 
     matches.each_with_index do |match,i|
-       est = (Webclient.config.sleep * (matches.size-(i+1)))/60.0   # estimated time left
+       est = (Webget.config.sleep * (matches.size-(i+1)))/60.0   # estimated time left
 
        puts "fetching #{i+1}/#{matches.size} (#{est} min(s)) - #{match[:round]} | #{match[:team1]} v #{match[:team2]}..."
        report_ref = match[:report_ref ]
