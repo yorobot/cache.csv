@@ -115,14 +115,10 @@ module Footballdata
     headers['User-Agent']   = 'ruby'
     headers['Accept']       = '*/*'
 
-    response = Webclient.get( service_url, headers: headers )
-
-
-    # note: code returns/is a string!!! e.g. => "301"
-    puts "#{response.code} #{response.message}"
-    # get specific header e.g. => "application/json;charset=UTF-8"
-    puts response['content-type']
-
+    ## note: add format: 'json' for pretty printing json (before) save in cache
+    response = Webgo.get( service_url,
+                          headers: headers,
+                          format: 'json' )
 
 
       # note: Net::HTTP will NOT set encoding UTF-8 etc.
@@ -138,6 +134,7 @@ module Footballdata
       txt = JSON.pretty_generate( data )
       puts txt[0..400]
 
+      puts response.text[0..400]    ## print pretty printed json snipped for debugging - why? why not?
 
       if response.code == '200'
         ## note: use format json for pretty printing and parse check!!!!
@@ -148,7 +145,7 @@ module Footballdata
         exit 1
       end
 
-      data
+      response.json
   end
 end # module Footballdata
 

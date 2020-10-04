@@ -12,7 +12,13 @@ puts Webcache.config.root
 
 url = 'https://raw.githubusercontent.com/openfootball/football.json/master/2019-20/en.1.clubs.json'
 res = Webclient.get( url )
+puts res.code              #=> 200
+puts res.message           #=> OK
+puts res.status.code       #=> 200
+puts res.status.message    #=> OK
+puts res.status.ok?
 
+__END__
 Webcache.record( url, res )
 
 puts Webcache.exist?( url )

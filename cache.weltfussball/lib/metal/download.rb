@@ -76,16 +76,10 @@ class Metal
   #  helpers
   def self.get( url )  ## get & record/save to cache
 
-    response = Webclient.get( url )
+    response = Webgo.get( url )
 
-    if response.code == '200'
-      puts "#{response.code} #{response.message}"
-      Webcache.record( url, response )
-    else
-      puts "!! ERROR - #{response.code} #{response.message}:"
-      pp response
-      exit 1
-    end
+    ## note: exit on get / fetch error - do NOT continue for now - why? why not?
+    exit 1   if response.code != '200'
   end
 
 

@@ -12,11 +12,6 @@ require 'yaml'
 
 
 
-###
-# our own 3rd party libs
-#   require 'fetcher'   -- note: change to Webclient for now - why? why not?
-
-
 
 module Webcache
 
@@ -161,39 +156,37 @@ end  # module Webcache
 
 
 
-## add convenience alias for camel case / alternate different spelling
-WebCache = Webcache
-
-
 
 ############################
 ###############################
 
 class Webclient
 
-  class Configuration  ## nested class
+  class Response   # nested class - wrap Net::HTTP::Response
+    def initialize( response )
+      @response = response
+    end
+    def raw() @response; end
 
-    #######################
-    ## accessors
-    def sleep()       @sleep || 3; end
-    def sleep=(value) @sleep = value; end
-
-  end # (nested) class Configuration
-
-  ## lets you use
-  ##   Webclient.configure do |config|
-  ##      config.sleep = 10
-  ##   end
-  def self.configure() yield( config ); end
-  def self.config()    @config ||= Configuration.new;  end
+    def code()    @response.code.to_i; end
+    def message() @response.message;   end
 
 
+
+    class Status  # nested (nested) class
+      def initialize( response )
+        @response = response
+      end
+      def code() @response.code.to_i; end
+      def ok?()  code == 200; end
+      def nok?() code != 200; end
+      def message() @response.message; end
+    end
+    def status() @status ||= Status.new( self ); end
+  end # (nested) class Response
 
 
 def self.get( url, headers: {} )
-
-  puts "  sleep #{config.sleep} sec(s)..."
-  sleep( config.sleep )   ## slow down - sleep 3secs before each http request
 
   uri = URI.parse( url )
   http = Net::HTTP.new( uri.host, uri.port )
@@ -222,11 +215,64 @@ def self.get( url, headers: {} )
 
 
   response = http.request( request )
-  response
+
+  ## note: return "unified" wrapped response
+  Response.new( response )
 end  # method self.get
 
-end  # class Weblclient
+end  # class Webclient
+
+
+
+
+
+############################
+###############################
+
+class Webgo   # web gopher - a web (go get) crawler
+
+  class Configuration  ## nested class
+
+    #######################
+    ## accessors
+    def sleep()       @sleep || 3; end     ### todo/check: use delay / wait or such?
+    def sleep=(value) @sleep = value; end
+
+  end # (nested) class Configuration
+
+  ## lets you use
+  ##   Webgo.configure do |config|
+  ##      config.sleep = 10
+  ##   end
+  def self.configure() yield( config ); end
+  def self.config()    @config ||= Configuration.new;  end
+
+
+  def self.get( url, headers: {}, format: 'html' )
+
+    puts "  sleep #{config.sleep} sec(s)..."
+    sleep( config.sleep )   ## slow down - sleep 3secs before each http request
+
+    response = Webclient.get( url, headers: headers )
+
+    if response.status.ok?  ## must be HTTP 200
+      puts "#{response.code} #{response.message}"
+      Webcache.record( url, response )
+    else
+      ## todo/check - log error
+      puts "!! ERROR - #{response.code} #{response.message}:"
+      pp response
+    end
+
+    ## to be done / continued
+    response
+  end
+
+end  # class Webgo
+
 
 
 ## add convenience alias for camel case / alternate different spelling
+WebCache  = Webcache
 WebClient = Webclient
+WebGo     = Webgo
