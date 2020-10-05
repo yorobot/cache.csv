@@ -1,5 +1,7 @@
 # Notes
 
+- [ ] fix Brazil 2020 !!!! - use season (and start_year) NOT year for convert!!!!
+
 - [ ] add time!!! to datasets - why? why not?
 
 

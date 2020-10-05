@@ -1,24 +1,30 @@
 module Footballdata
-  BASE_URL = 'http://api.football-data.org/v2/'
+  BASE_URL = 'http://api.football-data.org/v2'
+
+
+  def self.competitions_url( plan )  "#{BASE_URL}/competitions?plan=#{plan}"; end
+
+  ## just use matches_url - why? why not?
+  def self.competition_matches_url( code, year )  "#{BASE_URL}/competitions/#{code}/matches?season=#{year}"; end
+  def self.competition_teams_url( code, year )    "#{BASE_URL}/competitions/#{code}/teams?season=#{year}";   end
+
 
 
   def self.competitions_tier_one
-    get( 'competitions?plan=TIER_ONE' )
+    get( competitions_url( 'TIER_ONE' ))
   end
 
   def self.competitions_tier_two
-    get( 'competitions?plan=TIER_TWO' )
+    get( competions_url( 'TIER_TWO' ))
   end
 
   def self.competitions_tier_three
-    get( 'competitions?plan=TIER_THREE' )
+    get( competions_url( 'TIER_THREE' ))
   end
 
-
-
   def self.competition( code, year )
-    get( "competitions/#{code}/matches?season=#{year}" )
-    get( "competitions/#{code}/teams?season=#{year}" )
+    get( competition_matches_url( code, year ))
+    get( competition_teams_url( code, year ))
   end
 
 
@@ -102,10 +108,7 @@ module Footballdata
   end
 
 
-  def self.get( service )
-    service_url = BASE_URL + service
-    puts service_url
-
+  def self.get( url )
     token = ENV['FOOTBALLDATA']
     ## note: because of public workflow log - do NOT output token
     ## puts token
@@ -116,7 +119,7 @@ module Footballdata
     headers['Accept']       = '*/*'
 
     ## note: add format: 'json' for pretty printing json (before) save in cache
-    response = Webget.call( service_url, headers: headers )
+    response = Webget.call( url, headers: headers )
 
     ## for debugging print pretty printed json first 400 chars
     puts JSON.pretty_generate( response.json )[0..400]

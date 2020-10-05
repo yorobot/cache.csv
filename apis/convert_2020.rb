@@ -1,7 +1,7 @@
 require_relative 'lib/convert'
 
 
-Footballdata.config.convert.out_dir = './o2'
+# Footballdata.config.convert.out_dir = './o'
 # '../../stage/one'
 
 

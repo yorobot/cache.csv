@@ -37,11 +37,14 @@ STAGE_TO_ROUND = {
 
 
 def self.convert_cl( league:, year: )
-  path         = "#{config.cache.download_dir}/competitions~~#{LEAGUES[league.downcase]}~~matches-I-season~#{year}.json"
-  path_teams   = "#{config.cache.download_dir}/competitions~~#{LEAGUES[league.downcase]}~~teams-I-season~#{year}.json"
+  # path         = "#{config.cache.download_dir}/competitions~~#{LEAGUES[league.downcase]}~~matches-I-season~#{year}.json"
+  # path_teams   = "#{config.cache.download_dir}/competitions~~#{LEAGUES[league.downcase]}~~teams-I-season~#{year}.json"
+  #
+  # data         = read_json( path )
+  # data_teams   = read_json( path_teams )
 
-  data         = read_json( path )
-  data_teams   = read_json( path_teams )
+  data           = Webcache.read_json( competition_matches_url( LEAGUES[league.downcase], year ))
+  data_teams     = Webcache.read_json( competition_teams_url( LEAGUES[league.downcase], year ))
 
 
   ## build a (reverse) team lookup by name

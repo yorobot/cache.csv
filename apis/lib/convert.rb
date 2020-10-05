@@ -10,15 +10,6 @@ require_relative 'metal'
 require_relative '../../csv'
 
 
-def read_json( path )
-  puts "path=>#{path}<"
-  txt = File.open( path, 'r:utf-8' ) {|f| f.read }
-  data = JSON.parse( txt )
-  data
-end
-
-
-
 
 module Footballdata
 

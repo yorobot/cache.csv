@@ -17,11 +17,11 @@ Webget.config.sleep  = 10   ## use delay / wait instead of sleep - why? why not?
 # Footballdata.fr( 2020 )
 # Footballdata.it( 2020 )
 
-Footballdata.nl( 2020 )
-Footballdata.pt( 2020 )
+# Footballdata.nl( 2020 )
+# Footballdata.pt( 2020 )
 
-# Footballdata.br( 2020 )
+Footballdata.br( 2020 )
 
-# Footballdata.cl( 2020 )
+Footballdata.cl( 2020 )
 
 
