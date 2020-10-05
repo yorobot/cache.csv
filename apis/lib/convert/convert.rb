@@ -4,6 +4,16 @@ module Footballdata
 
 
 def self.convert( league:, season: )
+
+  ### note/fix: cl (champions league for now is a "special" case)
+  if league.downcase == 'cl'
+    convert_cl( league: league,
+                season: season )
+    return
+  end
+
+
+
   season = Season( season )   ## cast (ensure) season class (NOT string, integer, etc.)
 
   data           = Webcache.read_json( Metal.competition_matches_url( LEAGUES[league.downcase], season.start_year ))

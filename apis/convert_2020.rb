@@ -21,4 +21,5 @@ end
 Footballdata.convert( league: 'br.1', season: '2020' )
 
 ## note: special case converter for champions league now
-Footballdata.convert_cl( league: 'cl', season: '2020/21' )
+# Footballdata.convert_cl( league: 'cl', season: '2020/21' )
+Footballdata.convert( league: 'cl', season: '2020/21' )
