@@ -1,4 +1,8 @@
 module Footballdata
+
+## todo/check: put in Downloader namespace/class - why? why not?
+##   or use Metal    - no "porcelain" downloaders / machinery
+class Metal
   BASE_URL = 'http://api.football-data.org/v2'
 
 
@@ -43,71 +47,6 @@ module Footballdata
 =end
 
 
-  def self.fr( year )
-    # FL1 - Ligue 1, France
-    #   9 seasons | 2019-08-09 - 2020-05-31 / matchday 38
-    #
-    # 2019 => 2019/20
-    # 2018 => 2018/19
-    # 2017 => xxx 2017-18 - requires subscription !!!
-    competition( 'FL1', year )
-  end
-
-  def self.br( year )
-    # BSA - Série A, Brazil
-    #   4 seasons | 2020-05-03 - 2020-12-06 / matchday 10
-    #
-    #  2020 => 2020
-    #  2019 => 2019
-    #  2018 => 2018
-    #  2017 => xxx 2017 - requires subscription !!!
-    competition( 'BSA', year )
-  end
-
-  def self.de( year )
-    # BL1 - Bundesliga            , Germany        24 seasons | 2019-08-16 - 2020-06-27 / matchday 34
-    competition( 'BL1', year )
-  end
-
-  def self.nl( year )
-    # DED - Eredivisie            , Netherlands    10 seasons | 2019-08-09 - 2020-03-08 / matchday 34
-    competition( 'DED', year )
-  end
-
-  def self.pt( year )
-    # PPL - Primeira Liga         , Portugal        9 seasons | 2019-08-10 - 2020-07-26 / matchday 28
-    competition( 'PPL', year )
-  end
-
-  def self.es( year )
-    # PD  - Primera Division      , Spain          27 seasons | 2019-08-16 - 2020-07-19 / matchday 31
-    competition( 'PD', year )
-  end
-
-  def self.it( year )
-    # SA  - Serie A               , Italy          15 seasons | 2019-08-24 - 2020-08-02 / matchday 27
-    competition( 'SA', year )
-  end
-
-  def self.eng( year )
-   # PL  - Premier League        , England        27 seasons | 2019-08-09 - 2020-07-25 / matchday 31
-   #  ELC - Championship          , England         3 seasons | 2019-08-02 - 2020-07-22 / matchday 38
-   #
-   # 2019 => 2019/20
-   # 2018 => 2018/19
-   # 2017 => xxx 2017-18 - requires subscription !!!
-
-   competition( 'PL', year )
-   competition( 'ELC', year )
-  end
-
-
-  def self.cl( year )
-    # CL  - UEFA Champions League , Europe         19 seasons | 2019-06-25 - 2020-05-30 / matchday 6
-    competition( 'CL', year )
-  end
-
-
   def self.get( url )
     token = ENV['FOOTBALLDATA']
     ## note: because of public workflow log - do NOT output token
@@ -122,9 +61,12 @@ module Footballdata
     response = Webget.call( url, headers: headers )
 
     ## for debugging print pretty printed json first 400 chars
-    puts JSON.pretty_generate( response.json )[0..400]
+    puts response.json.pretty_inspect[0..400]
 
     exit 1  if response.status.nok?   # e.g. HTTP status code != 200
   end
+
+
+end  ## class Metal
 end # module Footballdata
 

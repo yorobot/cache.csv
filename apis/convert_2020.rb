@@ -5,18 +5,20 @@ require_relative 'lib/convert'
 # '../../stage/one'
 
 
-['ENG.1',
- 'ENG.2',
- 'DE.1',
- 'ES.1',
- 'FR.1',
- 'IT.1',
- 'NL.1',
- 'PT.1',
- 'BR.1',   ### note: gets 2020/21 season!! runs until february 2021!!!
+['eng.1',
+ 'eng.2',
+ 'de.1',
+ 'es.1',
+ 'fr.1',
+ 'it.1',
+ 'nl.1',
+ 'pt.1',
 ].each do |league|
-  Footballdata.convert( league: league, year: 2020 )
+  Footballdata.convert( league: league, season: '2020/21' )
 end
 
+# note: season is calendar year (but in 2020 runs into 2021!!)
+Footballdata.convert( league: 'br.1', season: '2020' )
+
 ## note: special case converter for champions league now
-Footballdata.convert_cl( league: 'CL', year: 2020 )
+Footballdata.convert_cl( league: 'cl', season: '2020/21' )

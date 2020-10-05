@@ -1,4 +1,4 @@
-require_relative 'lib/metal'
+require_relative 'lib/convert'
 
 #############
 ## up (ongoing) 2020 or 2020/21 seasons
@@ -9,19 +9,19 @@ require_relative 'lib/metal'
 Webget.config.sleep  = 10   ## use delay / wait instead of sleep - why? why not?
 
 
-# Footballdata.eng( 2020 )   ## note. includes Premier League & Championship
+# Footballdata.schedule( league: 'eng.1', season: '2020/21' )
+# Footballdata.schedule( league: 'eng.2', season: '2020/21' )
 
-# Footballdata.de( 2020 )
-# Footballdata.es( 2020 )
+# Footballdata.schedule( league: 'de.1', season: '2020/21' )
+# Footballdata.schedule( league: 'es.1', season: '2020/21' )
 
-# Footballdata.fr( 2020 )
-# Footballdata.it( 2020 )
+# Footballdata.schedule( league: 'fr.1', season: '2020/21' )
+# Footballdata.schedule( league: 'it.1', season: '2020/21' )
 
-# Footballdata.nl( 2020 )
-# Footballdata.pt( 2020 )
+# Footballdata.schedule( league: 'nl.1', season: '2020/21' )
+Footballdata.schedule( league: 'pt.1', season: '2020/21' )
 
-Footballdata.br( 2020 )
+Footballdata.schedule( league: 'br.1', season: '2020' )  ## note: season is calendar year!!
 
-Footballdata.cl( 2020 )
-
+Footballdata.schedule( league: 'cl', season: '2020/21' )
 

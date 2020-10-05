@@ -19,19 +19,19 @@ DATASETS = [['BR.1',  %w[2018 2019 2020]],
            ]
 =end
 
-DATASETS = [['NL.1',  %w[2018 2019]],
-            ['PT.1',  %w[2018 2019]],
-            ['ENG.1', %w[2018 2019]],
-            ['ENG.2', %w[2018 2019]],
-            #['BR.1',  %w[2020 2019 2018]],
+DATASETS = [['nl.1',  %w[2018/19 2019/20]],
+            ['pt.1',  %w[2018/19 2019/20]],
+            ['eng.1', %w[2018/19 2019/20]],
+            ['eng.2', %w[2018/19 2019/20]],
+            ['br.1',  %w[2020    2019     2018]],  # note: season is calendar year
            ]
 
 pp DATASETS
 
 DATASETS.each do |dataset|
   basename = dataset[0]
-  dataset[1].each do |year|
-    convert( league: basename, year: year )
+  dataset[1].each do |season|
+    Footballdata.convert( league: basename, season: season )
   end
 end
 

@@ -3,15 +3,11 @@
 module Footballdata
 
 
-def self.convert( league:, year: )
-#  path         = "#{config.cache.download_dir}/competitions~~#{LEAGUES[league.downcase]}~~matches-I-season~#{year}.json"
-#  path_teams   = "#{config.cache.download_dir}/competitions~~#{LEAGUES[league.downcase]}~~teams-I-season~#{year}.json"
-#
-#  data         = read_json( path )
-#  data_teams   = read_json( path_teams )
+def self.convert( league:, season: )
+  season = Season( season )   ## cast (ensure) season class (NOT string, integer, etc.)
 
-  data           = Webcache.read_json( competition_matches_url( LEAGUES[league.downcase], year ))
-  data_teams     = Webcache.read_json( competition_teams_url( LEAGUES[league.downcase], year ))
+  data           = Webcache.read_json( Metal.competition_matches_url( LEAGUES[league.downcase], season.start_year ))
+  data_teams     = Webcache.read_json( Metal.competition_teams_url(   LEAGUES[league.downcase], season.start_year ))
 
 
   ## build a (reverse) team lookup by name
@@ -36,24 +32,6 @@ teams = Hash.new( 0 )
 stat  =  Stat.new
 
 matches = data[ 'matches']
-
-
-## note: get season from first match
-##   assert - all other matches include the same season
-## e.g.
-# "season": {
-#  "id": 154,
-#  "startDate": "2018-08-03",
-#  "endDate": "2019-05-05",
-#  "currentMatchday": 46
-# }
-
-season = matches[0]['season']
-start_date = Date.strptime( season['startDate'], '%Y-%m-%d' )
-end_date   = Date.strptime( season['endDate'],   '%Y-%m-%d' )
-
-
-
 matches.each do |m|
   stat.update( m )
 
@@ -147,21 +125,24 @@ matches.each do |m|
 end # each match
 
 
-season_key = if start_date.year == end_date.year
-               "%4d" % start_date.year
-             elsif start_date.year+1 == end_date.year
-               "%4d/%02d" % [start_date.year,end_date.year%100]
-             else
-               puts "!! ERROR: expected season e.g. 2020 or 2019/2020; got:"
-               pp start_date
-               pp end_date
-               exit 1
-             end
+
+## note: get season from first match
+##   assert - all other matches include the same season
+## e.g.
+# "season": {
+#  "id": 154,
+#  "startDate": "2018-08-03",
+#  "endDate": "2019-05-05",
+#  "currentMatchday": 46
+# }
+
+start_date = Date.strptime( matches[0]['season']['startDate'], '%Y-%m-%d' )
+end_date   = Date.strptime( matches[0]['season']['endDate'],   '%Y-%m-%d' )
 
 dates = "#{start_date.strftime('%b %-d')} - #{end_date.strftime('%b %-d')}"
 
 buf = ''
-buf << "#{season_key} (#{dates}) - "
+buf << "#{season.key} (#{dates}) - "
 buf << "#{teams.keys.size} clubs, "
 buf << "#{stat[:regular_season][:matches]} matches, "
 buf << "#{stat[:regular_season][:goals]} goals"
@@ -174,7 +155,7 @@ puts buf
    ## note: warn if stage is greater one and not regular season!!
    File.open( './errors.txt' , 'a:utf-8' ) do |f|
      if stat[:all][:stage].keys != ['REGULAR_SEASON']
-      f.write "!! WARN - league: #{league}, year: #{year} includes non-regular stage(s):\n"
+      f.write "!! WARN - league: #{league}, season: #{season.key} includes non-regular stage(s):\n"
       f.write "   #{stat[:all][:stage].keys.inspect}\n"
      end
    end
@@ -221,7 +202,7 @@ headers = [
 ]
 
 ## note: change season_key from 2019/20 to 2019-20  (for path/directory!!!!)
-Cache::CsvMatchWriter.write( "#{config.convert.out_dir}/#{season_key.tr('/','-')}/#{league.downcase}.csv",
+Cache::CsvMatchWriter.write( "#{config.convert.out_dir}/#{season.to_path}/#{league.downcase}.csv",
                              recs,
                              headers: headers )
 
