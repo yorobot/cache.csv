@@ -53,33 +53,30 @@ class Tool
   end
 
 
-  ####
-  ## e.g.
-  ##   [['2020/21', ['eng', 'de', ...]],
-  ##    ['2020',    ['br']]],
 
-  def download( leagues_by_season )
-    leagues_by_season.each do |item|
-      season  = item[0]
-      leagues = item[1]   ## array of league keys e.g. at.1, at.cup, etc.
+  def download( datasets )
+    datasets.each do |dataset|
+      league   = dataset[0]
+      seasons  = dataset[1]
 
-      leagues.each do |league|
-        with_filter( league ) do
+      with_filter( league ) do
+        seasons.each do |season|
           puts "downloading #{league} #{season}..."
 
-          Worldfootball.schedule( league: league, season: season )
+          Worldfootball.schedule( league: league,
+                                  season: season )
         end
       end
     end
   end
 
-  def convert( leagues_by_season )
-    leagues_by_season.each do |item|
-      season  = item[0]
-      leagues = item[1]   ## array of league keys e.g. at.1, at.cup, etc.
+  def convert( datasets )
+    datasets.each do |dataset|
+      league   = dataset[0]
+      seasons  = dataset[1]
 
-      leagues.each do |league|
-        with_filter( league ) do
+      with_filter( league ) do
+        seasons.each do |season|
            Worldfootball.convert( league: league,
                                   season: season,
                                   offset: OFFSETS[ league ] )
@@ -91,11 +88,10 @@ class Tool
 
 #########################################
 # more helpers
-  def with_filter( league )
-    return  if @excludes && @excludes.find { |q| league.start_with?( q ) }
-    return  if @includes && @includes.find { |q| league.start_with?( q ) }.nil?
-
-    yield  ## use blk.call and &blk - why? why not?
+  def with_filter( league, &blk )
+    return  if @excludes && @excludes.find { |q| league.start_with?( q.downcase ) }
+    return  if @includes && @includes.find { |q| league.start_with?( q.downcase ) }.nil?
+    blk.call()
   end
 
 end # class Tool

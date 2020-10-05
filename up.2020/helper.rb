@@ -69,15 +69,20 @@ SportDb::Import.config.leagues_dir = "#{SportDb::Boot.root}/openfootball/leagues
 ##
 ## todo/check:  remove default for source to make it more "generic" / less magic - why? why not?
 ##   or move this write into Worldfootball?
-def write( leagues, season,
+def write( datasets,
              source:   Worldfootball.config.convert.out_dir,
              includes: nil,
              excludes: nil )
-  leagues.each do |league|
-    next  if excludes && excludes.find { |q| league.start_with?( q ) }
-    next  if includes && includes.find { |q| league.start_with?( q ) }.nil?
+  datasets.each do |dataset|
+    league  = dataset[0]
+    seasons = dataset[1]
 
-    Writer.write( league, season, source: source )
+    next  if excludes && excludes.find { |q| league.start_with?( q.downcase ) }
+    next  if includes && includes.find { |q| league.start_with?( q.downcase ) }.nil?
+
+    seasons.each do |season|
+      Writer.write( league, season, source: source )
+    end
   end
 end
 
@@ -147,7 +152,7 @@ end
 ###
 ## todo/fix:  move more code into tool class or such? - why? why not?
 
-def process( leagues_by_season, repos, includes: )
+def process( datasets, repos, includes: )
   ## quick fix: move/handle empty array upstream!!!!
   includes = nil   if includes.is_a?(Array) && includes.empty?
 
@@ -156,11 +161,7 @@ def process( leagues_by_season, repos, includes: )
                          includes: includes )
 
 
-  Worldfootball.config.cache.schedules_dir = '../cache.weltfussball/dl'
-  Worldfootball.config.cache.reports_dir   = '../cache.weltfussball/dl2'
-
-
-  tool.download( leagues_by_season )  if OPTS[:download]
+  tool.download( datasets )  if OPTS[:download]
 
   ## always pull before push!! (use fast_forward)
   git_fast_forward_if_clean( repos )  if OPTS[:push]
@@ -169,7 +170,7 @@ def process( leagues_by_season, repos, includes: )
   # Worldfootball.config.convert.out_dir = './o/aug29'
   Worldfootball.config.convert.out_dir = './o'
 
-  tool.convert( leagues_by_season )
+  tool.convert( datasets )
 
 
   if OPTS[:push]
@@ -178,12 +179,8 @@ def process( leagues_by_season, repos, includes: )
     Writer.config.out_dir = './tmp'
   end
 
-  leagues_by_season.each do |item|
-    season  = item[0]
-    leagues = item[1]   ## array of league keys e.g. at.1, at.cup, etc.
+  write( datasets, includes: includes )
 
-    write( leagues, season, includes: includes )
-  end
 
   ## todo/fix: add a getch or something to hit return before commiting pushing - why? why not?
   git_push_if_changes( repos )    if OPTS[:push]

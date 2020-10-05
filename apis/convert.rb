@@ -29,9 +29,10 @@ DATASETS = [['nl.1',  %w[2018/19 2019/20]],
 pp DATASETS
 
 DATASETS.each do |dataset|
-  basename = dataset[0]
-  dataset[1].each do |season|
-    Footballdata.convert( league: basename, season: season )
+  league  = dataset[0]
+  seasons = dataset[1]
+  seasons.each do |season|
+    Footballdata.convert( league: league, season: season )
   end
 end
 
