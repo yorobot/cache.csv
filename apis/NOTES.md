@@ -1,5 +1,19 @@
 # Notes
 
+
+- [ ] webget - better report error - show requested url!!!!
+
+´´´
+sleep 8 sec(s)...
+!! ERROR - 400 :
+#<Net::HTTPBadRequest 400  readbody=true>
+{"message"=>
+  "Parameter 'competitionId' is expected to be either an integer in a specified range or a competition code.",
+ "errorCode"=>400}
+´´´
+
+
+
 - [ ] fix Brazil 2020 !!!! - use season (and start_year) NOT year for convert!!!!
 
 - [ ] add time!!! to datasets - why? why not?
