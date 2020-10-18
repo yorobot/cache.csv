@@ -22,8 +22,8 @@ sportdb:
 ##############
 #  some support gems libs
 rubycoco:
-- monos
-- gitti
+- git
+- webclient
 
 
 #####################
@@ -37,10 +37,10 @@ openfootball:
 - espana
 - deutschland
 - italy
-- france
 - austria
-- brazil
+- europe
 - mexico
+- south-america
 - world
 ####
 - spec     ## incl. football.txt tests

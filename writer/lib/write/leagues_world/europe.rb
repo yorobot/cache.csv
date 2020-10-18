@@ -1,6 +1,20 @@
 module Writer
 
 LEAGUES.merge!(
+
+  ########################
+  # France
+  'fr.1' => { name:     'French Ligue 1',
+              basename: '1-ligue1',
+              path:     'europe/france',
+              lang:     'fr',
+          },
+  'fr.2' => { name:     'French Ligue 2',
+              basename: '2-ligue2',
+              path:     'europe/france',
+              lang:     'fr',
+            },
+
   'hu.1' => { name:     'Hungarian NB I',
               basename: '1-nbi',
               path:     'world/europe/hungary',
@@ -195,6 +209,8 @@ LEAGUES.merge!(
               },
 )
 
+def self.write_fr1( season, source: ) write( 'fr.1', season, source: source ); end
+def self.write_fr2( season, source: ) write( 'fr.2', season, source: source ); end
 
 def self.write_hu1( season, source: ) write( 'hu.1', season, source: source ); end
 def self.write_gr1( season, source: ) write( 'gr.1', season, source: source ); end

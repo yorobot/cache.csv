@@ -16,16 +16,17 @@ DATASETS = [
  ['de.1',    %w[2020/21]],   # starts Fri Sep 18
  ['de.2',    %w[2020/21]],   # starts Fri Sep 18
  ['de.3',    %w[2020/21]],   # starts Fri Sep 18
- ['de.cup',  %w[2020/21]],
+ ## ['de.cup',  %w[2020/21]],
 
  ['es.1',    %w[2020/21]],   # starts Fri Sep 11
  ['es.2',    %w[2020/21]],   # starts Fri Sep 11
 
+ ['it.1',    %w[2020/21]],   # starts Sun Sep 20
+ ['it.2',    %w[2020/21]],   # starts Fri Sep 25
+
  ['fr.1',    %w[2020/21]],   # starts Fri Aug 21
  ['fr.2',    %w[2020/21]],   # starts Sat Aug 22
 
- ['it.1',    %w[2020/21]],   # starts Sun Sep 20
- ['it.2',    %w[2020/21]],   # starts Fri Sep 25
 
 
  ['at.1',    %w[2020/21]],   # starts Fri Sep 11
@@ -46,11 +47,11 @@ if ARGV.empty?
               'england',
               'deutschland',
               'austria',
-              'france',
               'italy',
               'espana',
+              'europe',            ## incl. france
               'mexico',
-              'brazil',
+              'south-america',     ## incl. brazil
              ]
 else
   leagues = []
@@ -67,7 +68,7 @@ else
     pp league_info
     path = league_info[:path]
 
-    ## use only first part e.g. world/europe/belgium => world
+    ## use only first part e.g. europe/belgium => europe
     repos << path.split( %r{[/\\]})[0]
   end
 

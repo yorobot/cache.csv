@@ -49,7 +49,7 @@ puts
 
 
 ## hack: use "local" dev monoscript too :-) for now
-$LOAD_PATH.unshift( 'C:/Sites/rubycoco/monos/lib' )
+$LOAD_PATH.unshift( 'C:/Sites/rubycoco/git/monos/lib' )
 
 require 'sportdb/setup'
 SportDb::Boot.setup   ## setup dev load path
