@@ -48,8 +48,12 @@ puts
 
 
 
-## hack: use "local" dev monoscript too :-) for now
-$LOAD_PATH.unshift( 'C:/Sites/rubycoco/git/monos/lib' )
+###
+## fix - remove Mono ?? just use gitti only - why? why not?
+require 'mono'
+
+## hack: use "local" sportdb-setup source too :-) for now
+$LOAD_PATH.unshift( 'C:/Sites/sportdb/sport.db/sportdb-setup/lib' )
 
 require 'sportdb/setup'
 SportDb::Boot.setup   ## setup dev load path
