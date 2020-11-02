@@ -24,6 +24,8 @@ sportdb:
 rubycoco:
 - git
 - webclient
+####  add more (or less) libs? -  monos, flow too - why? why not?
+
 
 
 #####################
