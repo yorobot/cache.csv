@@ -1,5 +1,4 @@
-## 3rd party (our own)
-require 'webget'    ## incl. webget, webcache, webclient, etc.
+require 'webget/football'
 
 
 # require 'sportdb/formats'   ## for Season etc.
@@ -39,8 +38,8 @@ end # module Cache
 # our own code
 require 'football-sources/version' # let version always go first
 
-require 'football-sources/apis/metal'
-require 'football-sources/apis/convert'
+require 'football-sources/apis'
+require 'football-sources/worldfootball'
 
 
 

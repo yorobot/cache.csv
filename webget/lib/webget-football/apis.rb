@@ -4,7 +4,7 @@
 #    and rest / convert  with sportdb references / goodies
 
 ## our own code
-require_relative 'metal/config'
-require_relative 'metal/download'
+require_relative 'apis/config'
+require_relative 'apis/download'
 
 

@@ -6,6 +6,7 @@
 note: if you require metal parts
 the following deps are assumed / required:
 - webget
+- nokogiri
 
 
 note: if your reqire convert parts

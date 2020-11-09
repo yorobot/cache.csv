@@ -1,5 +1,6 @@
+$LOAD_PATH.unshift( '../webget/lib')
 $LOAD_PATH.unshift( '../football-sources/lib' )
-require 'football-sources'
+require 'football/sources'
 
 
 #############
@@ -11,8 +12,8 @@ require 'football-sources'
 Webget.config.sleep  = 10   ## use delay / wait instead of sleep - why? why not?
 
 
-# Footballdata.schedule( league: 'eng.1', season: '2020/21' )
-# Footballdata.schedule( league: 'eng.2', season: '2020/21' )
+Footballdata.schedule( league: 'eng.1', season: '2020/21' )
+Footballdata.schedule( league: 'eng.2', season: '2020/21' )
 
 # Footballdata.schedule( league: 'de.1', season: '2020/21' )
 # Footballdata.schedule( league: 'es.1', season: '2020/21' )
@@ -21,9 +22,11 @@ Webget.config.sleep  = 10   ## use delay / wait instead of sleep - why? why not?
 # Footballdata.schedule( league: 'it.1', season: '2020/21' )
 
 # Footballdata.schedule( league: 'nl.1', season: '2020/21' )
-Footballdata.schedule( league: 'pt.1', season: '2020/21' )
+# Footballdata.schedule( league: 'pt.1', season: '2020/21' )
 
-Footballdata.schedule( league: 'br.1', season: '2020' )  ## note: season is calendar year!!
+# Footballdata.schedule( league: 'br.1', season: '2020' )  ## note: season is calendar year!!
 
-Footballdata.schedule( league: 'cl', season: '2020/21' )
+# Footballdata.schedule( league: 'cl', season: '2020/21' )
 
+
+puts "bye"
