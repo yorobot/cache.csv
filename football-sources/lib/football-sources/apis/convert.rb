@@ -7,14 +7,6 @@
 require_relative 'metal'
 
 
-# require 'sportdb/formats'   ## for Season etc.
-require 'sportdb/catalogs'
-
-
-require_relative '../../csv'
-
-
-
 module Footballdata
 
 LEAGUES = {

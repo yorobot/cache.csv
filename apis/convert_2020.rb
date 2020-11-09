@@ -1,4 +1,5 @@
-require_relative 'lib/convert'
+$LOAD_PATH.unshift( '../football-sources/lib' )
+require 'football-sources'
 
 
 # Footballdata.config.convert.out_dir = './o'

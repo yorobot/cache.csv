@@ -1,4 +1,6 @@
-require_relative 'lib/convert'
+$LOAD_PATH.unshift( '../football-sources/lib' )
+require 'football-sources'
+
 
 #############
 ## up (ongoing) 2020 or 2020/21 seasons
