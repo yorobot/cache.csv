@@ -18,25 +18,25 @@ puts "NAME          : #{NAME}"
 ##    add option for -e/--env(ironment)
 ##      - lets you toggle between dev/prod/etc.
 
-
+require 'pp'
 require 'optparse'
 
 puts "-- optparse:"
 
 OPTS = {}
-optparser = OptionParser.new do |opts|
-  opts.banner = "Usage: #{NAME} [options]"
+parser = OptionParser.new do |parser|
+  parser.banner = "Usage: #{NAME} [options]"
 
-  opts.on( "-d", "--download", "Download web pages" ) do |download|
+  parser.on( "-d", "--download", "Download web pages" ) do |download|
     OPTS[:download] = download
   end
 
-  opts.on( "-p", "--push", "(Commit &) push changes to git" ) do |push|
+  parser.on( "-p", "--push", "(Commit &) push changes to git" ) do |push|
     OPTS[:push] = push
   end
 
 end
-optparser.parse!
+parser.parse!
 
 puts "OPTS:"
 p OPTS

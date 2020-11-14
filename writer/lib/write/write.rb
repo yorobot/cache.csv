@@ -73,6 +73,13 @@ end
 ########
 # helpers
 #   normalize team names
+#
+#  todo/fix:  for reuse move to sportdb-catalogs
+#                use normalize  - add to module/class ??
+##
+##  todo/fix: check league - if is national_team or clubs or intl etc.!!!!
+
+
 def self.normalize( matches, league:, season: nil )
     league = SportDb::Import.catalog.leagues.find!( league )
     country = league.country

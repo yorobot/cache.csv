@@ -16,7 +16,7 @@ DATASETS = [
  ['de.1',    %w[2020/21]],   # starts Fri Sep 18
  ['de.2',    %w[2020/21]],   # starts Fri Sep 18
  ['de.3',    %w[2020/21]],   # starts Fri Sep 18
- ## ['de.cup',  %w[2020/21]],
+ ['de.cup',  %w[2020/21]],
 
  ['es.1',    %w[2020/21]],   # starts Fri Sep 11
  ['es.2',    %w[2020/21]],   # starts Fri Sep 11
