@@ -41,50 +41,6 @@ DATASETS = [
 pp DATASETS
 
 
-
-if ARGV.empty?
-  REPOS    = [
-              'england',
-              'deutschland',
-              'austria',
-              'italy',
-              'espana',
-              'europe',            ## incl. france
-              'mexico',
-              'south-america',     ## incl. brazil
-             ]
-else
-  leagues = []
-  repos = []
-  ARGV.each do |q|   ## find all matching leagues (that is, league keys)
-    more_leagues = DATASETS
-                     .map { |dataset| dataset[0] }
-                     .find_all {|league| league.start_with?(q.downcase) }
-    leagues += more_leagues  if more_leagues
-  end
-
-  leagues.each do |league|
-    league_info = Writer::LEAGUES[ league ]
-    pp league_info
-    path = league_info[:path]
-
-    ## use only first part e.g. europe/belgium => europe
-    repos << path.split( %r{[/\\]})[0]
-  end
-
-  repos
-  pp repos
-  REPOS = repos.uniq
-  pp REPOS
-end
-
-
-
-
-process( DATASETS,
-         REPOS,
-         includes: ARGV
-       )
+process( DATASETS, includes: ARGV )
 
 puts "bye"
-

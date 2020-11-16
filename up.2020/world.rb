@@ -45,15 +45,7 @@ DATASETS = [
 pp DATASETS
 
 
-
-
-REPOS = ['world']   ## all datasets in world repo for now
-
-
-process( DATASETS,
-         REPOS,
-         includes: ARGV
-       )
+process( DATASETS, includes: ARGV )
 
 
 puts "bye"

@@ -56,14 +56,19 @@ require 'sportdb/setup'
 SportDb::Boot.setup   ## setup dev load path
 
 
-
-require_relative '../cache.weltfussball/lib/convert'
-require_relative '../writer/lib/write'
-
+require 'sportdb/catalogs'
 
 ## use (switch to) "external" datasets
 SportDb::Import.config.leagues_dir = "#{SportDb::Boot.root}/openfootball/leagues"
 SportDb::Import.config.clubs_dir   = "#{SportDb::Boot.root}/openfootball/clubs"
+
+
+## more libs / gems
+require 'sportdb/writers'
+
+require 'football/sources'    ## download & convert football data
+
+
 
 
 
@@ -148,13 +153,61 @@ end
 
 
 
+
 ###
 ## todo/fix:  move more code into tool class or such? - why? why not?
 
-def process( datasets, repos, includes: )
+## todo/check: find a better name for helper?
+##   find_leagues_in (datasets) ???
+##  queries (lik ARGV) e.g. ['at'] or ['eng', 'de'] etc. list of strings
+def find_leagues( datasets, queries=[] )
+  ## find all matching leagues (that is, league keys)
+  if queries.empty?  ## no filter - get all league keys
+    leagues = datasets.map { |dataset| dataset[0] }
+  else
+    leagues = []
+    queries.each do |q|
+      more_leagues = datasets
+                       .map { |dataset| dataset[0] }
+                       .find_all {|league| league.start_with?( q.downcase ) }
+      leagues += more_leagues  if more_leagues
+    end
+    ## todo/check: filter out (possible) duplicates - why? why not?
+  end
+  leagues
+end
+
+## todo/check: find a better name for helper?
+def find_repos( leagues )
+  repos = []
+  leagues.each do |league|
+    league_info = Writer::LEAGUES[ league ]
+    pp league_info
+    path = league_info[:path]
+
+    ## use only first part e.g. europe/belgium => europe
+    repos << path.split( %r{[/\\]})[0]
+  end
+  pp repos
+  repos.uniq   ## note: remove duplicates (e.g. europe or world or such)
+end
+
+
+def process( datasets, includes: )
+
+  ## expand includes (e.g. at matchting at.1,at.2,at.cup with start_with etc.)
+  ## find all repo paths (e.g. england or europe)
+  ##   from league code e.g. eng.1, be.1, etc.
+  leagues = find_leagues( datasets, includes )
+  repos   = find_repos( leagues )
+
+
+
+  ## fix: pass along list of expand league keys
+  ##        (not includes query/array of strings) - why? why not?
+
   ## quick fix: move/handle empty array upstream!!!!
   includes = nil   if includes.is_a?(Array) && includes.empty?
-
 
   tool = Worldfootball::Tool.new(
                          includes: includes )
@@ -184,8 +237,10 @@ def process( datasets, repos, includes: )
   ## todo/fix: add a getch or something to hit return before commiting pushing - why? why not?
   git_push_if_changes( repos )    if OPTS[:push]
 
-  puts "INCLUDES:"
+  puts "INCLUDES (QUERIES):"
   pp includes
+  puts "LEAGUES:"
+  pp leagues
   puts "REPOS:"
   pp repos
 end
