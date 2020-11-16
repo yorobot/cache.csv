@@ -24,8 +24,8 @@ require 'sportdb/catalogs'
 
 
 ## use (switch to) "external" datasets
-SportDb::Import.config.clubs_dir   = "#{SportDb::Boot.root}/openfootball/clubs"
 SportDb::Import.config.leagues_dir = "#{SportDb::Boot.root}/openfootball/leagues"
+SportDb::Import.config.clubs_dir   = "#{SportDb::Boot.root}/openfootball/clubs"
 
 
 

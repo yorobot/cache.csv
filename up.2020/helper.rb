@@ -48,12 +48,9 @@ puts
 
 
 
-###
-## fix - remove Mono ?? just use gitti only - why? why not?
-require 'mono'
 
 ## hack: use "local" sportdb-setup source too :-) for now
-$LOAD_PATH.unshift( 'C:/Sites/sportdb/sport.db/sportdb-setup/lib' )
+# $LOAD_PATH.unshift( 'C:/Sites/sportdb/sport.db/sportdb-setup/lib' )
 
 require 'sportdb/setup'
 SportDb::Boot.setup   ## setup dev load path
@@ -65,8 +62,8 @@ require_relative '../writer/lib/write'
 
 
 ## use (switch to) "external" datasets
-SportDb::Import.config.clubs_dir   = "#{SportDb::Boot.root}/openfootball/clubs"
 SportDb::Import.config.leagues_dir = "#{SportDb::Boot.root}/openfootball/leagues"
+SportDb::Import.config.clubs_dir   = "#{SportDb::Boot.root}/openfootball/clubs"
 
 
 
@@ -102,9 +99,7 @@ end
 
 ########################
 #  push & pull github scripts
-
-
-
+require 'gitti'
 
 ## todo/fix: rename to something like
 ##    git_(auto_)commit_and_push_if_changes/if_dirty()
