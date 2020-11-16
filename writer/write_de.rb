@@ -9,8 +9,8 @@ boot_time = Time.now
 
 Writer.config.out_dir = './o5'
 
-Writer.write_de1( '2020/21', source: 'two/o' )
-Writer.write_de2( '2020/21', source: 'two/o' )
+Writer.write( 'de.1', '2020/21', source: 'two/o' )
+Writer.write( 'de.2', '2020/21', source: 'two/o' )
 
 
 # write_de_cup( '2018/19', source: 'tmp/two' )

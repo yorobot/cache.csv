@@ -1,23 +1,23 @@
-## hack: use "local" dev monoscript too :-) for now
-$LOAD_PATH.unshift( 'C:/Sites/rubycoco/monos/lib' )
+## hack: use "local" sportdb-setup source too :-) for now
+# $LOAD_PATH.unshift( 'C:/Sites/sportdb/sport.db/sportdb-setup/lib' )
+
 
 ## note: use the local version of sportdb-source gem
 require 'sportdb/setup'
-SportDb::Boot.setup   # setup load path
+SportDb::Boot.setup   # setup dev (local) load path
 
 
 
+require 'sportdb/catalogs'
 ##  just use sportdb/catalogs  ?! - why? why not?
 # todo/fix - update require ?!
 # require 'sportdb/importers'   # -- requires db support
 # require 'sportdb/readers'     # -- requires db support
-require 'sportdb/catalogs'
 
-
-
-require 'sportdb/linters'    # e.g. uses TeamSummary class
 
 ## require 'sportdb/writers'
+
+## require 'sportdb/linters'    # e.g. uses TeamSummary class
 
 
 ## require 'sportdb/exporters'   ## requires db support
