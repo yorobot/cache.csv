@@ -176,53 +176,6 @@ end
 
 
 
-
-def download( datasets )
-  datasets.each do |dataset|
-    league  = dataset[0]
-    seasons = dataset[1]
-    seasons.each do |season|
-      Worldfootball.schedule( league: league,
-                              season: season )
-    end
-  end
-end
-
-def convert( datasets )
-  datasets.each do |dataset|
-    league  = dataset[0]
-    seasons = dataset[1]
-    seasons.each do |season|
-      Worldfootball.convert( league: league,
-                             season: season )
-    end
-  end
-end
-
-##
-## todo/check:  remove default for source to make it more "generic" / less magic - why? why not?
-##   or move this write into Worldfootball?
-def write( datasets, source: )
-  datasets.each do |dataset|
-    league  = dataset[0]
-    seasons = dataset[1]
-    seasons.each do |season|
-      Writer.write( league,
-                    season,
-                    source: source )
-    end
-  end
-end
-
-
-
-
-
-###
-## todo/fix: delete Worldfootball::Tool - why? why not?
-
-
-
 def process( datasets, includes: )
   ## filter/find datasets by includes (e.g. at matchting at.1,at.2,at.cup with start_with etc.)
   ## find all repo paths (e.g. england or europe)
@@ -231,7 +184,7 @@ def process( datasets, includes: )
   repos    = find_repos( datasets )
 
 
-  download( datasets )  if OPTS[:download]
+  Worldfootball::Job.download( datasets )   if OPTS[:download]
 
   ## always pull before push!! (use fast_forward)
   git_fast_forward_if_clean( repos )  if OPTS[:push]
@@ -240,7 +193,7 @@ def process( datasets, includes: )
   # Worldfootball.config.convert.out_dir = './o/aug29'
   Worldfootball.config.convert.out_dir = './o'
 
-  convert( datasets )
+  Worldfootball::Job.convert( datasets )
 
 
   if OPTS[:push]
@@ -249,7 +202,8 @@ def process( datasets, includes: )
     Writer.config.out_dir = './tmp'
   end
 
-  write( datasets, source: Worldfootball.config.convert.out_dir )
+  Writer::Job.write( datasets,
+                     source: Worldfootball.config.convert.out_dir )
 
 
   ## todo/fix: add a getch or something to hit return before commiting pushing - why? why not?
