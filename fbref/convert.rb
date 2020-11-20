@@ -1,89 +1,49 @@
+$LOAD_PATH.unshift( 'C:/Sites/yorobot/sport.db.more/webget-football/lib' )
+require 'webget/football'
 
-class Writer
 
-MAX_HEADERS = [
-  'stage',
-  'round',
-  'matchweek',   # was gameweek - rename to matchday/matchweek - why? why not?
-  'dayofweek',
-  'date',
-  'time',
-  'team1',       # was squad_a  - rename to team_a/team_1  - why? why not?
-  'score',
-  'team2',       # was squad_b  - rename to team_b/team_2  - why? why not?
-  'attendance',
-  'venue',
-  'referee',
-  'notes',
-  'match_report',
-]
 
-def self.headers( rows, headers: MAX_HEADERS )
-  ## check for unused columns and strip/remove
-  counter = Hash.new(0)
+require_relative 'build'
 
-  rows.each do |row|
-     row.each do |key, value|
-       counter[key] += 1  unless value.nil? || value.empty?
-     end
+
+module Fbref
+  def self.convert( league:, season: )
+    page = Page::Schedule.from_cache( league: league,
+                                      season: season )
+
+    puts page.title
+
+    rows = page.matches
+    recs = build( rows, league: league, season: season )
+    ## pp rows
+
+    ## reformat date / beautify e.g. Sat Aug 7 1993
+    recs.each { |rec| rec[2] = Date.strptime( rec[2], '%Y-%m-%d' ).strftime( '%a %b %-d %Y' ) }
+
+
+    recs, headers = vacuum( recs )
+
+    pp recs[0..2]
+
+    season = Season.parse( season )
+    path = "o/#{league}_#{season.to_path}.csv"
+    puts "write #{path}..."
+    Cache::CsvMatchWriter.write( path, recs, headers: headers )
   end
-  pp counter
+end # module Fbref
 
 
-  ## report/exit if unknown header found !!
-  headers = headers.map { |key| key.to_sym }  ## symbolize keys/header names for now
-  unknown_headers = counter.keys.select { |key| headers.include?( key ) == false }
-  if unknown_headers.size > 0
-    puts "!! ERROR - #{unknown_headers.size} unknown headers:"
-    pp unknown_headers
-    exit 1
-  end
+# Fbref.convert( league: 'jp.1', season: '2019' )
+# Fbref.convert( league: 'mx.1', season: '2019/20' )
 
-  ## calculate (used) headers;
-  used_headers = []
-  headers.each do |header|
-     if counter[ header ] > 0
-      used_headers << header
-     else
-       puts "  skipping unused header/column >#{header}<"
-     end
-  end
+# Fbref.convert( league: 'at.1', season: '2018-19' )
 
-  used_headers
-end
+# convert all configured
 
-
-
-def self.csv_encode( values )
-  ## quote values that incl. a comma
-  values.map do |value|
-    if value.index(',')
-      puts "** rec with field with comma: >#{value}<"
-      ## pp values
-      %Q{"#{value}"}
-    else
-      value
-    end
-  end.join( ',' )
-end
-
-def self.write( path, rows )
-  headers = headers( rows )
-  pp headers
-
-  ## for convenience - make sure parent folders/directories exist
-  FileUtils.mkdir_p( File.dirname( path ))  unless Dir.exist?( File.dirname( path ))
-
-  File.open( path, 'w:utf-8' ) do |f|
-    f.write( headers.join( ',' ))
-    f.write( "\n" )
-    rows.each do |row|
-      values = headers.map {|key| row[key] || '' }
-      f.write( csv_encode( values ) )
-      f.write( "\n" )
-    end
+Fbref::LEAGUES.each do |league, pages|
+  pages.keys.each do |season|
+     Fbref.convert( league: league,
+                     season: season )
   end
 end
-
-end # class Writer
 

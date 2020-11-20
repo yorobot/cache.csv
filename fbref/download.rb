@@ -1,35 +1,32 @@
-require 'webget'
+$LOAD_PATH.unshift( 'C:/Sites/yorobot/sport.db.more/webget-football/lib' )
+require 'webget/football'
 
 
-require 'sportdb/structs'   ## add season support
+# Fbref.schedule( league: 'mx.1', season: '2019/20' )
+# Fbref.schedule( league: 'jp.1', season: '2019' )
 
-require_relative 'config'
-
-
-
-module Fbref
-
-def self.download_schedule( league:, season: )
-  url = schedule_url( league: league, season: season )
-  get( url )
+[
+ # ['br.1', ['2020']],
+ ['de.1', ['2020/21']],
+ ['es.1', ['2020/21']],
+ ['it.1', ['2020/21']],
+ ['fr.1', ['2020/21']],
+].each do |dataset|
+  league  = dataset[0]
+  seasons = dataset[1]
+  seasons.each do |season|
+    Fbref.schedule( league: league, season: season )
+  end
 end
 
-### add some "old" (back compat) aliases - keep - why? why not?
-class << self
-  alias_method :schedule,  :download_schedule
+
+
+__END__
+# download all configured
+
+Fbref::LEAGUES.each do |league, pages|
+   pages.keys.each do |season|
+      Fbref.schedule( league: league,
+                      season: season )
+   end
 end
-
-
-##################
-#  helpers
-def self.get( url )  ## get & record/save to cache
-  response = Webget.page( url )  ## fetch (and cache) html page (via HTTP GET)
-
-  ## note: exit on get / fetch error - do NOT continue for now - why? why not?
-  exit 1   if response.status.nok?    ## e.g.  HTTP status code != 200
-end
-end  ## module Fbref
-
-
-Fbref.schedule( league: 'mx.1', season: '2019/20' )
-Fbref.schedule( league: 'jp.1', season: '2019' )
