@@ -18,7 +18,7 @@ require 'football/sources'
 Fbref::LEAGUES.each do |league, pages|
   pages.keys.each do |season|
      Fbref.convert( league: league,
-                     season: season )
+                    season: season )
   end
 end
 
