@@ -3,7 +3,7 @@ require_relative 'helper'
 
 ## top-level countries / leagues
 
-DATASETS = [
+DATASETS_2020 = [
  ['br.1',    %w[2020]],     # starts Sun Aug 9  - note: now runs into 2021!!!
 
  ['eng.1',   %w[2020/21]],   # starts Sat Sep 12
@@ -38,9 +38,19 @@ DATASETS = [
  ['mx.1',    %w[2020/21]],   # starts Fri Jul 24
 ]
 
-pp DATASETS
+
+DATASETS_2019 = [
+  ['it.1',    %w[2019/20]],
+  ['it.2',    %w[2019/20]],
+
+  ['es.1',    %w[2019/20]],
+  ['es.2',    %w[2019/20]],
+]
 
 
-process( DATASETS, includes: ARGV )
+pp DATASETS_2020
+pp DATASETS_2019
+
+process( DATASETS_2020, includes: ARGV )
 
 puts "bye"
