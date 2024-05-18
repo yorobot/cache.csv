@@ -1,0 +1,59 @@
+== uefa champions league
+ 
+ ! ERROR: no mapping found for club >FK Dinamo Brest<:
+{:count=>3, :short=>"Dinamo Brest", :country=>"Belarus", :address=>"str. Levanevskogo, 7 Brest 224005"}
+
+  retry with unaccent name >FK Šachcior Salihorsk< => >fksachciorsalihorsk<
+!! ERROR: no mapping found for club >FK Šachcior Salihorsk<:
+{:count=>4, :short=>"Šachcior S.", :country=>"Belarus", :address=>"Lenin str.38 Salihorsk 223710"}
+
+
+  retry with unaccent name >Djurgårdens IF Fotboll< => >djurgardensiffotboll<
+!! ERROR: no mapping found for club >Djurgårdens IF Fotboll<:
+{:count=>1, :short=>"Djurgården", :country=>"Sweden", :address=>"Klocktornet Olympiastadion Stockholm 11433"}
+
+
+
+  retry with unaccent name >Qaırat Almaty FK< => >qairatalmatyfk<
+!! ERROR: no mapping found for club >Qaırat Almaty FK<:
+{:count=>4, :short=>"Qaırat Almaty", :country=>"Kazakhstan", :address=>"null Almaty null"}
+
+!! ERROR: no mapping found for club >FC Pyunik Yerevan<:
+{:count=>6, :short=>"Pyunik", :country=>"Armenia", :address=>"Kilikia Sport Centre Yerevan 100"}
+  retry with unaccent name >KF Víkingur< => >kfvikingur<
+
+!! ERROR: no mapping found for club >KF Víkingur<:
+{:count=>2, :short=>"Víkingur", :country=>"Iceland", :address=>"Traðarlandi 1 Reykjavík 108"}
+
+!! ERROR: no mapping found for club >FK Shkupi Skopje<:
+{:count=>4,
+ :short=>"Shkupi Skopje",
+ :country=>"FYR Macedonia",
+ :address=>"Str. Kemal Sejfula, nr. 4, nas. Čair Skopje 1000"}
+
+!! ERROR: no mapping found for club >Tobol Kostanay<:
+{:count=>2, :short=>nil, :country=>"Kazakhstan", :address=>"null null null"}
+
+  retry with unaccent name >AÉK Lárnaka< => >aeklarnaka<
+!! ERROR: no mapping found for club >AÉK Lárnaka<:
+{:count=>2, :short=>"AÉK Lárnaka", :country=>"Cyprus", :address=>"Kilkis 7 Lárnaka 6015"}
+
+  retry with unaccent name >Apollon FC Lemesós< => >apollonfclemesos<
+!! ERROR: no mapping found for club >Apollon FC Lemesós<:
+{:count=>2, :short=>"Apollon", :country=>"Cyprus", :address=>"1, Mesologgiou Str. Lemesós 3031"}
+
+
+
+!! ERROR: no mapping found for club >Royale Union Saint-Gilloise<:
+{:count=>2, :short=>"Union SG", :country=>"Belgium", :address=>"Chaussée de Bruxelles, 223 Forest 1190"}
+
+
+----
+
+  retry with unaccent name >Rīga FC< => >rigafc<
+!! 22 -   Rīga FC | Rīga FC  =>  Riga FC
+             @ Balasta Dambis 70b-1 Rīga null > Latvia
+
+  retry with unaccent name >NŠ Mura< => >nsmura<
+!! 88 -   NŠ Mura | Mura  =>  ND Mura 05
+             @ Bade 45 S. 118 Murska Sobota 9000 > Slovenia
