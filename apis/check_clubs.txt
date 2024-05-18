@@ -1,4 +1,10 @@
 
+== leagues - eng, de, etc.
+
+  retry with unaccent name >SpVgg Greuther Fürth 1903< => >spvgggreutherfurth1903<
+!! ERROR: no mapping found for club >SpVgg Greuther Fürth 1903<:
+{:count=>34, :short=>"Greuther Fürth", :country=>"Germany", :address=>"Laubenweg 60 Fürth 90765"}
+
 
 
 == uefa champions league

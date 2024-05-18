@@ -1,4 +1,12 @@
 
+##
+#
+# todos / ideas
+##  - [ ]  check for shortname if same as canonical (do NOT report)
+##  - [ ]   maybe auto-add always country by default to teams - why? why not?
+
+
+
 require 'cocos'
 
 $LOAD_PATH.unshift( '../../../rubycocos/webclient/webget/lib' )
@@ -39,10 +47,23 @@ def check( league:, year: )
     [m['homeTeam']['name'],
      m['awayTeam']['name']].each do |team|
 
+      ## skip if name nil  
+      if team.nil?
+        puts "  skipping empty team (no name) in match"
+        next
+      end
+
+       team_hash = teams_by_name[ team ]
+       if team_hash.nil?
+          puts "!! error - no team by name record found for >#{team}< in match:"
+          pp m
+          exit 1
+       end
+
        rec = TEAMS[ team ] ||= { count: 0,
-                                 short:   teams_by_name[ team ]['shortName'],
-                                 country: teams_by_name[ team ]['area']['name'],
-                                 address: teams_by_name[ team ]['address'],
+                                 short:   team_hash['shortName'],
+                                 country: team_hash['area']['name'],
+                                 address: team_hash['address'],
                                }
        rec[ :count ] += 1
     end # each team
@@ -62,7 +83,10 @@ end # method check
 
 DATASETS = [
            # ['uefa.cl',    %w[2020 2021 2022 2023]],
-             ['copa.l', %w[2023 2024]],
+           #  ['copa.l', %w[2023 2024]],
+           ['eng.1', %w[2020 2021 2022 2023]],
+           ['eng.2', %w[2020 2021 2022 2023]],
+           ['de.1', %w[2020 2021 2022 2023]],
            ]
 
 pp DATASETS
@@ -103,12 +127,11 @@ mods = SportDb::Import.catalog.clubs.build_mods(
                   { 'Liverpool | Liverpool FC' => 'Liverpool FC, ENG',
                     'Arsenal  | Arsenal FC'    => 'Arsenal FC, ENG',
                     'Barcelona'                => 'FC Barcelona, ESP',
-                    'Valencia'                 => 'Valencia CF, ESP'  })
-
+                    'Valencia'                 => 'Valencia CF, ESP'  
+                  })
 pp mods
 
 ## mods copa.l 
-mods = {}
 mods = SportDb::Import.catalog.clubs.build_mods(
                   { 'Club Nacional'        => 'Club Nacional, PAR', # Paraguay
                     'Universidad Catolica' => 'Universidad Catolica, ECU',  ## Ecuador
@@ -116,6 +139,15 @@ mods = SportDb::Import.catalog.clubs.build_mods(
                     'Liverpool FC'         => 'Liverpool FC, URU',  ## Uruguay
                   })
 pp mods
+
+
+## mods eng, etc.
+mods = SportDb::Import.catalog.clubs.build_mods(
+                  { 'Liverpool | Liverpool FC' => 'Liverpool FC, ENG',
+                    'Arsenal  | Arsenal FC'    => 'Arsenal FC, ENG',
+                  })
+pp mods
+
 
 
 puts
@@ -147,10 +179,10 @@ TEAMS.each_with_index do |(team_name, team_hash),i|
     ## exit 1
    else
     if team_name != club.name
-       puts "!! #{i} -   #{team_name} | #{team_hash[:short]}  =>  #{club.name}"  
+       puts "!! #{i+1} -   #{team_name} | #{team_hash[:short]}  =>  #{club.name}"  
        puts  "             @ #{team_hash[:address]} > #{team_hash[:country]}"
     else
-      puts "    #{i} -   #{team_name}"
+      puts "    #{i+1} -   #{team_name}, #{team_hash[:country]} == #{club.country.name}"
     end 
    end
 end
