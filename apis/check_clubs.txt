@@ -1,52 +1,14 @@
+
+
+
 == uefa champions league
  
- ! ERROR: no mapping found for club >FK Dinamo Brest<:
-{:count=>3, :short=>"Dinamo Brest", :country=>"Belarus", :address=>"str. Levanevskogo, 7 Brest 224005"}
-
-  retry with unaccent name >FK Šachcior Salihorsk< => >fksachciorsalihorsk<
-!! ERROR: no mapping found for club >FK Šachcior Salihorsk<:
-{:count=>4, :short=>"Šachcior S.", :country=>"Belarus", :address=>"Lenin str.38 Salihorsk 223710"}
-
-
+  retry with unaccent name >FK Šachcior Salihorsk<  => >fksachciorsalihorsk<
   retry with unaccent name >Djurgårdens IF Fotboll< => >djurgardensiffotboll<
-!! ERROR: no mapping found for club >Djurgårdens IF Fotboll<:
-{:count=>1, :short=>"Djurgården", :country=>"Sweden", :address=>"Klocktornet Olympiastadion Stockholm 11433"}
-
-
-
-  retry with unaccent name >Qaırat Almaty FK< => >qairatalmatyfk<
-!! ERROR: no mapping found for club >Qaırat Almaty FK<:
-{:count=>4, :short=>"Qaırat Almaty", :country=>"Kazakhstan", :address=>"null Almaty null"}
-
-!! ERROR: no mapping found for club >FC Pyunik Yerevan<:
-{:count=>6, :short=>"Pyunik", :country=>"Armenia", :address=>"Kilikia Sport Centre Yerevan 100"}
-  retry with unaccent name >KF Víkingur< => >kfvikingur<
-
-!! ERROR: no mapping found for club >KF Víkingur<:
-{:count=>2, :short=>"Víkingur", :country=>"Iceland", :address=>"Traðarlandi 1 Reykjavík 108"}
-
-!! ERROR: no mapping found for club >FK Shkupi Skopje<:
-{:count=>4,
- :short=>"Shkupi Skopje",
- :country=>"FYR Macedonia",
- :address=>"Str. Kemal Sejfula, nr. 4, nas. Čair Skopje 1000"}
-
-!! ERROR: no mapping found for club >Tobol Kostanay<:
-{:count=>2, :short=>nil, :country=>"Kazakhstan", :address=>"null null null"}
-
-  retry with unaccent name >AÉK Lárnaka< => >aeklarnaka<
-!! ERROR: no mapping found for club >AÉK Lárnaka<:
-{:count=>2, :short=>"AÉK Lárnaka", :country=>"Cyprus", :address=>"Kilkis 7 Lárnaka 6015"}
-
-  retry with unaccent name >Apollon FC Lemesós< => >apollonfclemesos<
-!! ERROR: no mapping found for club >Apollon FC Lemesós<:
-{:count=>2, :short=>"Apollon", :country=>"Cyprus", :address=>"1, Mesologgiou Str. Lemesós 3031"}
-
-
-
-!! ERROR: no mapping found for club >Royale Union Saint-Gilloise<:
-{:count=>2, :short=>"Union SG", :country=>"Belgium", :address=>"Chaussée de Bruxelles, 223 Forest 1190"}
-
+  retry with unaccent name >Qaırat Almaty FK<       => >qairatalmatyfk<
+  retry with unaccent name >KF Víkingur<            => >kfvikingur<
+  retry with unaccent name >AÉK Lárnaka<            => >aeklarnaka<
+  retry with unaccent name >Apollon FC Lemesós<     => >apollonfclemesos<
 
 ----
 
@@ -57,3 +19,108 @@
   retry with unaccent name >NŠ Mura< => >nsmura<
 !! 88 -   NŠ Mura | Mura  =>  ND Mura 05
              @ Bade 45 S. 118 Murska Sobota 9000 > Slovenia
+
+
+
+== copa libertadores
+
+!! ERROR: no mapping found for club >CSD Sport Huancayo<:
+{:count=>2, :short=>"Sport Huancayo", :country=>"Peru", :address=>"null Huancayo null"}
+
+  retry with unaccent name >Club Nacional Potosí< => >clubnacionalpotosi<
+!! ERROR: no mapping found for club >Club Nacional Potosí<:
+{:count=>2, :short=>"Nac. Potosí", :country=>"Bolivia", :address=>"null San Luis Potosí null"}
+
+!! ERROR: no mapping found for club >CSCyD El Nacional<:
+{:count=>6,
+ :short=>"El Nacional",
+ :country=>"Ecuador",
+ :address=>"Yasuní e Isla San Cristóbal, Ciudadela Jipijapa Quito null"}
+
+!! ERROR: no mapping found for club >CS Cristal<:
+{:count=>12, :short=>"Cristal", :country=>"Peru", :address=>"Calle 18 s/n La Florida, Rímac Lima null"}
+
+  retry with unaccent name >CDP Curicó Unido< => >cdpcuricounido<
+!! ERROR: no mapping found for club >CDP Curicó Unido<:
+{:count=>2, :short=>"Curicó", :country=>"Chile", :address=>"Avenida Peňa 819 Curicó null"}
+
+  retry with unaccent name >CD Independiente Medellín< => >cdindependientemedellin<
+!! ERROR: no mapping found for club >CD Independiente Medellín<:
+{:count=>10,
+ :short=>"Independiente",
+ :country=>"Colombia",
+ :address=>"Carrera 43 A #7-50A Torre Empresarial Dann P.11 Medellín null"}
+
+
+!! ERROR: no mapping found for club >Magallanes<:
+{:count=>4, :short=>"Magallanes", :country=>"Chile", :address=>"null null null"}
+ 
+
+!! ERROR: no mapping found for club >CD Maldonado<:
+{:count=>2,
+ :short=>"CD Maldonado",
+ :country=>"Uruguay",
+ :address=>"Avda. España 693 esquina Ginés Cairo Medina CP Maldonado 20000"}
+
+
+!! ERROR: no mapping found for club >AA Argentinos Juniors<:
+{:count=>8,
+ :short=>"Argentinos Jrs",
+ :country=>"Argentina",
+ :address=>"Punta Arenas 1271, La Paternal Buenos Aires, Buenos Aires 1427"}
+
+!! ERROR: no mapping found for club >CAR Independiente del Valle<:
+{:count=>14,
+ :short=>"Independiente",
+ :country=>"Ecuador",
+ :address=>"Calle F S/N y Calle I - La Balvina Sangolqui null"}
+
+!! ERROR: no mapping found for club >CA Patronato<:
+{:count=>6, :short=>"Patronato", :country=>"Argentina", :address=>"Padre Bartolomé Grella 874 Paraná, Entre Ríos 3100"}
+
+  retry with unaccent name >CDC Atlético Nacional< => >cdcatleticonacional<
+!! ERROR: no mapping found for club >CDC Atlético Nacional<:
+{:count=>10, :short=>"CDC Atlético", :country=>"Colombia", :address=>"Calle 62 No. 44 - 103 Itagüí, Antioquia null"}
+
+!! ERROR: no mapping found for club >CD Nublense<:
+{:count=>6, :short=>"Nublense", :country=>"Chile", :address=>"null null null"}
+
+
+!! ERROR: no mapping found for club >CSD Colo-Colo<:
+{:count=>16, :short=>"Colo-Colo", :country=>"Chile", :address=>"null Santiago null"}
+
+!! ERROR: no mapping found for club >CA Boca Juniors<:
+{:count=>13,
+ :short=>"Boca Juniors",
+ :country=>"Argentina",
+ :address=>"Brandsen 805, La Boca Buenos Aires, Buenos Aires 1161"}
+
+!! ERROR: no mapping found for club >Olimpia Asuncion<:
+{:count=>10, :short=>"Olimpia", :country=>"Paraguay", :address=>"null null null"}
+
+
+!! ERROR: no mapping found for club >Defensor SC<:
+{:count=>2,
+ :short=>"Defensor",
+ :country=>"Uruguay",
+ :address=>"Avenida 21 de Setiembre 2362, Parque Rodó Montevideo 11100"}
+
+!! ERROR: no mapping found for club >CD Palestino<:
+{:count=>10, :short=>"Palestino", :country=>"Chile", :address=>"null Santiago null"}
+
+!! ERROR: no mapping found for club >Sportivo Trinidense<:
+{:count=>4, :short=>"Trinidense", :country=>"Paraguay", :address=>"null null null"}
+
+!! ERROR: no mapping found for club >CD Godoy Cruz Antonio Tomba<:
+{:count=>2, :short=>"Godoy Cruz", :country=>"Argentina", :address=>"Calle Balcarce 477 Godoy Cruz, Mendoza 5501"}
+
+  retry with unaccent name >Deportivo Táchira FC< => >deportivotachirafc<
+!! ERROR: no mapping found for club >Deportivo Táchira FC<:
+{:count=>6,
+ :short=>"Táchira",
+ :country=>"Venezuela",
+ :address=>"Urbanización Mérida, Calle 3, Nº 3-55 San Cristóbal null"}
+
+!! ERROR: no mapping found for club >CDP Junior FC<:
+{:count=>6, :short=>"Junior", :country=>"Colombia", :address=>"Carrera 57 No 72 - 56 Barranquilla null"}
+

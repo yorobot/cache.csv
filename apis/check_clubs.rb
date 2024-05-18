@@ -55,9 +55,14 @@ end # method check
 ## ==>  uefa.cl 2022 - 79 teams
 ##      uefa.cl 2023 - 32 teams
 
+## ==>  copa.l 2023 - 47 teams
+##      copa.l 2024 - 47 teams
+
+
 
 DATASETS = [
-            ['uefa.cl',    %w[2020 2021 2022 2023]],
+           # ['uefa.cl',    %w[2020 2021 2022 2023]],
+             ['copa.l', %w[2023 2024]],
            ]
 
 pp DATASETS
@@ -93,6 +98,7 @@ puts "  #{CatalogDb::Metal::NationalTeam.count} national teams"
 puts "  #{CatalogDb::Metal::League.count} leagues"
 
 
+## mods uefa.cl
 mods = SportDb::Import.catalog.clubs.build_mods(
                   { 'Liverpool | Liverpool FC' => 'Liverpool FC, ENG',
                     'Arsenal  | Arsenal FC'    => 'Arsenal FC, ENG',
@@ -101,6 +107,15 @@ mods = SportDb::Import.catalog.clubs.build_mods(
 
 pp mods
 
+## mods copa.l 
+mods = {}
+mods = SportDb::Import.catalog.clubs.build_mods(
+                  { 'Club Nacional'        => 'Club Nacional, PAR', # Paraguay
+                    'Universidad Catolica' => 'Universidad Catolica, ECU',  ## Ecuador
+                    'CA River Plate'       => 'CA River Plate, ARG',   ## Argentina
+                    'Liverpool FC'         => 'Liverpool FC, URU',  ## Uruguay
+                  })
+pp mods
 
 
 puts
