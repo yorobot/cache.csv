@@ -1,9 +1,7 @@
-
 ##
 #
 # todos / ideas
-##  - [ ]  check for shortname if same as canonical (do NOT report)
-##  - [ ]   maybe auto-add always country by default to teams - why? why not?
+#  - [ ]  check for shortname if same as canonical (do NOT report)
 
 
 
@@ -82,8 +80,8 @@ end # method check
 
 
 DATASETS = [
-           # ['uefa.cl',    %w[2020 2021 2022 2023]],
-           #  ['copa.l', %w[2023 2024]],
+           ['uefa.cl',    %w[2020 2021 2022 2023]],
+           ['copa.l', %w[2023 2024]],
            ['eng.1', %w[2020 2021 2022 2023]],
            ['eng.2', %w[2020 2021 2022 2023]],
            ['de.1', %w[2020 2021 2022 2023]],
@@ -122,33 +120,6 @@ puts "  #{CatalogDb::Metal::NationalTeam.count} national teams"
 puts "  #{CatalogDb::Metal::League.count} leagues"
 
 
-## mods uefa.cl
-mods = SportDb::Import.catalog.clubs.build_mods(
-                  { 'Liverpool | Liverpool FC' => 'Liverpool FC, ENG',
-                    'Arsenal  | Arsenal FC'    => 'Arsenal FC, ENG',
-                    'Barcelona'                => 'FC Barcelona, ESP',
-                    'Valencia'                 => 'Valencia CF, ESP'  
-                  })
-pp mods
-
-## mods copa.l 
-mods = SportDb::Import.catalog.clubs.build_mods(
-                  { 'Club Nacional'        => 'Club Nacional, PAR', # Paraguay
-                    'Universidad Catolica' => 'Universidad Catolica, ECU',  ## Ecuador
-                    'CA River Plate'       => 'CA River Plate, ARG',   ## Argentina
-                    'Liverpool FC'         => 'Liverpool FC, URU',  ## Uruguay
-                  })
-pp mods
-
-
-## mods eng, etc.
-mods = SportDb::Import.catalog.clubs.build_mods(
-                  { 'Liverpool | Liverpool FC' => 'Liverpool FC, ENG',
-                    'Arsenal  | Arsenal FC'    => 'Arsenal FC, ENG',
-                  })
-pp mods
-
-
 
 puts
 puts "==> #{TEAMS.keys.size} teams"
@@ -171,18 +142,37 @@ TEAMS.each_with_index do |(team_name, team_hash),i|
    end
 
 
-   ## note: first check mods!!! e.g. Liverpool
-   club = mods[ team_name ] || SportDb::Import.catalog.clubs.find( team_name )
+   ## note - use lookup with country required
+   club = SportDb::Import.catalog.clubs.find_by( 
+                                  name:    team_name,
+                                  country: country )
    if club.nil?
-    puts "!! ERROR: no mapping found for club >#{team_name}<:"
+    puts "!! ERROR: no mapping found for club >#{team_name}, #{country.name}<:"
     pp team_hash
     ## exit 1
    else
     if team_name != club.name
-       puts "!! #{i+1} -   #{team_name} | #{team_hash[:short]}  =>  #{club.name}"  
-       puts  "             @ #{team_hash[:address]} > #{team_hash[:country]}"
+       ## check for short name matching club name??
+       if team_hash[:short] == club.name
+         puts "    #{i+1} -   #{team_name} | >>#{team_hash[:short]}<<, #{team_hash[:country]}"    
+       else
+         puts " != #{i+1} -   #{team_name} | #{team_hash[:short]}  =>  #{club.name}, #{country.name}"  
+         puts "             @ #{team_hash[:address]} > #{team_hash[:country]}"
+       end
     else
-      puts "    #{i+1} -   #{team_name}, #{team_hash[:country]} == #{club.country.name}"
+      ## todo - cleanup country name equals check
+      if team_hash[:country] != club.country.name
+         print " !! "
+      else
+         print "    "
+      end
+      print "#{i+1} -   >>#{team_name}<< | #{team_hash[:short]}"
+      if team_hash[:country] != club.country.name
+        print ", #{team_hash[:country]} != #{club.country.name}"      
+      else
+        print ", #{team_hash[:country]}"
+      end    
+      print "\n"
     end 
    end
 end
