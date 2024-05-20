@@ -84,11 +84,12 @@ require 'sportdb/writers'
 # try eng.1
 
 
-source_dir = '../../sport.db.more/football-sources/o'
+source_dir = '../../../stage'
 
 seasons = ['2023/24',
-           # '2022/23',
-           # '2021/22'
+           '2022/23',
+           '2021/22',
+           '2020/21'
           ]
 
 seasons.each do |season|
@@ -107,13 +108,18 @@ end
 
 #######
 # try de.1
+seasons.each do |season|
+  season = Season( season )   ## convert to Season obj
 
-matches = SportDb::CsvMatchParser.read( '../../sport.db.more/football-sources/o/2023-24/de.1.csv' )
+  matches = SportDb::CsvMatchParser.read( 
+                 "#{source_dir}/#{season.to_path}/de.1.csv" )
 
-write_txt( './o/2023-24/bl.txt', matches, 
-            league: 'Deutsche Bundesliga',
-            season: '2023/24',
-            lang: 'de' )
+  write_txt( "./o/#{season.to_path}/bl.txt", 
+              matches, 
+              league: 'Deutsche Bundesliga',
+              season: '2023/24',
+              lang: 'de' )
+end
 
 
 puts "bye"

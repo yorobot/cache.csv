@@ -2,7 +2,8 @@
 #
 # todos / ideas
 #  - [ ]  check for shortname if same as canonical (do NOT report)
-
+#
+# -  [ ] check for shortnames too (if present/match)
 
 
 require 'cocos'
