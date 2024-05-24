@@ -29,6 +29,7 @@ puts "  #{CatalogDb::Metal::League.count} leagues"
       ## first by date (older first)
       ## next by matchday (lowwer first)
       res =   l.date <=> r.date
+      res =   l.time <=> r.time     if res == 0 && l.time && r.time
       res =   l.round <=> r.round   if res == 0
       res
     end

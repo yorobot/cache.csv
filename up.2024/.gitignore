@@ -9,3 +9,9 @@ temp/
 *.db
 
 
+
+###
+# ignore logs
+logs.txt
+errors.txt
+
