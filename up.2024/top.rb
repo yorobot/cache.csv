@@ -57,69 +57,78 @@ puts "  #{CatalogDb::Metal::League.count} leagues"
     matches
   end
 
-def write_txt( path, matches,
-           league:,
-           season:,
-           lang: )
-
-  puts
-  pp matches[0]
-  puts
-  pp matches[-1]
-  puts "#{matches.size} matches"
-
-  matches = normalize( matches, league: league )
- 
-  SportDb::TxtMatchWriter.write( path, matches,
-                             name: "#{league} #{season}",
-                             lang:  lang )
-end
-
 
 
 
 $LOAD_PATH.unshift( '../../sport.db.more/sportdb-writers/lib' )
 require 'sportdb/writers'
 
-#######
-# try eng.1
 
 
 source_dir = '../../../stage'
 
-seasons = ['2023/24',
+SEASONS = ['2023/24',
            '2022/23',
            '2021/22',
            '2020/21'
           ]
 
-seasons.each do |season|
-  season = Season( season )   ## convert to Season obj
+leagues = {
+   'eng.1' => {  name:   'English Premier League',
+                 lang:   'en',
+                 slug:   '1-premierleague',
+                 seasons: SEASONS,
+              },
+   'de.1'  => {  name:  'Deutsche Bundesliga',
+                 lang:   'de',
+                 slug:   '1-bundesliga',
+                 seasons: SEASONS,
+              },
+   'es.1'   => { name:  'Primera División de España',
+                 lang:   'es',
+                 slug:   '1-liga',
+                 seasons: SEASONS,
+               },  
+   'fr.1'   => { name:  'French Ligue 1',
+                 lang:   'fr',
+                 slug:   '1-ligue1',
+                 seasons: SEASONS,
+               },                    
+   'it.1'   => { name:  'Italian Serie A',
+                 lang:   'it',
+                 slug:   '1-seriea',
+                 seasons: SEASONS,
+               },                    
+}
 
-  matches = SportDb::CsvMatchParser.read( 
-                 "#{source_dir}/#{season.to_path}/eng.1.csv" )
-
-  write_txt( "./o/#{season.to_path}/pl.txt", 
-             matches, 
-             league: 'English Premier League',
-             season: season.key,
-             lang: 'en' )
-end
 
 
-#######
-# try de.1
-seasons.each do |season|
-  season = Season( season )   ## convert to Season obj
+leagues.each_with_index do |(league, config),i|
+  lang    = config[:lang] || 'en'
+  name    = config[:name] 
+  slug    = config[:slug]
+  seasons = config[:seasons]
 
-  matches = SportDb::CsvMatchParser.read( 
-                 "#{source_dir}/#{season.to_path}/de.1.csv" )
+  seasons.each_with_index do |season,j|
+    season = Season( season )   ## convert to Season obj
 
-  write_txt( "./o/#{season.to_path}/bl.txt", 
-              matches, 
-              league: 'Deutsche Bundesliga',
-              season: '2023/24',
-              lang: 'de' )
+    matches = SportDb::CsvMatchParser.read( 
+                 "#{source_dir}/#{season.to_path}/#{league}.csv" )
+
+    puts "==> [#{i+1}/#{leagues.size}]  #{name} #{season.key} [#{j+1}/#{seasons.size}]  -  #{matches.size} match(es)..."
+
+    # puts
+    # pp matches[0]
+    # puts
+    # pp matches[-1]
+             
+    matches = normalize( matches, league: league )
+              
+    SportDb::TxtMatchWriter.write( "./o/#{season.to_path}/#{slug}.txt", 
+                                   matches,
+                                   name: "#{name} #{season.key}",
+                                   lang:  lang ) 
+  end
 end
 
 
