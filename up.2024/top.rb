@@ -38,6 +38,8 @@ puts "  #{CatalogDb::Metal::League.count} leagues"
     league = SportDb::Import.catalog.leagues.find!( league )
     country = league.country
 
+    stats = {}
+
     ## todo/fix: cache name lookups - why? why not?
     puts "==> normalize #{matches.size} matches..."
     matches.each_with_index do |match,i|        
@@ -46,12 +48,24 @@ puts "  #{CatalogDb::Metal::League.count} leagues"
        team2 = SportDb::Import.catalog.clubs.find_by!( name: match.team2,
                                                        country: country )
 
-       puts "#{match.team1} => #{team1.name}"  if match.team1 != team1.name
-       puts "#{match.team2} => #{team2.name}"  if match.team2 != team2.name
+       if match.team1 != team1.name
+          stat = stats[ match.team1 ] ||= Hash.new(0)
+          stat[ team1.name ] += 1
+       end   
 
+       if match.team2 != team2.name
+          stat = stats[ match.team2 ] ||= Hash.new(0)
+          stat[ team2.name ] += 1
+       end
+   
        match.update( team1: team1.name )
        match.update( team2: team2.name )
     end
+   
+    if stats.size > 0
+      pp stats
+    end
+
     print "norm OK\n"
 
     matches
