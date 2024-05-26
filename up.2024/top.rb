@@ -30,8 +30,12 @@ puts "  #{CatalogDb::Metal::League.count} leagues"
     matches = matches.sort do |l,r|
       ## first by date (older first)
       ## next by matchday (lowwer first)
+
+     ## todo/fix
+     ##    if no time  (assume 0:00 for now)
+
       res =   l.date <=> r.date
-      res =   l.time <=> r.time     if res == 0 && l.time && r.time
+      res =   (l.time ? l.time : '0:00') <=> (r.time ? r.time : '0:00')    if res == 0
       res =   l.round <=> r.round   if res == 0
       res
     end
@@ -81,7 +85,10 @@ require 'sportdb/writers'
 
 
 DATASETS = [
-  ['eng.2',   %w[2023/24 2022/23 2021/22 2020/21]],
+ # ['eng.2',   %w[2023/24 2022/23 2021/22 2020/21]],
+ # ['nl.1', %w[2023/24 2022/23 2021/22 2020/21]],
+ # ['pt.1', %w[2023/24 2022/23 2021/22 2020/21]],
+ ['br.1', %w[2024 2023 2022 2021 2020]],
 ]
 
 

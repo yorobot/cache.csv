@@ -14,9 +14,9 @@ Webget.config.sleep  = 11    ## max. 10 requests/minute
 
 # Footballdata.schedule( league: 'eng.1', season: '2023/24' )
 # Footballdata.schedule( league: 'eng.2', season: '2023/24' )
-Footballdata.schedule( league: 'eng.2', season: '2022/23' )
-Footballdata.schedule( league: 'eng.2', season: '2021/22' )
-Footballdata.schedule( league: 'eng.2', season: '2020/21' )
+# Footballdata.schedule( league: 'eng.2', season: '2022/23' )
+# Footballdata.schedule( league: 'eng.2', season: '2021/22' )
+# Footballdata.schedule( league: 'eng.2', season: '2020/21' )
 
 # Footballdata.schedule( league: 'de.1',  season: '2023/24' )
 # Footballdata.schedule( league: 'fr.1',  season: '2023/24' )
@@ -27,6 +27,14 @@ Footballdata.schedule( league: 'eng.2', season: '2020/21' )
 # note: es.1 2023/2024 end may/26 !!!
 # Footballdata.schedule( league: 'es.1',  season: '2023/24' )
 
+# Footballdata.schedule( league: 'pt.1',  season: '2023/24' )
+# Footballdata.schedule( league: 'nl.1',  season: '2023/24' )
+
+# Footballdata.schedule( league: 'br.1',  season: '2024' )
+# Footballdata.schedule( league: 'br.1',  season: '2023' )
+# Footballdata.schedule( league: 'br.1',  season: '2022' )
+# Footballdata.schedule( league: 'br.1',  season: '2021' )
+# Footballdata.schedule( league: 'br.1',  season: '2020' )
 
 
 #####
@@ -50,7 +58,10 @@ DATASETS = [
 
 
 DATASETS = [
- ['eng.2', SEASONS] #  %w[2023/24]],
+# ['eng.2', SEASONS], #  %w[2023/24]],
+# ['pt.1', SEASONS],
+# ['nl.1', SEASONS],
+  ['br.1', %w[2024 2023 2022 2021 2020]],
 ]
 
 

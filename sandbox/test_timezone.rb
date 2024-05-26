@@ -15,6 +15,7 @@ require 'tzinfo'
 
 pp TZInfo::Timezone.all_identifiers
 
+__END__
 
 tz_eng  = TZInfo::Timezone.get( 'Europe/London' )
 pp tz_eng
