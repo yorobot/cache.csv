@@ -13,6 +13,11 @@ Webcache.root = '../../../cache'  ### c:\sports\cache
 Webget.config.sleep  = 11    ## max. 10 requests/minute
 
 # Footballdata.schedule( league: 'eng.1', season: '2023/24' )
+# Footballdata.schedule( league: 'eng.2', season: '2023/24' )
+Footballdata.schedule( league: 'eng.2', season: '2022/23' )
+Footballdata.schedule( league: 'eng.2', season: '2021/22' )
+Footballdata.schedule( league: 'eng.2', season: '2020/21' )
+
 # Footballdata.schedule( league: 'de.1',  season: '2023/24' )
 # Footballdata.schedule( league: 'fr.1',  season: '2023/24' )
 
@@ -26,18 +31,26 @@ Webget.config.sleep  = 11    ## max. 10 requests/minute
 
 #####
 # convert for staging
+
 Footballdata.config.convert.out_dir = '../../../stage'
 
 
 ## use LATEST_SEASONS or such - why? why not?
 SEASONS = %w[2023/24 2022/23 2021/22 2020/21]
 
+=begin
 DATASETS = [
  ['eng.1',   SEASONS],  
  ['de.1',    SEASONS],
  ['es.1',    SEASONS],
  ['it.1',    SEASONS], # - %w[2023/24]],
  ['fr.1',    SEASONS],
+]
+=end
+
+
+DATASETS = [
+ ['eng.2', SEASONS] #  %w[2023/24]],
 ]
 
 
@@ -53,7 +66,45 @@ end
 puts "bye"
 
 
+
 __END__
+
+eng.2  - championship includes playoff e.g.
+            add later how???
+!!! unexpected stage:
+-- skipping SEMI_FINALS
+!!! unexpected stage:
+-- skipping SEMI_FINALS
+!!! unexpected stage:
+-- skipping SEMI_FINALS
+!!! unexpected stage:
+-- skipping SEMI_FINALS
+!!! unexpected stage:
+-- skipping FINAL
+
+!!! unexpected stage:
+-- skipping SEMI_FINALS
+!!! unexpected stage:
+-- skipping SEMI_FINALS
+!!! unexpected stage:
+-- skipping SEMI_FINALS
+!!! unexpected stage:
+-- skipping SEMI_FINALS
+!!! unexpected stage:
+-- skipping FINAL
+
+!!! unexpected stage:
+-- skipping PLAYOFFS
+!!! unexpected stage:
+-- skipping PLAYOFFS
+!!! unexpected stage:
+-- skipping PLAYOFFS
+!!! unexpected stage:
+-- skipping PLAYOFFS
+!!! unexpected stage:
+-- skipping PLAYOFFS
+
+
 
 double check for more (*) awared, cancelled, and such!!!
 
