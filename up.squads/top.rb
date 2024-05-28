@@ -141,7 +141,7 @@ end  # method convert_league
 
 
 
-
+=begin
 DATASETS = [
   ['eng.1',   %w[2023/24]],
   ['de.1',    %w[2023/24]],
@@ -150,6 +150,34 @@ DATASETS = [
   ['it.1',    %w[2023/24]],
 
   ['at.1',    %w[2023/24]],
+]
+=end
+
+
+# try some more
+DATASETS = [
+#  ['sco.1',  %w[2023/24]], 
+#  ['pt.1',  %w[2023/24]],
+#  ['nl.1',   %w[2023/24]],
+
+#  ['be.1',  %w[2023/24]],
+  ['tr.1',  %w[2023/24]],
+  ['gr.1',  %w[2023/24]],
+
+  ['ru.1',  %w[2023/24]],
+  ['ua.1', %w[2023/24]],
+  ['pl.1',  %w[2023/24]],
+
+  ['br.1',  %w[2024]],
+  ['ar.1',  %w[2024]], 
+  
+  ['eng.2',   %w[2023/24]],
+  ['eng.3',   %w[2023/24]],
+  ['de.2',    %w[2023/24]],
+  ['es.2',    %w[2023/24]],
+  ['fr.2',    %w[2023/24]],
+  ['it.2',    %w[2023/24]],
+
 ]
 
 pp DATASETS
@@ -182,6 +210,10 @@ datasets = DATASETS
 datasets.each_with_index do |(league_key, seasons),i|
  
   league = Writer::LEAGUES[ league_key ]
+  if league.nil?
+    puts "!! ERROR - sorry no write config for league found >#{league_key}<"
+    exit 1
+  end
  
   seasons.each_with_index do |season_key,j|  
     season   =  Season( season_key )
