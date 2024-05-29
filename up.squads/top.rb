@@ -1,13 +1,6 @@
 ##
 # todos/fix
 #
-#   date format add  "-" for empty!!
-#    ! WARN - no date of birth (or wrong format)
-#    e.g "Date of Birth"=>"-",
-#
-#   add date format - year (with single digit) 
-#    e.g.  "Date of Birth"=>"25-08-5", or
-#   
 #  name lookup
 #    for fr.1 - add  monaco !!
 #    for 
@@ -92,7 +85,9 @@ def pp_player( rec )
     ## note: MUST parse by our own (in ruby year 65 => 2065)
     ## 24-06-99
     ## assert date format
-    dob = if dob_str.match( /^\d{2}-\d{2}-\d{2}$/ )
+    dob = if ['-'].include?( dob_str )    ## note: "-" used for no date 
+              nil
+          elsif dob_str.match( /^\d{2}-\d{2}-\d{1,2}$/ )
             dob_i = dob_str.split( '-').map { |str| str.strip.to_i(10) }
             begin
               Date.new( dob_i[2] < 20 ? 2000+dob_i[2] : 1900+dob_i[2],
@@ -235,9 +230,9 @@ DATASETS_TOP = [
 
 # try some more
 DATASETS_MORE = [
-#  ['sco.1',  %w[2023/24]], 
-#  ['pt.1',  %w[2023/24]],
-#  ['nl.1',   %w[2023/24]],
+  ['sco.1',  %w[2023/24]], 
+  ['pt.1',  %w[2023/24]],
+  ['nl.1',   %w[2023/24]],
 
  ['be.1',  %w[2023/24]],
 
@@ -265,8 +260,8 @@ pp DATASETS_TOP
 pp DATASETS_MORE
 
 
-# datasets = DATASETS_TOP
-datasets = DATASETS_MORE
+datasets = DATASETS_TOP
+# datasets = DATASETS_MORE
 
 repos  = find_repos( datasets )
 pp repos
