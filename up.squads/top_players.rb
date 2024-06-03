@@ -42,6 +42,18 @@ NODATE = Date.new(1800, 1,1)
 def sort_players( data )
      ## sort by 1) dob, 2) name for now
     data.sort do |l,r|
+
+=begin      
+       ###
+       # assert we get not corrupt data
+       unless l[:name].is_a?( String ) &&
+              r[:name].is_a?( String )
+            puts "!! ERROR - expected strings for player data got:"
+            pp l 
+            pp r
+            exit 1
+       end
+=end
        res = (r[:dob] || NODATE ) <=> (l[:dob] || NODATE)
        res =  l[:name]  <=>  r[:name]  if res == 0
        res
@@ -89,33 +101,78 @@ def add_players( data )
     data.each { |rec| add_player( rec ) }
 end
 
+
+
 def add_player( rec )
-
-    name = rec['Name']
+    name = rec['Name']  || rec['Namea']   ## fix upstream
     nat  = rec['Nat']
-
     pos  = rec['Pos']   ## keep G|D|M|F for now
-
     height = if rec['Height'].size > 0 && rec['Height'] != '-'
                 rec['Height']
               else
                  nil
               end
 
+    ##  fix upstream
+    ##    column name with traling dash e.g.
+    ##  Date of Birth-
+    dob_str = rec['Date of Birth'] || rec['Date of Birth-']
 
-    dob_str = rec['Date of Birth']
 
+    if name.nil?
+        puts "!! ERROR - name is nil - why?"
+        pp rec
+        exit 1
+    end
+
+
+
+    return  if nat == 'SUD'  ## add SUD (Sudan)
+
+    if name == 'Tony Rölke' && nat == 'GE'
+       nat = 'GER'
+    end
+   ##  
+  ##  share known bugs/auto-fixes in its own file??
   ## fix for  Mike Penders (BEL)
-  if rec['Name'] == 'Mike Penders' && rec['Nat'] == 'BEL'
+  if name == 'Mike Penders' && nat == 'BEL'
      ## "Date of Birth"=>"31-06-05",
      dob_str = '31-07-05'  #  is July (not June) - June 31st does NOT exist!!  
   end
-  if rec['Name'] == 'Luca Philipp' && rec['Nat'] == 'GET'
+  if name == 'Luca Philipp' && nat == 'GET'
      ## fix - no country code found >GET<
      nat     = 'GER'
   end
+  if name == 'Jed Meerholz' && nat == 'EMG'
+    ## fix - no country code found >EMG<
+    nat     = 'ENG'
+  end
+  if name == 'Aboubakary Kanté' && nat == 'GMB'
+    ## fix - no country code found >GMB<
+    nat     = 'GAM'  # gambia
+  end
+  if name == 'Alessandro Caporale' && nat == 'IRA'
+    ## fix - no country code found >IRA<
+    nat     = 'ITA'  
+  end
 
 
+ 
+  ## assert nat is a three letter code (not GE for example)
+    unless nat.match( /^[A-Z]{3}$/ )
+       puts "!! ERROR - three-letter code expected; got: #{nat}"
+       pp rec
+       exit 1
+    end
+ 
+    unless %w[G D M F].include?(pos)
+       puts "!! ERROR - for pos G|D|M|F expected; got: #{pos}"
+       pp rec
+       exit 1
+    end
+
+
+ 
     ## note: MUST parse by our own (in ruby year 65 => 2065)
     ## 24-06-99
     ## assert date format
@@ -170,8 +227,10 @@ def add_player( rec )
 end
 
 
-def add_league(   league:,
-                  season: )
+
+
+def add_club_league( league:,
+                     season: )
                      
 league_page = Footballsquads.league( league: league, season: season )
 pp league_page.title
@@ -247,26 +306,30 @@ end  # method convert_league
 
 
 
-DATASETS_TOP = [
+DATASETS = [
   ['eng.1',   %w[2023/24]],
-  ['de.1',    %w[2023/24]],
+  ['eng.2',   %w[2023/24]],
+  ['eng.3',   %w[2023/24]],
+
   ['es.1',    %w[2023/24]],
-  ['fr.1',    %w[2023/24]],
-  ['it.1',    %w[2023/24]],
+  ['es.2',    %w[2023/24]],
 
-  ['at.1',    %w[2023/24]],
-]
+  ['de.1',    %w[2023/24]],
+  ['de.2',    %w[2023/24]],
 
-
-# try some more
-DATASETS_MORE = [
   ['sco.1',  %w[2023/24]], 
-  ['pt.1',  %w[2023/24]],
+
+  ['it.1',    %w[2023/24]],
+  ['it.2',    %w[2023/24]],
+
+  ['fr.1',    %w[2023/24]],
+  ['fr.2',    %w[2023/24]],
+
+  ['pt.1',   %w[2023/24]],
+
   ['nl.1',   %w[2023/24]],
+  ['be.1',   %w[2023/24]],
 
- ['be.1',  %w[2023/24]],
-
-=begin
   ['tr.1',  %w[2023/24]],
   ['gr.1',  %w[2023/24]],
 
@@ -274,30 +337,53 @@ DATASETS_MORE = [
   ['ua.1', %w[2023/24]],
   ['pl.1',  %w[2023/24]],
 
-  ['br.1',  %w[2024]],
-  ['ar.1',  %w[2024]], 
-  
-  ['eng.2',   %w[2023/24]],
-  ['eng.3',   %w[2023/24]],
-  ['de.2',    %w[2023/24]],
-  ['es.2',    %w[2023/24]],
-  ['fr.2',    %w[2023/24]],
-  ['it.2',    %w[2023/24]],
-=end
+  ['dk.1',    %w[2023/24]],
+  ['at.1',    %w[2023/24]],
+  ['ch.1',    %w[2023/24]],
+
+  ['cz.1',    %w[2023/24]],
+  ['hr.1',    %w[2023/24]],
+  ['hu.1',    %w[2023/24]],
+
+  ['no.1',    %w[2024]],
+  ['se.1',    %w[2024]],
+
+  ['ie.1',    %w[2024]],
+
+  ## add overseas leagues
+#  ['br.1',  %w[2024]],
+#  ['ar.1',  %w[2024]], 
 ]
 
-pp DATASETS_TOP
-pp DATASETS_MORE
+
+pp DATASETS
 
 
-datasets = DATASETS_TOP
-# datasets = DATASETS_MORE
+datasets = DATASETS
 
 
 
 
 Webcache.root = '../../../cache'  ### c:\sports\cache
 pp Webcache.root
+
+=begin
+## 
+## add national
+datasets = [
+  ['euro',   %w[2020]],
+  ['world',  %w[2022]],
+]
+
+datasets.each_with_index do |(league_key, seasons),i|
+  seasons.each_with_index do |season_key,j|  
+    season   =  Season( season_key )
+ 
+    puts "==> [#{i+1}/#{datasets.size}]  #{league_key} #{season_key} [#{j+1}/#{seasons.size}]..."
+  end
+end
+=end
+
 
 
 datasets.each_with_index do |(league_key, seasons),i|
@@ -308,8 +394,8 @@ datasets.each_with_index do |(league_key, seasons),i|
  
     puts "==> [#{i+1}/#{datasets.size}]  #{league_key} #{season_key} [#{j+1}/#{seasons.size}]..."
 
-    add_league( league: league_key, 
-                season: season_key )
+    add_club_league( league: league_key, 
+                     season: season_key )
   end
 end
 
@@ -326,9 +412,9 @@ PLAYERS.each do |cc, players|
   if country
      puts "#{cc} => #{country.key} - #{country.name} (#{country.code})   -- #{players.size} player(s)"
 
-     ## pp players
-     buf = pp_players( players.values )
-     puts buf
+     # pp players
+     # buf = pp_players( players.values )
+     # puts buf
   else
     ## e.g. found  GET is ??
      puts "!! ERROR - no country code found >#{cc}<:"
@@ -342,7 +428,7 @@ end
 
 
 OPTS = {
-   # push: true
+    # push: true
 }
 
 
@@ -364,10 +450,14 @@ outdir = if OPTS[:push]
 #  
 #   try to write out some
 codes = %w[ENG GER FRA ITA ESP
-           AUT BEL 
-           MEX USA
+           AUT BEL NED SUI POR POL
+           MEX USA CAN
+           BRA ARG URU
           ]
 
+puts
+puts "=>  #{codes.size} countries..."
+pp codes
 
 CCPATHS = {
   'eng' => 'europe/england',
@@ -377,11 +467,21 @@ CCPATHS = {
   'es'  => 'europe/spain',
 
   'at'  => 'europe/austria',
+  'ch'  => 'europe/switzerland', 
   'be'  => 'europe/belgium',
+  'nl'  => 'europe/netherlands',
+  'pt'  => 'europe/portugal',
+  'pl'  => 'europe/poland',
 
   'mx'  => 'north-america/mexico',
   'us'  => 'north-america/united-states',
+  'ca'  => 'north-america/canada',
+
+  'br'  =>  'south-america/brazil',
+  'ar'  =>  'south-america/argentina',
+  'uy'  =>  'south-america/uruguay',
 }
+
 
 
 
@@ -410,5 +510,3 @@ git_push_if_changes( repos )    if OPTS[:push]
 
 puts "bye"
 
-
-__END__
