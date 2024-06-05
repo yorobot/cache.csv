@@ -12,6 +12,52 @@
 
 
 
+
+
+### skip
+##   players with no date of birth for now!!!
+##
+
+
+
+########
+#  note: use unaccent (squish and downcase)
+#         for name key to avoid duplicates e.g.
+#   İlkay Gündogan,               M,  1.80 m,  b. 24 Oct 1990 @ Gelsenkirchen
+#   İlkay Gündoğan,               M,  1.80 m,  b. 24 Oct 1990 @ Gelsenkirchen
+#   ...
+#
+#  in spain
+#   Fabián,                       M,  1.89 m,  b. 3 Apr 1996 @ Los Palacios y Villafranca
+#   Fabián Ruiz,                  M,  1.89 m,  b. 3 Apr 1996 @ Los Palacios y Villafranca
+#
+#  in belgium
+#   Timothy Castagne,             D,  1.80 m,  b. 5 Dec 1995 @ Aarlen
+#   Timoty Castagne,              D,  1.80 m,  b. 5 Dec 1995 @ Aarlen
+#   check by date of birth or such
+#
+#  more in brazil !!!
+#   Fred,                         M,  1.69 m,  b. 5 Mar 1993 @ Belo Horizonte
+#   Fred,                         F,  1.85 m,  b. 3 Oct 1983 @ Téofilo Otoni
+#
+#   Kaka,                         D,  - ,      b. 16 Oct 2004
+#   Kaká,                         M,  1.86 m,  b. 22 Apr 1982 @ Brasília
+#
+#  same name but different birthdate/year !!
+#   e.g. in england
+#  Reece James,                  D,  1.68 m,  b. 7 Nov 1993 @ Bacup 
+#  Reece James,                  D,  1.83 m,  b. 8 Dec 1999 @ Redbridge
+#
+#
+#  track different heights too
+#    for now use max (in theory young player still growing)
+#
+# for pos(ition) use latest (may change D to M etc)
+#          or yes, allow more than one?
+#              add   D|F  or M|F etc.
+#
+#
+
 require_relative 'helper'   ## (shared) boot helper
 
 
@@ -125,8 +171,15 @@ def add_player( rec )
         exit 1
     end
 
+    ## e.g.
+    ## no. 19 in www.footballsquads.co.uk/ger/2017-2018/bundes/mainz.htm
+    if name.empty?
+      puts "!! WARN - name is empty - skipping entry for now"
+      pp rec
+      return
+    end
 
-
+    
     return  if nat == 'SUD'  ## add SUD (Sudan)
 
     if name == 'Tony Rölke' && nat == 'GE'
@@ -154,6 +207,10 @@ def add_player( rec )
   if name == 'Alessandro Caporale' && nat == 'IRA'
     ## fix - no country code found >IRA<
     nat     = 'ITA'  
+  end
+  if name == 'David García' && nat == 'ESO'
+    ## fix - no country code found >ESO<
+    nat     = 'ESP'  
   end
 
 
@@ -209,9 +266,11 @@ def add_player( rec )
                     nil
                   end
 
+      ## use normalized name for key lookup - why? why not?
+      key =   unaccent( name ).downcase.gsub( /[^a-z]/, '' )
 
       names = PLAYERS[ nat ] ||= {}
-      rec = names[ name ] ||= { count:     0,
+      rec = names[ key ] ||=  { count:     0,
                                 name:      nil,
                                 pos:       nil,
                                 height:    nil,  
@@ -229,8 +288,8 @@ end
 
 
 
-def add_club_league( league:,
-                     season: )
+def add_league( league:,
+                season: )
                      
 league_page = Footballsquads.league( league: league, season: season )
 pp league_page.title
@@ -240,11 +299,11 @@ league_rec   = LEAGUES.find!( league )
 league_page.each_team do |team_page|
    # pp team_page.title
 
-   team_name         =  team_page.team_name
-   # pp team_name
-   team_name_official = team_page.team_name_official
-   # pp team_name_official
-
+   if league_rec.club?
+     team_name         =  team_page.team_name
+     # pp team_name
+     team_name_official = team_page.team_name_official
+     # pp team_name_official
 ##
 #  map team name
 #  
@@ -289,8 +348,10 @@ league_page.each_team do |team_page|
         "#{team_name_official}    # #{team_name}"
     end
   end
+end
 
-  current, past =  team_page.players
+
+current, past =  team_page.players
 
    # puts "current (#{current.size}):"
    # pp current
@@ -305,50 +366,54 @@ end  # method convert_league
 
 
 
+## add three more seasons
 
-DATASETS = [
-  ['eng.1',   %w[2023/24]],
-  ['eng.2',   %w[2023/24]],
-  ['eng.3',   %w[2023/24]],
+DATASETS_CLUBS = [
+  ['eng.1',   %w[2023/24 2022/23 2021/22 2020/21
+                 2019/20 2018/19 2017/18 2016/17 2015/16 2014/15]],
+  ['eng.2',   %w[2023/24 2022/23 2021/22 2020/21]],
+  ['eng.3',   %w[2023/24 2022/23 2021/22 2020/21]],
 
-  ['es.1',    %w[2023/24]],
-  ['es.2',    %w[2023/24]],
+  ['es.1',    %w[2023/24 2022/23 2021/22 2020/21]],
+  ['es.2',    %w[2023/24 2022/23 2021/22 2020/21]],
 
-  ['de.1',    %w[2023/24]],
-  ['de.2',    %w[2023/24]],
+  ['de.1',    %w[2023/24 2022/23 2021/22 2020/21
+                 2019/20 2018/19 2017/18 2016/17 2015/16 2014/15]],
+  ['de.2',    %w[2023/24 2022/23 2021/22 2020/21]],
 
-  ['sco.1',  %w[2023/24]], 
+  ['sco.1',  %w[2023/24 2022/23 2021/22 2020/21]], 
 
-  ['it.1',    %w[2023/24]],
-  ['it.2',    %w[2023/24]],
+  ['it.1',    %w[2023/24 2022/23 2021/22 2020/21]],
+  ['it.2',    %w[2023/24 2022/23 2021/22 2020/21]],
 
-  ['fr.1',    %w[2023/24]],
-  ['fr.2',    %w[2023/24]],
+  ['fr.1',    %w[2023/24 2022/23 2021/22 2020/21]],
+  ['fr.2',    %w[2023/24 2022/23 2021/22 2020/21]],
 
-  ['pt.1',   %w[2023/24]],
+  ['pt.1',   %w[2023/24 2022/23 2021/22 2020/21]],
 
-  ['nl.1',   %w[2023/24]],
-  ['be.1',   %w[2023/24]],
+  ['nl.1',   %w[2023/24 2022/23 2021/22 2020/21]],
+  ['be.1',   %w[2023/24 2022/23 2021/22 2020/21]],
 
-  ['tr.1',  %w[2023/24]],
-  ['gr.1',  %w[2023/24]],
+  ['tr.1',  %w[2023/24 2022/23 2021/22 2020/21]],
+  ['gr.1',  %w[2023/24 2022/23 2021/22 2020/21]],
 
-  ['ru.1',  %w[2023/24]],
-  ['ua.1', %w[2023/24]],
-  ['pl.1',  %w[2023/24]],
+  ['ru.1',  %w[2023/24 2022/23 2021/22 2020/21]],
+  ['ua.1', %w[2023/24 2022/23 2021/22 2020/21]],
+  ['pl.1',  %w[2023/24 2022/23 2021/22 2020/21]],
 
-  ['dk.1',    %w[2023/24]],
-  ['at.1',    %w[2023/24]],
-  ['ch.1',    %w[2023/24]],
+  ['dk.1',    %w[2023/24 2022/23 2021/22 2020/21]],
+  ['at.1',    %w[2023/24 2022/23 2021/22 2020/21
+                 2019/20 2018/19 2017/18 2016/17 2015/16 2014/15]],
+  ['ch.1',    %w[2023/24 2022/23 2021/22 2020/21]],
 
-  ['cz.1',    %w[2023/24]],
-  ['hr.1',    %w[2023/24]],
-  ['hu.1',    %w[2023/24]],
+  ['cz.1',    %w[2023/24 2022/23 2021/22 2020/21]],
+  ['hr.1',    %w[2023/24 2022/23]],
+  ['hu.1',    %w[2023/24 2022/23 2021/22 2020/21]],
 
-  ['no.1',    %w[2024]],
-  ['se.1',    %w[2024]],
+  ['no.1',    %w[2024 2023 2022 2021]],
+  ['se.1',    %w[2024 2023 2022 2021]],
 
-  ['ie.1',    %w[2024]],
+  ['ie.1',    %w[2024 2023 2022 2021]],
 
   ## add overseas leagues
 #  ['br.1',  %w[2024]],
@@ -356,10 +421,18 @@ DATASETS = [
 ]
 
 
-pp DATASETS
+DATASETS_NATIONAL = [
+  ['world',  %w[2022 2018 2014 2010]],
+  ['euro',   %w[2020 2016 2012]],
+  ## note: starting with euro 2008  has "old" format
+  ##           no nat(ionality) and height in 6'02" !!!
+  ## note: starting with world 2006 has "old" format
+  ##           no nat(inality) and ...
+]
 
 
-datasets = DATASETS
+
+datasets = DATASETS_CLUBS + DATASETS_NATIONAL
 
 
 
@@ -367,23 +440,6 @@ datasets = DATASETS
 Webcache.root = '../../../cache'  ### c:\sports\cache
 pp Webcache.root
 
-=begin
-## 
-## add national
-datasets = [
-  ['euro',   %w[2020]],
-  ['world',  %w[2022]],
-]
-
-datasets.each_with_index do |(league_key, seasons),i|
-  seasons.each_with_index do |season_key,j|  
-    season   =  Season( season_key )
- 
-    puts "==> [#{i+1}/#{datasets.size}]  #{league_key} #{season_key} [#{j+1}/#{seasons.size}]..."
-  end
-end
-=end
-
 
 
 datasets.each_with_index do |(league_key, seasons),i|
@@ -394,8 +450,8 @@ datasets.each_with_index do |(league_key, seasons),i|
  
     puts "==> [#{i+1}/#{datasets.size}]  #{league_key} #{season_key} [#{j+1}/#{seasons.size}]..."
 
-    add_club_league( league: league_key, 
-                     season: season_key )
+    add_league( league: league_key, 
+                season: season_key )
   end
 end
 
@@ -428,7 +484,7 @@ end
 
 
 OPTS = {
-    # push: true
+   # push: true
 }
 
 
