@@ -164,6 +164,12 @@ def add_player( rec )
     ##  Date of Birth-
     dob_str = rec['Date of Birth'] || rec['Date of Birth-']
 
+    if dob_str.nil?
+      puts "!! WARN - date of birth (d.o.b.) is nil - why? - skipping entry for now"
+      pp rec
+      return
+    end
+
 
     if name.nil?
         puts "!! ERROR - name is nil - why?"
@@ -181,7 +187,9 @@ def add_player( rec )
 
     
     return  if nat == 'SUD'  ## add SUD (Sudan)
+    return  if nat == 'MGL'  ## add MGL (Mongolia)
 
+    
     if name == 'Tony Rölke' && nat == 'GE'
        nat = 'GER'
     end
@@ -212,9 +220,31 @@ def add_player( rec )
     ## fix - no country code found >ESO<
     nat     = 'ESP'  
   end
+  if name == "Luke O'Regan" && nat == 'iRL'
+    ## fix - no country code found >iRL<
+    nat     = 'IRL'  
+  end
+  if name == "Nemanja Radonjić" && nat == 'SEB'
+    ## fix - no country code found >SEB<
+    nat     = 'SRB'  
+  end
+  if name == "Akmal Bakhtiyarov" && nat == 'KZK'
+    ## fix - no country code found >KZK<
+    nat     = 'KAZ'  
+  end
+  
+ ## check country code mongolia
+ ##   MGL ??
+=begin
+ {"ganboldganbayar"=>
+  {:count=>1,
+   :name=>"Ganbold Ganbayar",
+   :pos=>"M",
+   :height=>"1.79",
+   :dob=>#<Date: 2000-09-17 ((2451805j,0s,0n),+0s,2299161j)>,
+   :dob_place=>"Sükhbaatar"}} 
+=end
 
-
- 
   ## assert nat is a three letter code (not GE for example)
     unless nat.match( /^[A-Z]{3}$/ )
        puts "!! ERROR - three-letter code expected; got: #{nat}"
