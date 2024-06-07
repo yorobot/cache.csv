@@ -209,9 +209,6 @@ def add_player( rec )
       return
     end
 
-    
-    return  if nat == 'SUD'  ## add SUD (Sudan)
-    return  if nat == 'MGL'  ## add MGL (Mongolia)
 
     
     if name == 'Tony Rölke' && nat == 'GE'
@@ -257,17 +254,6 @@ def add_player( rec )
     nat     = 'KAZ'  
   end
   
- ## check country code mongolia
- ##   MGL ??
-=begin
- {"ganboldganbayar"=>
-  {:count=>1,
-   :name=>"Ganbold Ganbayar",
-   :pos=>"M",
-   :height=>"1.79",
-   :dob=>#<Date: 2000-09-17 ((2451805j,0s,0n),+0s,2299161j)>,
-   :dob_place=>"Sükhbaatar"}} 
-=end
 
   ## assert nat is a three letter code (not GE for example)
     unless nat.match( /^[A-Z]{3}$/ )
@@ -725,8 +711,8 @@ CCPATHS = {
      'sc'   => 'africa/seychelles',
      'bi'   => 'africa/burundi',
      'mz'    => 'africa/mozambique',
+     'sd'    =>  'africa/sudan',
      
-   
 
    'ir'  =>  'middle-east/iran',
    'iq'  =>  'middle-east/iraq',
@@ -759,11 +745,11 @@ CCPATHS = {
    'tj'  => 'asia/tajikistan',
    'kp' => 'asia/north-korea',
    'uz' => 'asia/uzbekistan',
+   'mn'  => 'asia/mongolia',
    
    'au'   => 'pacific/australia',
    'nz'   => 'pacific/new-zealand',
    'fj'   => 'pacific/fiji',
-   
 }
 
   
