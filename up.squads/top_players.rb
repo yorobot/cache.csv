@@ -101,10 +101,19 @@ def sort_players( data )
        end
 =end
        res = (r[:dob] || NODATE ) <=> (l[:dob] || NODATE)
-       res =  l[:name]  <=>  r[:name]  if res == 0
+       ### use first name of variants for now
+       res =  l[:names][0]  <=>  r[:names][0]  if res == 0
        res
     end
 end
+
+
+POS_SORT = {
+  'G' => 1,
+  'D' => 2,
+  'M' => 3,
+  'F' => 4
+}
 
 def pp_players( data )
      data = sort_players( data )
@@ -112,9 +121,24 @@ def pp_players( data )
      last_dob = nil
 
      data.each do |rec| 
-       name      = rec[:name]
-       pos       = rec[:pos]
-       height    = rec[:height]
+
+       ## quick & dirty heuristic for selecting name variant
+       ##   works for majority (BUT not all cases)
+       ##     different accents, different upcase/downcase,
+       ##       name with our without dash, etc.
+       ##    e.g.   Ricardo Vaz Tê  -or- Ricardo Vaz Té   ???
+       ##            Nils De Wilde  -or- Nils de Wilde    ???
+       ##            Hwang Hee-chan -or.  Hwang Hee-Chan ???
+       ##            Ron Thorben Hoffmann  -or-  Ron-Thorben Hoffmann ???
+       ## sort by bytesize (assumes)
+       ##    unaccented ascii name last and accented first
+       sorted_names   = rec[:names].sort { |l,r| r.bytesize <=> r.bytesize }
+       name = sorted_names[0]
+
+       ## sort by G|D|M|F
+       pos       = rec[:pos].sort { |l,r| POS_SORT[l] <=> POS_SORT[r] }.join('|')
+       ## fix/todo - sort height - get max value for now 
+       height    = rec[:height][0]
        dob       = rec[:dob]
        dob_place = rec[:dob_place]
 
@@ -283,8 +307,13 @@ def add_player( rec )
               pp dob_str
               pp rec
               nil
-          end    
+          end   
+
+          
+      ## note - for now skip all players WITHOUT birthdate
+      return  if dob.nil?    
     
+
       dob_place = if dob  && rec['Birth Place'].size > 0 &&
                     rec['Birth Place'] != '-'
                     
@@ -296,23 +325,30 @@ def add_player( rec )
                     nil
                   end
 
-      ## use normalized name for key lookup - why? why not?
+      ## use normalized name for key lookup
+      ##       plus birth year
       key =   unaccent( name ).downcase.gsub( /[^a-z]/, '' )
+      key += "_#{dob.year}"    ## add month too? why? why not?
+
 
       names = PLAYERS[ nat ] ||= {}
       rec = names[ key ] ||=  { count:     0,
-                                name:      nil,
-                                pos:       nil,
-                                height:    nil,  
+                                names:     [],
+                                nat:       nil,
+                                pos:       [],
+                                height:    [],  
                                 dob:       nil,
                                 dob_place: nil }
       rec[:count] += 1
       # overwrite for now fix - (check later if change)!!!!
-      rec[:name]      = name
-      rec[:pos]       = pos 
-      rec[:height]    = height
+      ##  check if name/pos/height is different
+      ##   for now collect all variants
+      rec[:names]    << name      unless rec[:names].include?(name)
+      rec[:nat]       = nat
+      rec[:pos]      << pos       unless rec[:pos].include?(pos)
+      rec[:height]   << height    unless rec[:height].include?(height)
       rec[:dob]       = dob 
-      rec[:dob_place] = dob_place                                   
+      rec[:dob_place] = dob_place     if dob_place   ## note - ignore variants here for now                                 
 end
 
 
@@ -514,7 +550,7 @@ end
 
 
 OPTS = {
-   # push: true
+  # push: true
 }
 
 
@@ -532,6 +568,205 @@ outdir = if OPTS[:push]
          end
 
 
+
+CCPATHS = {
+  'eng' => 'europe/england',
+  'de'  => 'europe/germany',
+  'fr'  => 'europe/france',
+  'it'  => 'europe/italy',
+  'es'  => 'europe/spain',
+
+  'at'  => 'europe/austria',
+  'hu'  => 'europe/hungary',
+  'ch'  => 'europe/switzerland', 
+  'be'  => 'europe/belgium',
+  'nl'  => 'europe/netherlands',
+  'pt'  => 'europe/portugal',
+  'pl'  => 'europe/poland',
+  'no'  => 'europe/norway', 
+
+  'ua'  => 'europe/ukraine',
+  'ie'  => 'europe/ireland',
+  'wal' => 'europe/wales',
+  'sco' => 'europe/scotland',
+  'nir' => 'europe/northern-ireland',
+  
+  'ee' => 'europe/estonia',
+  'al' => 'europe/albania',
+  'ro' => 'europe/romania',
+  'dk' =>  'europe/denmark',
+  'is' =>  'europe/iceland',
+  'se' =>  'europe/sweden',
+  'fi' =>  'europe/finland',
+  'tr' =>  'europe/turkey', 
+  'xk' =>  'europe/kosovo', 
+  'mk' =>  'europe/north-macedonia',  ## use macedonia ??
+  'rs' =>  'europe/serbia',
+  'si' =>  'europe/slovenia',
+  'sk' =>  'europe/slovakia',
+  'cy' =>  'europe/cyprus',
+  'gr' =>  'europe/greece',
+  'hr' =>  'europe/croatia',
+  'gi' =>  'europe/gibraltar',
+  'cz' =>  'europe/czech-republic',
+   
+   'ba' =>  'europe/bosnia-n-herzegovina',
+   'mt' =>  'europe/malta',
+   'me' =>  'europe/montenegro',
+   'lt' =>  'europe/lithuania',
+   'lv' =>  'europe/latvia',
+
+   'am' =>  'europe/armenia',
+   'az' =>  'europe/azerbaijan',
+   'bg' =>  'europe/bulgaria',
+   'ge' =>  'europe/georgia',
+   'ru' =>  'europe/russia',
+   'lu' =>  'europe/luxembourg',
+   
+   'ad' =>  'europe/andorra',
+   'md' =>  'europe/moldova',
+   'li' =>  'europe/liechtenstein',
+   'by' =>  'europe/belarus',
+    'fo'  =>  'europe/faroe-islands',
+    
+  
+
+  'mx'  => 'north-america/mexico',
+  'us'  => 'north-america/united-states',
+  'ca'  => 'north-america/canada',
+  'bm'  => 'north-america/bermuda', 
+
+
+  'cr'   => 'central-america/costa-rica',
+  'hn'   => 'central-america/honduras',
+  'pa'    => 'central-america/panama',
+  'bz'    => 'central-america/belize',
+   'ni'  => 'central-america/nicaragua',
+   'gt'  => 'central-america/guatemala',
+   
+
+  'jm'   =>  'caribbean/jamaica',
+  'gd'   =>  'caribbean/grenada',
+  'tt'    =>  'caribbean/trinidad-n-tobago',
+  'ms'    =>  'caribbean/montserrat',
+  'kn'    =>  'caribbean/saint-kitts-n-nevis',
+  'cu'    =>  'caribbean/cuba',
+  'cw'    =>  'caribbean/curacao',
+  'do'    =>  'caribbean/dominican-republic',
+  'ag'     =>  'caribbean/antigua-n-barbuda',
+  'lc'    =>  'caribbean/saint-lucia',
+  'bs'     =>  'caribbean/bahamas',
+  'vg'     =>  'caribbean/british-virgin-islands',
+  'ht'    =>  'caribbean/haiti',
+  'bb'    =>  'caribbean/barbados',
+  'pr'    =>  'caribbean/puerto_rico',
+   
+
+
+  'br'  =>  'south-america/brazil',
+  'ar'  =>  'south-america/argentina',
+  'uy'  =>  'south-america/uruguay',
+   'co' =>  'south-america/colombia',
+   'py'  =>  'south-america/paraguay',
+   'ec'  =>  'south-america/ecuador',
+   'cl'  =>  'south-america/chile',
+   'pe'  =>  'south-america/peru',
+   've' =>   'south-america/venezuela',
+   'bo' =>   'south-america/bolivia',
+   'gy'  =>  'south-america/guyana',
+   'sr' =>   'south-america/suriname',
+   
+
+  'gh'   => 'africa/ghana',
+  'eg'   => 'africa/egypt',
+  'ma'   =>  'africa/morocco',
+   'tn'  =>  'africa/tunisia', 
+   'cd'  =>  'africa/congo-dr',
+   'ng'  =>  'africa/nigeria',
+   'cm'  =>  'africa/cameroon',
+   'bf'  => 'africa/burkina-faso',
+   'ci'  => 'africa/cote-d-ivoire',
+   'za'  =>  'africa/south-africa',
+   'sn'  => 'africa/senegal',
+   'ml'  => 'africa/mali',
+   'tg'  => 'africa/togo',
+   'zw'  => 'africa/zimbabwe',
+   'dz'  => 'africa/algeria',
+   'ga'  => 'africa/gabon',
+   'zm'  => 'africa/zambia',
+   'gn'  => 'africa/guinea',
+   'sl'  => 'africa/sierra-leone',
+   'ao'  => 'africa/angola',
+   'lr'  => 'africa/liberia',
+   'tz'  => 'africa/tanzania',
+   'mr'  => 'africa/mauritania',
+   'gm'  => 'africa/gambia',
+   'cf'   => 'africa/central-african-republic',
+   'ke'  =>  'africa/kenya',
+   'bj'  =>  'africa/benin',
+   'gw'  =>  'africa/guinea-bissau',
+   'gq'  =>  'africa/equatorial-guinea',
+   'cg'  =>  'africa/congo',
+    'ne'  =>  'africa/niger',
+    'ss'  =>  'africa/south-sudan',
+    'ly'  =>  'africa/libya',
+    'et'  =>  'africa/ethiopia',
+    'mg'  =>  'africa/madagascar',
+    'td'  =>  'africa/chad',
+    'mu'  =>  'africa/mauritius',
+    'rw'   =>  'africa/rwanda',
+    'so'   =>  'africa/somalia',
+    'er'    =>  'africa/eritrea',
+     'st'  =>  'africa/sao-tome-n-principe',
+     'cv'  =>  'africa/cabo-verde',
+     'ug'   => 'africa/uganda',
+     'na'   => 'africa/namibia',
+     'km'   => 'africa/comoros',
+     'sc'   => 'africa/seychelles',
+     'bi'   => 'africa/burundi',
+     'mz'    => 'africa/mozambique',
+     
+   
+
+   'ir'  =>  'middle-east/iran',
+   'iq'  =>  'middle-east/iraq',
+   'il'  =>  'middle-east/israel',
+   'ae'  =>  'middle-east/united-arab-emirates',
+   'sa'  =>  'middle-east/saudi-arabia',
+   'sy'  =>  'middle-east/syria',
+   'qa'  =>  'middle-east/qatar',
+   'bh'  =>  'middle-east/bahrain',
+    'jo' =>  'middle-east/jordan',
+    'ps' =>  'middle-east/palestine',
+    'lb' =>  'middle-east/lebanon',
+    
+
+   'jp'   => 'asia/japan',
+   'kr'   => 'asia/south-korea',
+   'cn'   => 'asia/china',
+   'sg'   => 'asia/singapore',
+   'id'   => 'asia/indonesia',
+   'th'   => 'asia/thailand',
+   'bn'    => 'asia/brunei',
+   'hk'    => 'asia/hong-kong',
+   'ph'  => 'asia/philippines',
+   'af'  => 'asia/afghanistan',
+   'lk'  => 'asia/sri-lanka',
+   'vn'  => 'asia/vietnam',
+   'my'  => 'asia/malaysia',
+   'kz'  => 'asia/kazakhstan',
+   'kg'  => 'asia/kyrgyzstan',
+   'tj'  => 'asia/tajikistan',
+   'kp' => 'asia/north-korea',
+   'uz' => 'asia/uzbekistan',
+   
+   'au'   => 'pacific/australia',
+   'nz'   => 'pacific/new-zealand',
+   'fj'   => 'pacific/fiji',
+   
+}
+
+  
 ###
 #  
 #   try to write out some
@@ -545,31 +780,8 @@ puts
 puts "=>  #{codes.size} countries..."
 pp codes
 
-CCPATHS = {
-  'eng' => 'europe/england',
-  'de'  => 'europe/germany',
-  'fr'  => 'europe/france',
-  'it'  => 'europe/italy',
-  'es'  => 'europe/spain',
 
-  'at'  => 'europe/austria',
-  'ch'  => 'europe/switzerland', 
-  'be'  => 'europe/belgium',
-  'nl'  => 'europe/netherlands',
-  'pt'  => 'europe/portugal',
-  'pl'  => 'europe/poland',
-
-  'mx'  => 'north-america/mexico',
-  'us'  => 'north-america/united-states',
-  'ca'  => 'north-america/canada',
-
-  'br'  =>  'south-america/brazil',
-  'ar'  =>  'south-america/argentina',
-  'uy'  =>  'south-america/uruguay',
-}
-
-
-
+codes = PLAYERS.keys   ## use all
 
 codes.each do |cc|
   country = COUNTRIES.find_by_code( cc )
@@ -582,10 +794,14 @@ codes.each do |cc|
   buf << "=  #{country.name}\n\n"
   buf << pp_players( players )
 
-  ccpath = CCPATHS[ country.key ] 
-
-  path = "#{outdir}/players/#{ccpath}/#{country.key}.players.txt"
-  write_text( path, buf )
+  ccpath = CCPATHS[ country.key ]
+  
+  if ccpath
+    path = "#{outdir}/players/#{ccpath}/#{country.key}.players.txt"
+    write_text( path, buf )
+  else
+    puts "!! no path configured for country code #{cc} - #{country.name}"
+  end
 end
 
 
@@ -593,6 +809,21 @@ end
 ## todo/fix: add a getch or something to hit return before commiting pushing - why? why not?
 git_push_if_changes( repos )    if OPTS[:push]
 
+
+=begin
+###
+#  dump all players with more than one name
+PLAYERS.each do |nat, players|
+  ## puts "==> #{nat}  -  #{players.size} player(s) ..."
+  players.each do |key, rec|
+      if rec[:names].size > 1
+         puts "!! #{rec[:names].size}"
+         puts rec
+         pp   rec[:names].sort { |l,r| r.bytesize <=> l.bytesize }
+      end
+  end
+end
+=end
 
 puts "bye"
 
