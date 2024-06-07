@@ -186,7 +186,9 @@ def add_player( rec )
     ##  fix upstream
     ##    column name with traling dash e.g.
     ##  Date of Birth-
-    dob_str = rec['Date of Birth'] || rec['Date of Birth-']
+    dob_str = rec['Date of Birth'] || 
+              rec['Date of Birth-'] ||
+              rec['Date o-f Birth']
 
     if dob_str.nil?
       puts "!! WARN - date of birth (d.o.b.) is nil - why? - skipping entry for now"
