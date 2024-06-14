@@ -477,16 +477,19 @@ DATASETS_CLUBS = [
 
 DATASETS_NATIONAL = [
   ['world',  %w[2022 2018 2014 2010]],
-  ['euro',   %w[2020 2016 2012]],
+  ['euro',   %w[2024 2020 2016 2012]],
   ## note: starting with euro 2008  has "old" format
   ##           no nat(ionality) and height in 6'02" !!!
   ## note: starting with world 2006 has "old" format
   ##           no nat(inality) and ...
+
+  ## add Copa América  and Africa Cup of Nations 
+  ['southamerica', %w[2021 2019 2016]],
+  ['africa',  %w[2023 2021 2019]],
 ]
 
 
-
-datasets = DATASETS_CLUBS + DATASETS_NATIONAL
+datasets = DATASETS_CLUBS + DATASETS_NATIONAL 
 
 
 
@@ -714,9 +717,8 @@ CCPATHS = {
      'bi'   => 'africa/burundi',
      'mz'    => 'africa/mozambique',
      'sd'    =>  'africa/sudan',
-     
-
-   'ir'  =>  'middle-east/iran',
+     'mw'    =>  'africa/malawi',     
+    'ir'  =>  'middle-east/iran',
    'iq'  =>  'middle-east/iraq',
    'il'  =>  'middle-east/israel',
    'ae'  =>  'middle-east/united-arab-emirates',

@@ -15,11 +15,11 @@ require 'sportdb/writers'
 
 
 ## add webget
-## and webget/football
+## and footballsquads (formerly in webget/football)
 
 $LOAD_PATH.unshift( '../../../rubycocos/webclient/webget/lib' )
-$LOAD_PATH.unshift( '../../sport.db.more/webget-football/lib' )
-require 'webget/football'
+$LOAD_PATH.unshift( '../../sport.db.more/footballsquads/lib' )
+require 'footballsquads'
 
 
 ## todo/check: find a better name for helper?
