@@ -256,6 +256,18 @@ def add_player( rec )
     nat     = 'KAZ'  
   end
   
+  ###########################################
+  ### fix - known data errors
+  # Tyler Roberts (WAL)  - birthyear 1998 (XXX) => 1999
+  # Liam Kelly (SCO)                 1995 (XXX) => 1996 
+
+  if name = 'Tyler Roberts' && nat == 'WAL'
+    dob_str = '12-01-99'     # b. 12 Jan 1999 @ Gloucester
+  end
+  if name = 'Liam Kelly' && nat == 'SCO'
+    dob_str = '23-01-96'     # b. 23 Jan 1996 @ Glasgow
+  end
+
 
   ## assert nat is a three letter code (not GE for example)
     unless nat.match( /^[A-Z]{3}$/ )
