@@ -1,9 +1,3 @@
-##
-# todos/fix
-#
-#  name lookup
-#    for fr.1 - add  monaco !!
-#    for 
 
 
 require_relative 'helper'   ## (shared) boot helper
@@ -11,14 +5,17 @@ require_relative 'helper'   ## (shared) boot helper
 
 SportDb::Import.config.catalog_path = '../../../sportdb/sport.db/catalog/catalog.db'
 
-## move (for reusue) to CatalogDb::Metal.tables or such - why? 
-puts "  #{CatalogDb::Metal::Country.count} countries"
-puts "  #{CatalogDb::Metal::Club.count} clubs"
-puts "  #{CatalogDb::Metal::NationalTeam.count} national teams"
-puts "  #{CatalogDb::Metal::League.count} leagues"
+
+## print catalog (reference/lookup) db (table) stats
+CatalogDb::Metal.tables
 
 
+COUNTRIES = SportDb::Import.world.countries
+LEAGUES   = SportDb::Import.catalog.leagues
+CLUBS     = SportDb::Import.catalog.clubs
 
+
+require_relative 'autofix'
 
 
 
@@ -53,34 +50,53 @@ def sort_players( data )
     end
 end
 
-def pp_players( data )
-    buf = ""
+def pp_players( data, club: )
+
+    buf = String.new
     last_rec = nil
     data.each do |rec|
          ## auto-add separator if starting new pos (e.g. G/D/M/F/??)
          buf << "\n" if last_rec && last_rec['Pos'] != rec['Pos']
 
-         buf << pp_player( rec )
+         ## add autofix earlier (before sort or such)
+         ##  why? why not?
+         autofix( rec )
+
+         buf << pp_player( rec, club: club )
          buf << "\n"
          last_rec = rec
     end
     buf
 end
 
-def pp_player( rec )
-    buf = ""
-    buf << '%2s  ' % rec['Number']
-    buf << '%-28s   ' % "#{rec['Name']} (#{rec['Nat']})"
-    buf << '%-2s' % PPPOS[rec['Pos']] || "??#{rec['Pos']}"
+def pp_player( rec, club: )
+
+    club_country_key = club.country.key 
+
+    player_country  =  COUNTRIES.find_by_code( rec['Nat'] )
+    if player_country.nil?
+       puts "!! no country found for key #{rec['Nat']} for player:"
+       pp rec
+       exit 1
+    end   
+    player_country_key = player_country.key
+
+
+    buf = String.new
+
+    num_str = rec['Number']
+    buf << "%4s  "  % "#{num_str},"
+ 
+    name_str = "#{rec['Name']}"
+    if player_country_key != club_country_key  
+      name_str << " (#{rec['Nat']})"
+    end
+    buf << "%-33s  " % "#{name_str},"
+
+    buf << '%-2s,' % PPPOS[rec['Pos']] || "??#{rec['Pos']}"
     buf << "   "
 
     dob_str = rec['Date of Birth']
-
-  ## fix for  Mike Penders (BEL)
-  if rec['Name'] == 'Mike Penders' && rec['Nat'] == 'BEL'
-     ## "Date of Birth"=>"31-06-05",
-     dob_str = '31-07-05'  #  is July (not June) - June 31st does NOT exist!!  
-  end
 
     ## note: MUST parse by our own (in ruby year 65 => 2065)
     ## 24-06-99
@@ -107,31 +123,34 @@ def pp_player( rec )
               nil
           end    
           
-    buf2 = ""    
     if dob  
-      buf2 << "#{dob.strftime( '%d %b %Y' )}"
-      buf2 << ", #{rec['Birth Place']}"  if rec['Birth Place'].size > 0 &&
-                                           rec['Birth Place'] != '-'
-    end 
-    buf2 << "  -- #{rec['Previous Club']}"  if rec['Previous Club'].size > 0 &&
-                                                rec['Previous Club'] != 'None' 
-
-    ## add comments if available (non-empty only)                                            
-    buf << " # #{buf2.strip}"     if buf2.size > 0                                            
+      buf << "b. #{dob.strftime( '%Y' )},"
+      # buf2 << "# @ #{rec['Birth Place']}"  if rec['Birth Place'].size > 0 &&
+      #                                      rec['Birth Place'] != '-'
+    else
+      buf << "b. ????,"
+    end
+    
+    if rec['Previous Club'].size > 0 &&
+       rec['Previous Club'] != 'None'
+         buf << "   "
+         buf << rec['Previous Club']   
+    end
+                                                                                          
     buf
 end
 
 
+
 def convert_league(  outdir:,
                      league:,
-                     season: )
+                     season:,
+                     league_title: )
                      
 league_page = Footballsquads.league( league: league, season: season )
 pp league_page.title
 
-## find league rec
-leagues = SportDb::Import.catalog.leagues
-league_rec   = leagues.find!( league )
+league_rec   = LEAGUES.find!( league )
 
 
 league_page.each_team do |team_page|
@@ -143,19 +162,23 @@ league_page.each_team do |team_page|
    # pp team_name_official
 
 ##
-#  map team name
-#  
-    # try short name first
-    clubs =  SportDb::Import.catalog.clubs
+#  map team name; try short name first
+    country = find_countries_for_league( league_rec )
 
-    m1 = clubs.match_by( name: team_name,           country: league_rec.country.key )
-    m2 = clubs.match_by( name: team_name_official,  country: league_rec.country.key )
+#
+####
+##  todo/fix - add/use  match_by( name:, league: ) !!!!
+###               allow (conenience) league INSTEAD of country
+###                PLUS auto-add countries with find_countries_for_league!!! 
 
-   team_name_short =  
+    m1 = CLUBS.match_by( name: team_name,           country: country )
+    m2 = CLUBS.match_by( name: team_name_official,  country: country )
+
+   club_rec =  
     if m1.size == 1 && m2.size == 1
        puts "OK  #{team_name}  -  #{team_name_official}  =>  #{m1[0].name}"
 
-       m1[0].name   ## use "canonical name"
+       m1[0]   ## use "canonical name"
     else
       ## report 
       if m1.size == 0 && m2.size == 0
@@ -182,9 +205,7 @@ league_page.each_team do |team_page|
           pp m2
         end
 
-        ## use org name  with official name as comment
-        ##   -- log warning!! to errors.txt or logs.txt or such!!!
-        "#{team_name_official}    # #{team_name}"
+        nil
     end
   end
 
@@ -200,10 +221,17 @@ league_page.each_team do |team_page|
    season_slug = Season( season ).to_path
    path = "#{outdir}/#{season_slug}/squads/#{slug}.txt"
 
+ team_name_short =  if club_rec
+                       club_rec.name
+                    else
+                      ## use org name  with official name as comment
+                      ##   -- log warning!! to errors.txt or logs.txt or such!!!
+                      "#{team_name_official} | #{team_name}"
+                    end
 ## note - use official (long) team name - add (short) team name as comment   
 buf = ""
-buf << "= #{team_name_short}\n\n"
-buf << pp_players( sort_players(current))
+buf << "=  #{team_name_short} - #{league_title}\n\n"
+buf << pp_players( sort_players(current), club: club_rec )
    
 write_text( path, buf )
 end
@@ -304,7 +332,8 @@ datasets.each_with_index do |(league_key, seasons),i|
 
     convert_league( outdir: "#{outdir}/#{path}",
                     league: league_key, 
-                    season: season_key )
+                    season: season_key,
+                    league_title: "#{name} #{season.to_key}" )
   end
 end
 
